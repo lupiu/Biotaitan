@@ -38,29 +38,64 @@ void LCM_DrawGrid(void)
 void LCM_DrawKeyBoard(void) 
 {
   uint16_t i;
-   for(i = 0; i < sizeof(kb_button) / sizeof(_ButtonInfo); i++)
+   for(i = 0; i < sizeof(kb_btn) / sizeof(_ButtonInfo); i++)
   {
     g_LcmDisplay.Set_Text_Mode(1);
-    g_LcmDisplay.Set_Text_Size(kb_button[i].ButtonNameSize);
-    g_LcmDisplay.Set_Text_colour(kb_button[i].ButtonNameColor);
+    g_LcmDisplay.Set_Text_Size(kb_btn[i].ButtonNameSize);
+    g_LcmDisplay.Set_Text_colour(kb_btn[i].ButtonNameColor);
     g_LcmDisplay.Set_Text_Back_colour(BLACK);
-    g_LcmDisplay.Print_String(kb_button[i].ButtonName, kb_button[i].ButtonX, kb_button[i].ButtonY);
+    g_LcmDisplay.Print_String(kb_btn[i].ButtonName, kb_btn[i].ButtonX, kb_btn[i].ButtonY);
   }
 }
 
 //--------------------------------------------------
+void LCN_ShowString(uint8_t *str, uint8_t msg_type)
+{
+    g_LcmDisplay.Set_Text_Mode(1);
+    g_LcmDisplay.Set_Text_Size(4);
+    g_LcmDisplay.Set_Text_colour(BLACK);
+    g_LcmDisplay.Set_Text_Back_colour(BLACK);
+    if (msg_type = LCM_MSG_TITLE)
+      g_LcmDisplay.Print_String(str, GRID_SPACING, (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_Y))));
+    else
+      g_LcmDisplay.Print_String(str, GRID_SPACING, (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))));
+}
+
+//--------------------------------------------------
+boolean LCM_IsPressed(uint16_t px, uint16_t py, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+{
+    if((px > x1 && px < x2) && (py > y1 && py < y2))
+    {
+        return true;  
+    } 
+    else
+    {
+        return false;  
+    }
+ }
+//--------------------------------------------------
 void TaskLcmCtrl(void *pvParameters) 
 {  
   uint16_t i;
-  px = 0;
-  py = 0;
+  uint16_t px = 0;
+  uint16_t py = 0;
+
   g_LcmTouch.TP_Scan(0);
   if (g_LcmTouch.TP_Get_State() & TP_PRES_DOWN) 
   {
     px = g_LcmTouch.x;
     py = g_LcmTouch.y;
-  } 
 
+    for (i = 0; i < sizeof(kb_btn) / sizeof(_ButtonInfo); i++)
+    {
+      if (LCM_IsPressed(px, py, kb_btn[i].ButtonX, kb_btn[i].ButtonY, (kb_btn[i].ButtonX + BUTTON_SPACING_X), (kb_btn[i].ButtonY + BUTTON_SPACING_Y)))
+      {
+        ///
+        break;
+      }
+    }
+  }
+  
 }
 
 //--------------------------------------------------
@@ -70,10 +105,12 @@ void LCM_Initial(void)
   g_LcmDisplay.Set_Rotation(0);
   g_LcmTouch.TP_Set_Rotation(1);
   g_LcmTouch.TP_Init(0, LCM_WIDTH, LCM_HEIGHT);
-  
+
   g_LcmDisplay.Fill_Screen(BLUE);
   LCM_DrawGrid();
   LCM_DrawKeyBoard();
+
+  LCN_ShowString("System Initial...", LCM_MSG_TITLE);
 
   xTaskCreate(TaskLcmCtrl,"LCM Control",128,NULL,2,NULL);
 }
