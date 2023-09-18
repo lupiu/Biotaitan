@@ -12,14 +12,8 @@
 #include "Arduino.h"
 
 //--------------------------------------------------
-typedef enum
-{
-  LCM_TOP = 0,
-    LCM_USERMODE,
-    LCM_ENGMODE,
-}_LcmDispPage;
 
-_LcmDispPage g_UiPageStatus = 0;
+
 //--------------------------------------------------
 
 #endif

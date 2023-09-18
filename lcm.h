@@ -52,22 +52,19 @@
 #define LCM_MSG_DATA 1
 
 //--------------------------------------------------
-
 typedef enum
 {
-  TOP_ENMODE = 0,
-  TOP_USERMODE,
-}_LcmTopGroupType;
-
-typedef enum
-{
-  EM_TEMP = 0,
-  EM_OPTIC,
-}_LcmEMGroupType;
+  LCM_TOP = 0,
+    LCM_USERMODE,
+    LCM_ENGMODE,
+      LCM_EM_TEMP,
+      LCM_EM_OPTIC,
+}_LcmDispPage;
 
 typedef struct
 {
   uint8_t Name[10];
+  void *BtnCb(void);
 }_UiMenuType;
 
 typedef struct
@@ -82,15 +79,15 @@ typedef struct
 
 _UiMenuType g_TopMenu[9] = 
 {
-  " ",
-  " ",
-  "USER MODE",
-  " ",
-  " ",
-  "ENG MODE",
-  " ",
-  " ",
-  "BACK"
+  {" ", NULL},
+  {" ", NULL},
+  {"USER MODE", NULL},
+  {" ", NULL},
+  {" ", NULL},
+  {"ENG MODE", NULL},
+  {" ", NULL},
+  {" ", NULL},
+  {"BACK", NULL}
 };
 
 _UiMenuType g_EMMenu[9] = 

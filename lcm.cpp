@@ -13,7 +13,7 @@
 //--------------------------------------------------
 LCDWIKI_SPI g_LcmDisplay(LCM_MODEL, LCM_CS, LCM_CD, LCM_RST, LCM_LED);
 LCDWIKI_TOUCH g_LcmTouch(LCM_TCS, LCM_TCLK, LCM_TDOUT, LCM_TDIN, LCM_TIRQ);
-
+_LcmDispPage g_UiPageStatus = LCM_TOP;
 //--------------------------------------------------
 void LCM_DisplayGrid(void) 
 {
@@ -106,7 +106,7 @@ void TaskLcmCtrl(void *pvParameters)
     {
       if (LCM_IsPressed(px, py, g_func_btn[i].Px, g_func_btn[i].Py, (g_func_btn[i].Px + BUTTON_SPACING_X), (g_func_btn[i].Py + BUTTON_SPACING_Y)))
       {
-        
+        if (g_UiPageStatus)
         break;
       }
     }
