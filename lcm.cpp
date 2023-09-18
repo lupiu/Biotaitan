@@ -15,7 +15,7 @@ LCDWIKI_SPI g_LcmDisplay(LCM_MODEL, LCM_CS, LCM_CD, LCM_RST, LCM_LED);
 LCDWIKI_TOUCH g_LcmTouch(LCM_TCS, LCM_TCLK, LCM_TDOUT, LCM_TDIN, LCM_TIRQ);
 
 //--------------------------------------------------
-void LCM_DrawGrid(void) 
+void LCM_DisplayGrid(void) 
 {
   uint16_t i;
 
@@ -35,16 +35,32 @@ void LCM_DrawGrid(void)
 }
 
 //--------------------------------------------------
-void LCM_DrawKeyBoard(void) 
+void LCM_DisplayKeyBoard(void) 
 {
   uint16_t i;
-   for(i = 0; i < sizeof(kb_btn) / sizeof(_ButtonInfo); i++)
+
+  for(i = 0; i < sizeof(g_kb_btn) / sizeof(_ButtonInfo); i++)
   {
     g_LcmDisplay.Set_Text_Mode(1);
-    g_LcmDisplay.Set_Text_Size(kb_btn[i].ButtonNameSize);
-    g_LcmDisplay.Set_Text_colour(kb_btn[i].ButtonNameColor);
+    g_LcmDisplay.Set_Text_Size(g_kb_btn[i].NameSize);
+    g_LcmDisplay.Set_Text_colour(g_kb_btn[i].NameColor);
     g_LcmDisplay.Set_Text_Back_colour(BLACK);
-    g_LcmDisplay.Print_String(kb_btn[i].ButtonName, kb_btn[i].ButtonX, kb_btn[i].ButtonY);
+    g_LcmDisplay.Print_String(g_kb_btn[i].Name, g_kb_btn[i].Px, g_kb_btn[i].Py);
+  }
+}
+
+//--------------------------------------------------
+void LCM_DisplayFuncKey(_UiMenuType *menu) 
+{
+  uint16_t i;
+
+  for(i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
+  {
+    g_LcmDisplay.Set_Text_Mode(1);
+    g_LcmDisplay.Set_Text_Size(g_func_btn[i].NameSize);
+    g_LcmDisplay.Set_Text_colour(g_func_btn[i].NameColor);
+    g_LcmDisplay.Set_Text_Back_colour(BLACK);
+    g_LcmDisplay.Print_String(menu[i].Name, g_func_btn[i].Px, g_func_btn[i].Py);
   }
 }
 
@@ -86,16 +102,24 @@ void TaskLcmCtrl(void *pvParameters)
     px = g_LcmTouch.x;
     py = g_LcmTouch.y;
 
-    for (i = 0; i < sizeof(kb_btn) / sizeof(_ButtonInfo); i++)
+    for (i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
     {
-      if (LCM_IsPressed(px, py, kb_btn[i].ButtonX, kb_btn[i].ButtonY, (kb_btn[i].ButtonX + BUTTON_SPACING_X), (kb_btn[i].ButtonY + BUTTON_SPACING_Y)))
+      if (LCM_IsPressed(px, py, g_func_btn[i].Px, g_func_btn[i].Py, (g_func_btn[i].Px + BUTTON_SPACING_X), (g_func_btn[i].Py + BUTTON_SPACING_Y)))
+      {
+        
+        break;
+      }
+    }
+
+    for (i = 0; i < sizeof(g_kb_btn) / sizeof(_ButtonInfo); i++)
+    {
+      if (LCM_IsPressed(px, py, g_kb_btn[i].Px, g_kb_btn[i].Py, (g_kb_btn[i].Px + BUTTON_SPACING_X), (g_kb_btn[i].Py + BUTTON_SPACING_Y)))
       {
         ///
         break;
       }
     }
   }
-  
 }
 
 //--------------------------------------------------
@@ -107,9 +131,10 @@ void LCM_Initial(void)
   g_LcmTouch.TP_Init(0, LCM_WIDTH, LCM_HEIGHT);
 
   g_LcmDisplay.Fill_Screen(BLUE);
-  LCM_DrawGrid();
-  LCM_DrawKeyBoard();
+  LCM_DisplayGrid();
+  LCM_DisplayKeyBoard();
 
+  LCM_DisplayFuncKey(g_TopMenu);  
   LCN_ShowString("System Initial...", LCM_MSG_TITLE);
 
   xTaskCreate(TaskLcmCtrl,"LCM Control",128,NULL,2,NULL);

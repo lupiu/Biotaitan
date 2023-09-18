@@ -52,23 +52,61 @@
 #define LCM_MSG_DATA 1
 
 //--------------------------------------------------
+
 typedef enum
 {
-    TOP  = 0,
-      ENMODE,
-}_LCMPageStatus;
+  TOP_ENMODE = 0,
+  TOP_USERMODE,
+}_LcmTopGroupType;
+
+typedef enum
+{
+  EM_TEMP = 0,
+  EM_OPTIC,
+}_LcmEMGroupType;
 
 typedef struct
 {
-     uint8_t ButtonName[10];
-     uint8_t ButtonNameSize;
-     uint16_t ButtonNameColor;
-     uint16_t ButtonColor;
-     uint16_t ButtonX;
-     uint16_t ButtonY;     
+  uint8_t Name[10];
+}_UiMenuType;
+
+typedef struct
+{
+  uint8_t Name[10];
+  uint8_t NameSize;
+  uint16_t NameColor;
+  uint16_t BgColor;
+  uint16_t Px;
+  uint16_t Py;
 }_ButtonInfo;
 
-_ButtonInfo kb_btn[12] = 
+_UiMenuType g_TopMenu[9] = 
+{
+  " ",
+  " ",
+  "USER MODE",
+  " ",
+  " ",
+  "ENG MODE",
+  " ",
+  " ",
+  "BACK"
+};
+
+_UiMenuType g_EMMenu[9] = 
+{
+  " ",
+  " ",
+  "F1",
+  " ",
+  " ",
+  "F2",
+  " ",
+  " ",
+  "BACK"
+};
+
+_ButtonInfo g_kb_btn[12] = 
 {
   "1",    4,  BLACK,  BLUE, (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
   "2",    4,  BLACK,  BLUE, (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
@@ -84,17 +122,17 @@ _ButtonInfo kb_btn[12] =
   "0",    4,  BLACK,  BLUE, (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
 };
 
-_ButtonInfo func_btn[9] = 
+_ButtonInfo g_func_btn[9] = 
 {
-  "F1", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F2", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F3", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F4", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F5", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F6", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F7", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F8", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F9", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F0", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F1", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F2", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F3", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F4", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F5", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F6", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F7", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F8", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
 };
 
 
