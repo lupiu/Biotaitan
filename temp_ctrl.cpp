@@ -16,6 +16,7 @@
 _TempCtrl g_TempData = {IDLE, 25, 25};
 _PidData g_PidData;
 PID g_Temp_PID(&g_PidData.Input, &g_PidData.Output, &g_PidData.SetPoint, 2, 5, 1, DIRECT);
+
 //--------------------------------------------------
 uint16_t TEMP_ReadTemperature(uint8_t pin)
 {

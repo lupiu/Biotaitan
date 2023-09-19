@@ -49,23 +49,25 @@
 
 //--------------------------------------------------
 #define LCM_MSG_TITLE 0
-#define LCM_MSG_DATA 1
+#define LCM_MSG_PARAM 1
+#define LCM_MSG_VALUE 2
 
 //--------------------------------------------------
 typedef enum
 {
-  LCM_TOP = 0,
+  LCM_INIT = 0,
+  LCM_TOP,
     LCM_USERMODE,
     LCM_ENGMODE,
-      LCM_EM_TEMP,
-      LCM_EM_OPTIC,
 }_LcmDispPage;
+
+typedef void (*_Btn_cb)(void);
 
 typedef struct
 {
   uint8_t Name[10];
-  void *BtnCb(void);
-}_UiMenuType;
+  _Btn_cb CallBack;
+}_LcmMenuType;
 
 typedef struct
 {
@@ -77,64 +79,10 @@ typedef struct
   uint16_t Py;
 }_ButtonInfo;
 
-_UiMenuType g_TopMenu[9] = 
-{
-  {" ", NULL},
-  {" ", NULL},
-  {"USER MODE", NULL},
-  {" ", NULL},
-  {" ", NULL},
-  {"ENG MODE", NULL},
-  {" ", NULL},
-  {" ", NULL},
-  {"BACK", NULL}
-};
-
-_UiMenuType g_EMMenu[9] = 
-{
-  " ",
-  " ",
-  "F1",
-  " ",
-  " ",
-  "F2",
-  " ",
-  " ",
-  "BACK"
-};
-
-_ButtonInfo g_kb_btn[12] = 
-{
-  "1",    4,  BLACK,  BLUE, (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "2",    4,  BLACK,  BLUE, (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "3",    4,  BLACK,  BLUE, (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "DEL",  4,  BLACK,  BLUE, (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "4",    4,  BLACK,  BLUE, (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "5",    4,  BLACK,  BLUE, (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "6",    4,  BLACK,  BLUE, (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "ENT",  4,  BLACK,  BLUE, (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "7",    4,  BLACK,  BLUE, (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "8",    4,  BLACK,  BLUE, (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "9",    4,  BLACK,  BLUE, (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "0",    4,  BLACK,  BLUE, (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-};
-
-_ButtonInfo g_func_btn[9] = 
-{
-  "F0", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F1", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F2", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F3", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F4", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F5", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F6", 4,  BLACK,  BLUE, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F7", 4,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F8", 4,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
-};
-
-
 //--------------------------------------------------
-
+void LCM_DisplayTop(void);
+void LCM_DisplayEngMode(void);
+void LCM_Initial(void);
 //--------------------------------------------------
 
 #endif

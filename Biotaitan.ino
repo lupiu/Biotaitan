@@ -2,6 +2,7 @@
 #include <Arduino_FreeRTOS.h>
 #include "main.h"
 #include "temp_ctrl.h"
+#include "lcm.h"
 
 //--------------------------------------------------
 
@@ -12,21 +13,10 @@ void setup() {
   
   Serial.begin(9600);
 
+  LCM_Initial();
   TEMP_Initial();
 
   vTaskStartScheduler();
-}
-
-//--------------------------------------------------
-void Taskprint(void *pvParameters)  
-{
-  int counter = 0;
-  while(1)
-  {
-    counter++;
-    Serial.println(counter);
-    vTaskDelay( 500 / portTICK_PERIOD_MS ); 
-  }
 }
 
 //--------------------------------------------------
