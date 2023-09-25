@@ -53,14 +53,6 @@
 #define LCM_MSG_VALUE 2
 
 //--------------------------------------------------
-typedef enum
-{
-  LCM_INIT = 0,
-  LCM_TOP,
-    LCM_USERMODE,
-    LCM_ENGMODE,
-}_LcmDispPage;
-
 typedef void (*_Btn_cb)(void);
 
 typedef struct
@@ -83,6 +75,7 @@ typedef struct
 void LCM_DisplayTop(void);
 void LCM_DisplayEngMode(void);
 void LCM_Initial(void);
+void LCM_ShowMsg(uint8_t *str, uint8_t contd);
 //--------------------------------------------------
 
 #endif

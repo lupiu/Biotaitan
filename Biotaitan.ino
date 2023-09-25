@@ -3,6 +3,8 @@
 #include "main.h"
 #include "temp_ctrl.h"
 #include "lcm.h"
+#include "optic.h"
+#include "system.h"
 
 //--------------------------------------------------
 
@@ -13,10 +15,14 @@ void setup() {
   
   Serial.begin(9600);
 
+  SYS_SetOpmode(SYSTEM_INIT);
+
   LCM_Initial();
   TEMP_Initial();
+  OPT_Initial();
 
   vTaskStartScheduler();
+  SYS_Initial();
 }
 
 //--------------------------------------------------

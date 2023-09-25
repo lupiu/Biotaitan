@@ -52,6 +52,7 @@ typedef struct
 
 //--------------------------------------------------
 void TEMP_Initial(void);
+uint16_t TEMP_ReadTemperature(uint8_t pin);
 //--------------------------------------------------
 
 #endif

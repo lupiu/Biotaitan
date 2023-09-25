@@ -44,6 +44,15 @@ void TaskOpticCtrl(void *pvParameters)
 //--------------------------------------------------
 void OPT_Initial(void)
 {
+  pinMode(OPT_LED1, OUTPUT);
+  pinMode(OPT_LED2, OUTPUT);
+  pinMode(OPT_LED3, OUTPUT);
+  pinMode(OPT_LED4, OUTPUT);
+  pinMode(OPT_PD1, INPUT);
+  pinMode(OPT_PD2, INPUT);
+  pinMode(OPT_PD3, INPUT);
+  pinMode(OPT_PD4, INPUT);
+
   xTaskCreate(TaskOpticCtrl,"OPTIC Control",128,NULL,1,NULL);
 }
 

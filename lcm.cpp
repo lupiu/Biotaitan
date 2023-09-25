@@ -9,11 +9,11 @@
 #include <Arduino_FreeRTOS.h>
 #include "Arduino.h"
 #include "lcm.h"
+#include "system.h"
 
 //--------------------------------------------------
 LCDWIKI_SPI g_LcmDisplay(LCM_MODEL, LCM_CS, LCM_CD, LCM_RST, LCM_LED);
 LCDWIKI_TOUCH g_LcmTouch(LCM_TCS, LCM_TCLK, LCM_TDOUT, LCM_TDIN, LCM_TIRQ);
-_LcmDispPage g_UiPageStatus = LCM_INIT;
 
 _LcmMenuType g_TopMenu[6] = 
 {
@@ -100,7 +100,7 @@ void LCM_DisplayKeyBoard(void)
 }
 
 //--------------------------------------------------
-void LCM_DisplayFuncKey(_UiMenuType *menu) 
+void LCM_DisplayFuncKey(_LcmMenuType *menu) 
 {
   uint16_t i;
 
@@ -115,7 +115,7 @@ void LCM_DisplayFuncKey(_UiMenuType *menu)
 }
 
 //--------------------------------------------------
-void LCN_ShowString(uint8_t *str, uint8_t msg_type)
+void LCM_ShowData(uint8_t *str, uint8_t msg_type)
 {
     g_LcmDisplay.Set_Text_Mode(1);
     g_LcmDisplay.Set_Text_Size(4);
@@ -130,19 +130,44 @@ void LCN_ShowString(uint8_t *str, uint8_t msg_type)
 }
 
 //--------------------------------------------------
+void LCM_ShowMsg(uint8_t *str, uint8_t contd)
+{
+  static msg_line = 0;
+
+  g_LcmDisplay.Set_Text_Mode(1);
+  g_LcmDisplay.Set_Text_Size(4);
+  g_LcmDisplay.Set_Text_colour(BLACK);
+  g_LcmDisplay.Set_Text_Back_colour(BLACK);
+
+  if (contd == 0)
+  {
+    msg_line = 0;
+  }
+
+  if (msg_line == 0)
+    g_LcmDisplay.Fill_Screen(BLUE);
+
+  g_LcmDisplay.Print_String(str, GRID_SPACING, (GRID_SPACING + (msg_line * (GRID_SPACING + BUTTON_SPACING_Y))));
+  msg_line++;
+  if (msg_line >= 6)
+    msg_line = 0;
+
+}
+
+//--------------------------------------------------
 void LCM_DisplayEngMode(void) 
 {
   LCM_DisplayFuncKey(g_EMMenu);
-  LCN_ShowString("Engineering Mode", LCM_MSG_TITLE);
-  g_UiPageStatus = LCM_ENGMODE;
+  LCM_ShowString("Engineering Mode", LCM_MSG_TITLE);
+  SYS_SetOpmode(LCM_ENGMODE);
 }
 
 //--------------------------------------------------
 void LCM_DisplayTop(void) 
 {
   LCM_DisplayFuncKey(g_TopMenu);
-  LCN_ShowString("Biotaitan System", LCM_MSG_TITLE);
-  g_UiPageStatus = LCM_TOP;
+  LCM_ShowString("Biotaitan System", LCM_MSG_TITLE);
+  SYS_SetOpmode(LCM_TOP);
 }
 
 //--------------------------------------------------
@@ -157,7 +182,7 @@ boolean LCM_IsPressed(uint16_t px, uint16_t py, uint16_t x1, uint16_t y1, uint16
         return false;  
     }
  }
- 
+
 //--------------------------------------------------
 void TaskLcmCtrl(void *pvParameters) 
 {  
@@ -165,8 +190,8 @@ void TaskLcmCtrl(void *pvParameters)
   uint16_t px = 0;
   uint16_t py = 0;
 
-  if (g_UiPageStatus == LCM_INIT)
-    LCM_DisplayTop();
+  if (SYS_GetOpmode() == SYSTEM_INIT)
+    return;
 
   g_LcmTouch.TP_Scan(0);
   if (g_LcmTouch.TP_Get_State() & TP_PRES_DOWN) 
@@ -178,7 +203,7 @@ void TaskLcmCtrl(void *pvParameters)
     {
       if (LCM_IsPressed(px, py, g_func_btn[i].Px, g_func_btn[i].Py, (g_func_btn[i].Px + BUTTON_SPACING_X), (g_func_btn[i].Py + BUTTON_SPACING_Y)))
       {
-        switch (g_UiPageStatus)
+        switch (SYS_GetOpmode())
         {
           case LCM_TOP :
             if (g_TopMenu[i].CallBack != NULL)
@@ -214,19 +239,16 @@ void TaskLcmCtrl(void *pvParameters)
 //--------------------------------------------------
 void LCM_Initial(void)
 {
-  g_UiPageStatus = LCM_INIT;
-
   g_LcmDisplay.Init_LCD();
   g_LcmDisplay.Set_Rotation(0);
   g_LcmTouch.TP_Set_Rotation(1);
   g_LcmTouch.TP_Init(0, LCM_WIDTH, LCM_HEIGHT);
 
   g_LcmDisplay.Fill_Screen(BLUE);
-  LCM_DisplayGrid();
-  LCM_DisplayKeyBoard();
-
-  LCM_DisplayFuncKey(g_TopMenu);
-  LCN_ShowString("System Initial...", LCM_MSG_TITLE);
+  LCM_ShowMsg("System Initial...", 0);
+  //LCM_DisplayGrid();
+  //LCM_DisplayKeyBoard();
+  //LCM_DisplayFuncKey(g_TopMenu);
 
   xTaskCreate(TaskLcmCtrl,"LCM Control",128,NULL,2,NULL);
 }
