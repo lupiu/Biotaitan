@@ -115,7 +115,7 @@ void LCM_DisplayFuncKey(_LcmMenuType *menu)
 }
 
 //--------------------------------------------------
-void LCM_ShowData(uint8_t *str, uint8_t msg_type)
+void LCM_ShowString(uint8_t *str, uint8_t msg_type)
 {
     g_LcmDisplay.Set_Text_Mode(1);
     g_LcmDisplay.Set_Text_Size(4);
@@ -132,7 +132,7 @@ void LCM_ShowData(uint8_t *str, uint8_t msg_type)
 //--------------------------------------------------
 void LCM_ShowMsg(uint8_t *str, uint8_t contd)
 {
-  static msg_line = 0;
+  static uint8_t msg_line = 0;
 
   g_LcmDisplay.Set_Text_Mode(1);
   g_LcmDisplay.Set_Text_Size(4);

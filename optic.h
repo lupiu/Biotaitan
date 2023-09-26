@@ -28,7 +28,9 @@
 
 //--------------------------------------------------
 void OPT_Initial(void);
-
+void OPT_LedOn(uint8_t pin);
+void OPT_LedOff(uint8_t pin);
+uint16_t OPT_ReadPhotoDiode(uint8_t pin);
 //--------------------------------------------------
 
 #endif

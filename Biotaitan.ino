@@ -20,9 +20,9 @@ void setup() {
   LCM_Initial();
   TEMP_Initial();
   OPT_Initial();
+  SYS_Initial();
 
   vTaskStartScheduler();
-  SYS_Initial();
 }
 
 //--------------------------------------------------

@@ -63,6 +63,12 @@ void TEMP_FanOff(void)
 }
 
 //--------------------------------------------------
+void TEMP_SetTargetTemp_C(double temp_c)
+{
+  g_TempData.TargetTemp_C = temp_c;
+}
+
+//--------------------------------------------------
 void TaskTempCtrl(void *pvParameters) 
 {
   double now_time;
