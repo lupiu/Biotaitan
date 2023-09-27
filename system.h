@@ -23,13 +23,13 @@
 //--------------------------------------------------
 typedef enum
 {
+  SYS_OK = 0,
+  SYS_ERROR,
+}_SysErrCode;
+
+typedef enum
+{
   SYSTEM_INIT = 0,
-  SYSTEM_POR_P1,
-  SYSTEM_POR_P2,
-  SYSTEM_POR_P3,
-  SYSTEM_POR_P4,
-  SYSTEM_POR_P5,
-  SYSTEM_POR_P6,
   LCM_TOP,
     LCM_USERMODE,
     LCM_ENGMODE,

@@ -6,7 +6,6 @@
 *      Author: silva_lin
 */
 
-#include <Arduino_FreeRTOS.h>
 #include "Arduino.h"
 #include "optic.h"
 
@@ -35,18 +34,6 @@ uint16_t OPT_ReadPhotoDiode(uint8_t pin)
 }
 
 //--------------------------------------------------
-void TaskOpticCtrl(void *pvParameters) 
-{  
-  uint16_t i;
-
-  while(1)
-  {
-    vTaskDelay(200 / portTICK_PERIOD_MS);
-  }
-
-}
-
-//--------------------------------------------------
 void OPT_Initial(void)
 {
   pinMode(OPT_LED1, OUTPUT);
@@ -57,8 +44,6 @@ void OPT_Initial(void)
   pinMode(OPT_PD2, INPUT);
   pinMode(OPT_PD3, INPUT);
   pinMode(OPT_PD4, INPUT);
-
-  xTaskCreate(TaskOpticCtrl,"OPTIC Control",128,NULL,1,NULL);
 }
 
 //--------------------------------------------------

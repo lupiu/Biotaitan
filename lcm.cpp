@@ -6,7 +6,6 @@
 *      Author: silva_lin
 */
 
-#include <Arduino_FreeRTOS.h>
 #include "Arduino.h"
 #include "lcm.h"
 #include "system.h"
@@ -245,17 +244,12 @@ void TaskLcmCtrl(void *pvParameters)
 void LCM_Initial(void)
 {
   g_LcmDisplay.Init_LCD();
-  g_LcmDisplay.Set_Rotation(3);
-  g_LcmTouch.TP_Set_Rotation(3);
+  g_LcmDisplay.Set_Rotation(1);
+  g_LcmTouch.TP_Set_Rotation(1);
   g_LcmTouch.TP_Init(0, LCM_WIDTH, LCM_HEIGHT);
 
   g_LcmDisplay.Fill_Screen(BLUE);
   LCM_ShowMsg("System Initial...", 0);
-  //LCM_DisplayGrid();
-  //LCM_DisplayKeyBoard();
-  //LCM_DisplayFuncKey(g_TopMenu);
-
-  //xTaskCreate(TaskLcmCtrl,"LCM Control",128,NULL,2,NULL);
 }
 
 //--------------------------------------------------

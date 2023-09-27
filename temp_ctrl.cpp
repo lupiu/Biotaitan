@@ -6,7 +6,6 @@
 *      Author: silva_lin
 */
 
-#include <Arduino_FreeRTOS.h>
 #include "Arduino.h" 
 #include "main.h"
 #include "temp_ctrl.h"
@@ -63,44 +62,29 @@ void TEMP_FanOff(void)
 }
 
 //--------------------------------------------------
-void TEMP_SetTargetTemp_C(double temp_c)
-{
-  g_TempData.TargetTemp_C = temp_c;
-}
-
-//--------------------------------------------------
-void TaskTempCtrl(void *pvParameters) 
+void TEMP_TempCtrl(double temp_c)
 {
   double now_time;
+  g_TempData.TargetTemp_C = temp_c;
+  g_TempData.PresentTemp_C = TEMP_ReadTemperature(NTC_TS1);
 
-  while(1)
+  g_PidData.Input = g_TempData.PresentTemp_C;
+  g_PidData.SetPoint = g_TempData.TargetTemp_C;
+  g_Temp_PID.Compute();
+
+  now_time = millis();
+  if ((now_time - g_PidData.PidStartTime) > PID_WINDOWSIZE)
   {
-    if (g_TempData.status != IDLE)
-    {
-      g_TempData.PresentTemp_C = TEMP_ReadTemperature(NTC_TS1);
-    }
+    g_PidData.PidStartTime += PID_WINDOWSIZE;
+  }
 
-    if (g_TempData.status == PID_EN)
-    {
-      g_PidData.Input = g_TempData.PresentTemp_C;
-      g_PidData.SetPoint = g_TempData.TargetTemp_C;
-      g_Temp_PID.Compute();
-
-      now_time = millis();
-      if ((now_time - g_PidData.PidStartTime) > PID_WINDOWSIZE)
-      {
-        g_PidData.PidStartTime += PID_WINDOWSIZE;
-      }
-
-      if (g_PidData.Output > (now_time - g_PidData.PidStartTime))
-      {
-        TEMP_HeaterOn();
-      }
-      else
-      {
-        TEMP_HeaterOff();
-      }
-    }
+  if (g_PidData.Output > (now_time - g_PidData.PidStartTime))
+  {
+    TEMP_HeaterOn();
+  }
+  else
+  {
+    TEMP_HeaterOff();
   }
 }
 
@@ -127,10 +111,6 @@ void TEMP_Initial(void)
   pinMode(FAN_CTRL, OUTPUT);
 
   PID_Initial();
-
-  g_TempData.status = MEASURE;
- 
-  xTaskCreate(TaskTempCtrl,"Temperature Control",128,NULL,1,NULL);
 }
 
 //--------------------------------------------------

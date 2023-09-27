@@ -1,5 +1,4 @@
 #include "Arduino.h"
-#include <Arduino_FreeRTOS.h>
 #include "main.h"
 #include "temp_ctrl.h"
 #include "lcm.h"
@@ -18,11 +17,9 @@ void setup() {
   SYS_SetOpmode(SYSTEM_INIT);
 
   LCM_Initial();
-  //TEMP_Initial();
+  TEMP_Initial();
   OPT_Initial();
   SYS_Initial();
-
-  vTaskStartScheduler();
 }
 
 //--------------------------------------------------
