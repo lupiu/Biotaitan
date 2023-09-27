@@ -17,10 +17,10 @@
 //--------------------------------------------------
 //paramters define
 #define LCM_MODEL ILI9488_18
-#define LCM_CS   A5    
-#define LCM_CD   A3
-#define LCM_RST  A4
-#define LCM_LED  A0   //if you don't need to control the LED pin,you should set it to -1 and set it to 3.3V
+#define LCM_CS   43    
+#define LCM_CD   44
+#define LCM_RST  42
+#define LCM_LED  -1   //if you don't need to control the LED pin,you should set it to -1 and set it to 3.3V
 
 //touch screen paramters define
 #define LCM_TCS   45

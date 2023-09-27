@@ -18,7 +18,7 @@ void setup() {
   SYS_SetOpmode(SYSTEM_INIT);
 
   LCM_Initial();
-  TEMP_Initial();
+  //TEMP_Initial();
   OPT_Initial();
   SYS_Initial();
 

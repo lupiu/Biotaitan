@@ -39,6 +39,11 @@ void TaskOpticCtrl(void *pvParameters)
 {  
   uint16_t i;
 
+  while(1)
+  {
+    vTaskDelay(200 / portTICK_PERIOD_MS);
+  }
+
 }
 
 //--------------------------------------------------

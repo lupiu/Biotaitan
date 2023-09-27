@@ -73,30 +73,33 @@ void TaskTempCtrl(void *pvParameters)
 {
   double now_time;
 
-  if (g_TempData.status != IDLE)
+  while(1)
   {
-    g_TempData.PresentTemp_C = TEMP_ReadTemperature(NTC_TS1);
-  }
-
-  if (g_TempData.status == PID_EN)
-  {
-    g_PidData.Input = g_TempData.PresentTemp_C;
-    g_PidData.SetPoint = g_TempData.TargetTemp_C;
-    g_Temp_PID.Compute();
-
-    now_time = millis();
-    if ((now_time - g_PidData.PidStartTime) > PID_WINDOWSIZE)
+    if (g_TempData.status != IDLE)
     {
-      g_PidData.PidStartTime += PID_WINDOWSIZE;
+      g_TempData.PresentTemp_C = TEMP_ReadTemperature(NTC_TS1);
     }
 
-    if (g_PidData.Output > (now_time - g_PidData.PidStartTime))
+    if (g_TempData.status == PID_EN)
     {
-      TEMP_HeaterOn();
-    }
-    else
-    {
-      TEMP_HeaterOff();
+      g_PidData.Input = g_TempData.PresentTemp_C;
+      g_PidData.SetPoint = g_TempData.TargetTemp_C;
+      g_Temp_PID.Compute();
+
+      now_time = millis();
+      if ((now_time - g_PidData.PidStartTime) > PID_WINDOWSIZE)
+      {
+        g_PidData.PidStartTime += PID_WINDOWSIZE;
+      }
+
+      if (g_PidData.Output > (now_time - g_PidData.PidStartTime))
+      {
+        TEMP_HeaterOn();
+      }
+      else
+      {
+        TEMP_HeaterOff();
+      }
     }
   }
 }
