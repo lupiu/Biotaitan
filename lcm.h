@@ -23,10 +23,10 @@
 #define LCM_LED  -1   //if you don't need to control the LED pin,you should set it to -1 and set it to 3.3V
 
 //touch screen paramters define
-#define LCM_TCS   45
+#define LCM_TCS   48
 #define LCM_TCLK  46
 #define LCM_TDOUT 47
-#define LCM_TDIN  48
+#define LCM_TDIN  45
 #define LCM_TIRQ  49
 
 //--------------------------------------------------

@@ -56,7 +56,7 @@ _SysErrCode SYS_PowerOnReset(void)
       TEMP_TempCtrl(95);
     }
 
-    if (TEMP_ReadTemperature(NTC_TS1) == 95);
+    if (TEMP_ReadTemperature(NTC_TS1) == 95)
     {
       LCM_ShowMsg("Heater POR Pass", 1);
     }
@@ -81,7 +81,7 @@ _SysErrCode SYS_PowerOnReset(void)
       TEMP_TempCtrl(60);
     }
 
-    if (TEMP_ReadTemperature(NTC_TS1) == 60);
+    if (TEMP_ReadTemperature(NTC_TS1) == 60)
     {
       LCM_ShowMsg("TEC cooler POR Pass", 1);
     }
@@ -91,13 +91,13 @@ _SysErrCode SYS_PowerOnReset(void)
       SYS_Shutdown();
     }
 
-    if (OPT_ReadPhotoDiode(OPT_PD1) != 60);
+    if (OPT_ReadPhotoDiode(OPT_PD1) != 60)
     {
       LCM_ShowMsg("LED1 or PD1 POR Fail!!", 1);
       SYS_Shutdown();
     }
 
-    if (OPT_ReadPhotoDiode(OPT_PD3) != 60);
+    if (OPT_ReadPhotoDiode(OPT_PD3) != 60)
     {
       LCM_ShowMsg("LED3 or PD3 POR Fail!!", 1);
       SYS_Shutdown();
@@ -137,7 +137,7 @@ _SysErrCode SYS_PowerOnReset(void)
       TEMP_TempCtrl(50);
     }
 
-    if (TEMP_ReadTemperature(NTC_TS1) == 50);
+    if (TEMP_ReadTemperature(NTC_TS1) == 50)
     {
       LCM_ShowMsg("TEC cooler POR Pass", 1);
     }
@@ -153,6 +153,7 @@ _SysErrCode SYS_PowerOnReset(void)
 
     g_SystemStatus.status = LCM_TOP;
     LCM_ShowMsg("System Initial OK!", 1);
+    delay(1000);
     g_SystemStatus.time = millis();
     return SYS_OK;
   }
