@@ -43,6 +43,7 @@ _SysErrCode SYS_PowerOnReset(void)
   {
     LCM_ShowMsg("System POR...", 1);
 
+    return SYS_OK;
     //POR P1
     delay(SYS_POR_P1T);
     LCM_ShowMsg("Barcode Scanner...", 1);
@@ -150,10 +151,6 @@ _SysErrCode SYS_PowerOnReset(void)
     //POR P6
     delay(SYS_POR_P6T);
     LCM_ShowMsg("SHT20 Initial...", 1);
-
-    g_SystemStatus.status = LCM_TOP;
-    LCM_ShowMsg("System Initial OK!", 1);
-    delay(1000);
     g_SystemStatus.time = millis();
     return SYS_OK;
   }
@@ -166,6 +163,16 @@ void SYS_Initial(void)
   {
     LCM_ShowMsg("Initialization failed...", 1);
     //while(1);
+  }
+  else
+  {
+    LCM_ShowMsg("System Initial OK!", 1);
+    delay(1000);
+    
+    g_SystemStatus.status = LCM_TOP;
+    LCM_DisplayGrid();
+    LCM_DisplayKeyBoard();
+    LCM_DisplayTop();
   }
 }
 //--------------------------------------------------

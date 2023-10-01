@@ -40,9 +40,9 @@
 #define WHITE   0xFFFF
 
 //--------------------------------------------------
-#define BUTTON_SPACING_X 74
-#define BUTTON_SPACING_Y 58
-#define GRID_SPACING 5
+#define BUTTON_SPACING_X 67
+#define BUTTON_SPACING_Y 62
+#define GRID_SPACING 1
 
 #define LCM_WIDTH 480
 #define LCM_HEIGHT 320
@@ -74,6 +74,8 @@ typedef struct
 //--------------------------------------------------
 void LCM_DisplayTop(void);
 void LCM_DisplayEngMode(void);
+void LCM_DisplayGrid(void);
+void LCM_DisplayKeyBoard(void);
 void LCM_Initial(void);
 void LCM_ShowMsg(uint8_t *str, uint8_t contd);
 //--------------------------------------------------
