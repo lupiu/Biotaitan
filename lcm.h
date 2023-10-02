@@ -40,8 +40,8 @@
 #define WHITE   0xFFFF
 
 //--------------------------------------------------
-#define BUTTON_SPACING_X 67
-#define BUTTON_SPACING_Y 62
+#define BUTTON_SPACING_X 49
+#define BUTTON_SPACING_Y 49
 #define GRID_SPACING 1
 
 #define LCM_WIDTH 480
@@ -51,6 +51,9 @@
 #define LCM_MSG_TITLE 0
 #define LCM_MSG_PARAM 1
 #define LCM_MSG_VALUE 2
+
+#define LCM_MSG_SIZE 3
+#define LCM_MSG_HEIGHT (LCM_MSG_SIZE * 9)
 
 //--------------------------------------------------
 typedef void (*_Btn_cb)(void);
@@ -74,6 +77,7 @@ typedef struct
 //--------------------------------------------------
 void LCM_DisplayTop(void);
 void LCM_DisplayEngMode(void);
+void LCM_DisplayPtMode(void);
 void LCM_DisplayGrid(void);
 void LCM_DisplayKeyBoard(void);
 void LCM_Initial(void);

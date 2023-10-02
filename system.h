@@ -33,6 +33,7 @@ typedef enum
   LCM_TOP,
     LCM_USERMODE,
     LCM_ENGMODE,
+    LCM_PTMODE,
 }_SysOpMode;
 
 typedef struct
