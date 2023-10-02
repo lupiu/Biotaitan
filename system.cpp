@@ -43,7 +43,6 @@ _SysErrCode SYS_PowerOnReset(void)
   {
     LCM_ShowMsg("System POR...", 1);
 
-    return SYS_OK;
     //POR P1
     delay(SYS_POR_P1T);
     LCM_ShowMsg("Barcode Scanner...", 1);

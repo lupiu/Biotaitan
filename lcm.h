@@ -78,6 +78,7 @@ void LCM_DisplayGrid(void);
 void LCM_DisplayKeyBoard(void);
 void LCM_Initial(void);
 void LCM_ShowMsg(uint8_t *str, uint8_t contd);
+void LCM_TouchScan(void);
 //--------------------------------------------------
 
 #endif

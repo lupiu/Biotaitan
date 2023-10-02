@@ -55,12 +55,12 @@ _ButtonInfo g_kb_btn[15] =
 
 _ButtonInfo g_func_btn[6] = 
 {
-  "F0", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F1", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F2", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F3", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F4", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F5", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F0", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F1", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F2", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F3", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F4", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F5", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
 };
 
 //--------------------------------------------------
@@ -183,7 +183,7 @@ boolean LCM_IsPressed(uint16_t px, uint16_t py, uint16_t x1, uint16_t y1, uint16
  }
 
 //--------------------------------------------------
-void TaskLcmCtrl(void *pvParameters) 
+void LCM_TouchScan(void)
 {  
   uint16_t i;
   uint16_t px = 0;
@@ -191,11 +191,6 @@ void TaskLcmCtrl(void *pvParameters)
 
   while(1)
   {
-    if (SYS_GetOpmode() == SYSTEM_INIT)
-    {
-      continue;
-    }
-
     g_LcmTouch.TP_Scan(0);
     if (g_LcmTouch.TP_Get_State() & TP_PRES_DOWN) 
     {
@@ -206,6 +201,7 @@ void TaskLcmCtrl(void *pvParameters)
       {
         if (LCM_IsPressed(px, py, g_func_btn[i].Px, g_func_btn[i].Py, (g_func_btn[i].Px + BUTTON_SPACING_X), (g_func_btn[i].Py + BUTTON_SPACING_Y)))
         {
+          LCM_ShowString(g_func_btn[i].Name, LCM_MSG_PARAM);
           switch (SYS_GetOpmode())
           {
             case LCM_TOP :

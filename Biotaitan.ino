@@ -17,13 +17,17 @@ void setup() {
   SYS_SetOpmode(SYSTEM_INIT);
 
   LCM_Initial();
-  TEMP_Initial();
-  OPT_Initial();
-  SYS_Initial();
+  //TEMP_Initial();
+  //OPT_Initial();
+  //SYS_Initial();
+  SYS_SetOpmode(LCM_TOP);
+  LCM_DisplayGrid();
+  LCM_DisplayKeyBoard();
+  LCM_DisplayTop();
 }
 
 //--------------------------------------------------
 void loop() {
   // put your main code here, to run repeatedly:
-
+  LCM_TouchScan();
 }
