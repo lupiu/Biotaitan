@@ -42,7 +42,11 @@
 //--------------------------------------------------
 #define BUTTON_SPACING_X 49
 #define BUTTON_SPACING_Y 49
+
+#define FUNCTION_SPACING_X 76
+#define FUNCTION_SPACING_Y 49
 #define GRID_SPACING 1
+#define FUNCTION_X_START ((5 * (GRID_SPACING + BUTTON_SPACING_X)))
 
 #define LCM_WIDTH 480
 #define LCM_HEIGHT 320

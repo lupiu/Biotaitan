@@ -14,63 +14,75 @@
 LCDWIKI_SPI g_LcmDisplay(LCM_MODEL, LCM_CS, LCM_CD, LCM_RST, LCM_LED);
 LCDWIKI_TOUCH g_LcmTouch(LCM_TCS, LCM_TCLK, LCM_TDOUT, LCM_TDIN, LCM_TIRQ);
 
-_LcmMenuType g_TopMenu[6] = 
+_LcmMenuType g_TopMenu[9] = 
 {
-  {" ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
   {"USR",  NULL},
-  {" ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
   {"ENG",   LCM_DisplayEngMode},
+  {"   ",     NULL},
   {"PT ",   LCM_DisplayPtMode},
   {"BACK",  LCM_DisplayTop}
 };
 
-_LcmMenuType g_EMMenu[6] = 
+_LcmMenuType g_EMMenu[9] = 
 {
-  {" ",     NULL},
-  {" ",     NULL},
-  {" ",     NULL},
-  {" ",     NULL},
-  {" ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
   {"BACK",  LCM_DisplayTop}
 };
 
-_LcmMenuType g_PTMenu[6] = 
+_LcmMenuType g_PTMenu[9] = 
 {
   {"NTC",   NULL},
   {"OPT",   NULL},
   {"HET",   NULL},
   {"COL",   NULL},
-  {" ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
   {"BACK",  LCM_DisplayTop}
 };
 
 _ButtonInfo g_kb_btn[15] = 
 {
-  "1",    3,  BLACK,  BLUE, (0 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "2",    3,  BLACK,  BLUE, (1 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "3",    3,  BLACK,  BLUE, (2 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "DEL",  2,  BLACK,  BLUE, (3 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "UP",   2,  BLACK,  BLUE, (4 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "4",    3,  BLACK,  BLUE, (0 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "5",    3,  BLACK,  BLUE, (1 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "6",    3,  BLACK,  BLUE, (2 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "0",    3,  BLACK,  BLUE, (3 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "DN",   2,  BLACK,  BLUE, (4 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "7",    3,  BLACK,  BLUE, (0 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "8",    3,  BLACK,  BLUE, (1 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "9",    3,  BLACK,  BLUE, (2 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  ".",    3,  BLACK,  BLUE, (3 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
-  "ENT",  2,  BLACK,  BLUE, (4 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "1",    3,  BLACK,  BLUE, (0 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "2",    3,  BLACK,  BLUE, (1 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "3",    3,  BLACK,  BLUE, (2 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "DEL",  2,  BLACK,  BLUE, (3 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "UP",   2,  BLACK,  BLUE, (4 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "4",    3,  BLACK,  BLUE, (0 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "5",    3,  BLACK,  BLUE, (1 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "6",    3,  BLACK,  BLUE, (2 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "0",    3,  BLACK,  BLUE, (3 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "DN",   2,  BLACK,  BLUE, (4 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "7",    3,  BLACK,  BLUE, (0 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "8",    3,  BLACK,  BLUE, (1 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "9",    3,  BLACK,  BLUE, (2 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  ".",    3,  BLACK,  BLUE, (3 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
+  "ENT",  2,  BLACK,  BLUE, (4 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + BUTTON_SPACING_Y)),
 };
 
-_ButtonInfo g_func_btn[6] = 
+_ButtonInfo g_func_btn[9] = 
 {
-  "F0", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F1", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (2 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F2", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F3", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (3 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F4", 2,  BLACK,  BLUE, (GRID_SPACING + (5 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
-  "F5", 2,  BLACK,  BLUE, (GRID_SPACING + (6 * (GRID_SPACING + BUTTON_SPACING_X))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_Y))),
+  "F0", 2,  BLACK,  BLUE, FUNCTION_X_START + (0 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F1", 2,  BLACK,  BLUE, FUNCTION_X_START + (1 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F2", 2,  BLACK,  BLUE, FUNCTION_X_START + (2 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F3", 2,  BLACK,  BLUE, FUNCTION_X_START + (0 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F4", 2,  BLACK,  BLUE, FUNCTION_X_START + (1 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F5", 2,  BLACK,  BLUE, FUNCTION_X_START + (2 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (2 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F6", 2,  BLACK,  BLUE, FUNCTION_X_START + (0 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F7", 2,  BLACK,  BLUE, FUNCTION_X_START + (1 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + FUNCTION_SPACING_Y)),
+  "F8", 2,  BLACK,  BLUE, FUNCTION_X_START + (2 * (GRID_SPACING + FUNCTION_SPACING_X)), LCM_HEIGHT - (1 * (GRID_SPACING + FUNCTION_SPACING_Y)),
 };
 
 //--------------------------------------------------
@@ -87,7 +99,25 @@ void LCM_DrawKeyBoardGrid(void)
 
   for (i = 1; i <= 5; i++)
   {
-    g_LcmDisplay.Draw_Fast_VLine((i * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)));
+    g_LcmDisplay.Draw_Fast_VLine((i * (GRID_SPACING + BUTTON_SPACING_X)) - 1, LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)));
+  }
+}
+
+//--------------------------------------------------
+void LCM_DrawFuncKeyGrid(void)
+{
+  uint16_t i;
+
+  g_LcmDisplay.Set_Draw_color(BLACK);
+
+  for (i = 1; i <= 3; i++)
+  {
+    g_LcmDisplay.Draw_Fast_HLine(FUNCTION_X_START, LCM_HEIGHT - 1 - (i * (GRID_SPACING + FUNCTION_SPACING_Y)), (3 * (GRID_SPACING + FUNCTION_SPACING_X)));
+  }
+
+  for (i = 1; i <= 3; i++)
+  {
+    g_LcmDisplay.Draw_Fast_VLine(FUNCTION_X_START + (i * (GRID_SPACING + FUNCTION_SPACING_X)) - 1, LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)), LCM_HEIGHT - 1 - (3 * (GRID_SPACING + BUTTON_SPACING_Y)));
   }
 }
 
@@ -103,12 +133,8 @@ void LCM_DisplayGrid(void)
   g_LcmDisplay.Draw_Fast_HLine(0, LCM_MSG_HEIGHT, LCM_WIDTH);
   g_LcmDisplay.Draw_Fast_HLine(0, LCM_MSG_HEIGHT * 2, LCM_WIDTH);
 
-  for (i = 0; i < 5; i++)
-  {
-    g_LcmDisplay.Draw_Fast_HLine(0, (i * (BUTTON_SPACING_Y + GRID_SPACING)), LCM_WIDTH);
-  }
-
   LCM_DrawKeyBoardGrid();
+  LCM_DrawFuncKeyGrid();
 }
 
 //--------------------------------------------------
@@ -116,12 +142,12 @@ void LCM_DisplayKeyBoard(void)
 {
   uint16_t i;
 
+  g_LcmDisplay.Set_Text_Mode(0);
   for(i = 0; i < sizeof(g_kb_btn) / sizeof(_ButtonInfo); i++)
   {
-    g_LcmDisplay.Set_Text_Mode(1);
     g_LcmDisplay.Set_Text_Size(g_kb_btn[i].NameSize);
     g_LcmDisplay.Set_Text_colour(g_kb_btn[i].NameColor);
-    g_LcmDisplay.Set_Text_Back_colour(BLACK);
+    g_LcmDisplay.Set_Text_Back_colour(g_kb_btn[i].BgColor);
     g_LcmDisplay.Print_String(g_kb_btn[i].Name, g_kb_btn[i].Px - strlen(g_kb_btn[i].Name) * g_kb_btn[i].NameSize * 6 / 2 + g_kb_btn[i].NameSize / 2 + 1 + BUTTON_SPACING_X /  2, g_kb_btn[i].Py - g_kb_btn[i].NameSize * 8 / 2 + g_kb_btn[i].NameSize / 2 + 1 + BUTTON_SPACING_Y /  2);
   }
 }
@@ -132,40 +158,41 @@ void LCM_DisplayFuncKey(_LcmMenuType *menu)
   uint16_t i;
 
   g_LcmDisplay.Set_Text_Mode(0);
-  g_LcmDisplay.Set_Text_Back_colour(BLACK);
-
   for(i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
   {
     g_LcmDisplay.Set_Text_Size(g_func_btn[i].NameSize);
     g_LcmDisplay.Set_Text_colour(g_func_btn[i].NameColor);
-    g_LcmDisplay.Fill_Rect(g_func_btn[i].Px, g_func_btn[i].Py, BUTTON_SPACING_X - GRID_SPACING, BUTTON_SPACING_Y - GRID_SPACING, BLUE);
-    g_LcmDisplay.Print_String(menu[i].Name, g_func_btn[i].Px - strlen(g_func_btn[i].Name) * g_func_btn[i].NameSize * 6 / 2 + g_func_btn[i].NameSize / 2 + 1 + BUTTON_SPACING_X /  2, g_func_btn[i].Py - g_func_btn[i].NameSize * 8 / 2 + g_func_btn[i].NameSize / 2 + 1 + BUTTON_SPACING_Y /  2);
+    g_LcmDisplay.Set_Text_Back_colour(g_kb_btn[i].BgColor);
+    g_LcmDisplay.Print_String(menu[i].Name, g_func_btn[i].Px - strlen(g_func_btn[i].Name) * g_func_btn[i].NameSize * 6 / 2 + g_func_btn[i].NameSize / 2 + 1 + FUNCTION_SPACING_X /  2, g_func_btn[i].Py - g_func_btn[i].NameSize * 8 / 2 + g_func_btn[i].NameSize / 2 + 1 + FUNCTION_SPACING_Y /  2);
   }
 }
 
 //--------------------------------------------------
 void LCM_ShowString(uint8_t *str, uint8_t msg_type)
 {
-    g_LcmDisplay.Set_Text_Mode(1);
-    g_LcmDisplay.Set_Text_Size(LCM_MSG_SIZE);
-    g_LcmDisplay.Set_Text_colour(BLACK);
-    g_LcmDisplay.Set_Text_Back_colour(BLACK);
+  uint8_t i;
+  uint8_t  msg[28] =  {"                            "};
 
-    if (msg_type == LCM_MSG_TITLE)
-    {
-      g_LcmDisplay.Fill_Rect(GRID_SPACING + 2, 1 + ((0 * (GRID_SPACING + BUTTON_SPACING_Y))), LCM_WIDTH, LCM_MSG_HEIGHT - GRID_SPACING, BLUE);
-      g_LcmDisplay.Print_String(str, GRID_SPACING + 2, 1 + (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_Y))));
-    }
-    else if (msg_type == LCM_MSG_PARAM)
-    {
-      g_LcmDisplay.Fill_Rect(GRID_SPACING + 2, 1 + (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), BUTTON_SPACING_Y - GRID_SPACING, BLUE);
-      g_LcmDisplay.Print_String(str, GRID_SPACING + 2, 1 + (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))));
-    }
-    else if (msg_type == LCM_MSG_VALUE)
-    {
-      g_LcmDisplay.Fill_Rect((GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), 1 + (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_Y))), (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), BUTTON_SPACING_Y - GRID_SPACING, BLUE);
-      g_LcmDisplay.Print_String(str, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), 1 + (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))));
-    }
+  for (i = 0; i < strlen(str); i++)
+    msg[i] = str[i];
+
+  g_LcmDisplay.Set_Text_Mode(0);
+  g_LcmDisplay.Set_Text_Size(LCM_MSG_SIZE);
+  g_LcmDisplay.Set_Text_colour(BLACK);
+  g_LcmDisplay.Set_Text_Back_colour(BLUE);
+
+  if (msg_type == LCM_MSG_TITLE)
+  {
+    g_LcmDisplay.Print_String(msg, GRID_SPACING + 2, 1 + (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_Y))));
+  }
+  else if (msg_type == LCM_MSG_PARAM)
+  {
+    g_LcmDisplay.Print_String(msg, GRID_SPACING + 2, 1 + (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))));
+  }
+  else if (msg_type == LCM_MSG_VALUE)
+  {
+    g_LcmDisplay.Print_String(msg, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), 1 + (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))));
+  }
 }
 
 //--------------------------------------------------
@@ -196,22 +223,22 @@ void LCM_ShowMsg(uint8_t *str, uint8_t contd)
 //--------------------------------------------------
 void LCM_DisplayPtMode(void)
 {
-  LCM_DisplayFuncKey(g_PTMenu);
   LCM_ShowString("Part Test Mode", LCM_MSG_TITLE);
+  LCM_DisplayFuncKey(g_PTMenu);
 }
 
 //--------------------------------------------------
 void LCM_DisplayEngMode(void)
 {
-  LCM_DisplayFuncKey(g_EMMenu);
   LCM_ShowString("Engineering Mode", LCM_MSG_TITLE);
+  LCM_DisplayFuncKey(g_EMMenu);
 }
 
 //--------------------------------------------------
 void LCM_DisplayTop(void)
 {
-  LCM_DisplayFuncKey(g_TopMenu);
   LCM_ShowString("Biotaitan System", LCM_MSG_TITLE);
+  LCM_DisplayFuncKey(g_TopMenu);
 }
 
 //--------------------------------------------------
