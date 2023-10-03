@@ -55,6 +55,7 @@
 #define LCM_MSG_TITLE 0
 #define LCM_MSG_PARAM 1
 #define LCM_MSG_VALUE 2
+#define LCM_MSG_INFO  3
 
 #define LCM_MSG_SIZE 3
 #define LCM_MSG_HEIGHT (LCM_MSG_SIZE * 9)
@@ -85,7 +86,7 @@ void LCM_DisplayPtMode(void);
 void LCM_DisplayGrid(void);
 void LCM_DisplayKeyBoard(void);
 void LCM_Initial(void);
-void LCM_ShowMsg(uint8_t *str, uint8_t contd);
+void LCM_ScreenShowMsg(uint8_t *str, uint8_t contd);
 void LCM_TouchScan(void);
 //--------------------------------------------------
 

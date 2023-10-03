@@ -168,43 +168,89 @@ void LCM_DisplayFuncKey(_LcmMenuType *menu)
 }
 
 //--------------------------------------------------
-void LCM_ShowString(uint8_t *str, uint8_t msg_type)
+void LCM_SetMsgText(void)
 {
-  uint8_t i;
-  uint8_t  msg[28] =  {"                            "};
-
-  for (i = 0; i < strlen(str); i++)
-    msg[i] = str[i];
-
   g_LcmDisplay.Set_Text_Mode(0);
   g_LcmDisplay.Set_Text_Size(LCM_MSG_SIZE);
   g_LcmDisplay.Set_Text_colour(BLACK);
   g_LcmDisplay.Set_Text_Back_colour(BLUE);
-
-  if (msg_type == LCM_MSG_TITLE)
-  {
-    g_LcmDisplay.Print_String(msg, GRID_SPACING + 2, 1 + (GRID_SPACING + (0 * (GRID_SPACING + BUTTON_SPACING_Y))));
-  }
-  else if (msg_type == LCM_MSG_PARAM)
-  {
-    g_LcmDisplay.Print_String(msg, GRID_SPACING + 2, 1 + (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))));
-  }
-  else if (msg_type == LCM_MSG_VALUE)
-  {
-    g_LcmDisplay.Print_String(msg, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), 1 + (GRID_SPACING + (1 * (GRID_SPACING + BUTTON_SPACING_Y))));
-  }
 }
 
 //--------------------------------------------------
-void LCM_ShowMsg(uint8_t *str, uint8_t contd)
+void LCM_ShowTitleString(uint8_t *str)
+{
+  uint8_t i;
+  uint8_t  msg[27] = "                           ";
+
+  for (i = 0; i < strlen(str); i++)
+    msg[i] = str[i];
+
+  LCM_SetMsgText();
+  g_LcmDisplay.Print_String(msg, GRID_SPACING + 2, 1);
+}
+
+//--------------------------------------------------
+void LCM_ShowParamString(uint8_t *str)
+{
+  uint8_t i;
+  uint8_t  msg[11] = "           ";
+
+  for (i = 0; i < strlen(str); i++)
+    msg[i] = str[i];
+
+  LCM_SetMsgText();
+  g_LcmDisplay.Print_String(msg, GRID_SPACING + 2, LCM_MSG_HEIGHT + 2);
+}
+
+//--------------------------------------------------
+void LCM_ShowValueString(uint8_t *str)
+{
+  uint8_t i;
+  uint8_t  msg[20] = "            ";
+
+  for (i = 0; i < strlen(str); i++)
+    msg[i] = str[i];
+
+  LCM_SetMsgText();
+  g_LcmDisplay.Print_String(msg, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), LCM_MSG_HEIGHT + 2);
+}
+
+//--------------------------------------------------
+void LCM_ShowInfoString(uint8_t *str, uint8_t contd)
 {
   static uint8_t msg_line = 0;
+  uint8_t i;
+  uint8_t  msg[27] = "                           ";
 
-  g_LcmDisplay.Set_Text_Mode(0);
-  g_LcmDisplay.Set_Text_Size(LCM_MSG_SIZE);
-  g_LcmDisplay.Set_Text_colour(BLACK);
-  g_LcmDisplay.Set_Text_Back_colour(BLACK);
+  for (i = 0; i < strlen(str); i++)
+    msg[i] = str[i];
 
+  LCM_SetMsgText();
+  if (contd == 0)
+  {
+    msg_line = 0;
+  }
+
+  if (msg_line == 0)
+    g_LcmDisplay.Fill_Rect(0, (2 * LCM_MSG_HEIGHT) + 2, LCM_WIDTH, (4 * LCM_MSG_HEIGHT), BLUE);
+
+  g_LcmDisplay.Print_String(msg, GRID_SPACING + 2,  ((msg_line + 2) * LCM_MSG_HEIGHT) + 2);
+  msg_line++;
+  if (msg_line >= 4)
+    msg_line = 0;
+}
+
+//--------------------------------------------------
+void LCM_ScreenShowMsg(uint8_t *str, uint8_t contd)
+{
+  static uint8_t msg_line = 0;
+  uint8_t i;
+  uint8_t  msg[27] = "                           ";
+
+  for (i = 0; i < strlen(str); i++)
+    msg[i] = str[i];
+
+  LCM_SetMsgText();
   if (contd == 0)
   {
     msg_line = 0;
@@ -213,9 +259,9 @@ void LCM_ShowMsg(uint8_t *str, uint8_t contd)
   if (msg_line == 0)
     g_LcmDisplay.Fill_Screen(BLUE);
 
-  g_LcmDisplay.Print_String(str, GRID_SPACING, (GRID_SPACING + (msg_line * (GRID_SPACING + BUTTON_SPACING_Y))));
+  g_LcmDisplay.Print_String(msg, GRID_SPACING + 2, (msg_line * LCM_MSG_HEIGHT) + 2);
   msg_line++;
-  if (msg_line >= 5)
+  if (msg_line >= 11)
     msg_line = 0;
 
 }
@@ -223,21 +269,24 @@ void LCM_ShowMsg(uint8_t *str, uint8_t contd)
 //--------------------------------------------------
 void LCM_DisplayPtMode(void)
 {
-  LCM_ShowString("Part Test Mode", LCM_MSG_TITLE);
+  LCM_ShowTitleString("Part Test Mode");
   LCM_DisplayFuncKey(g_PTMenu);
 }
 
 //--------------------------------------------------
 void LCM_DisplayEngMode(void)
 {
-  LCM_ShowString("Engineering Mode", LCM_MSG_TITLE);
+  LCM_ShowTitleString("Engineering Mode");
   LCM_DisplayFuncKey(g_EMMenu);
 }
 
 //--------------------------------------------------
 void LCM_DisplayTop(void)
 {
-  LCM_ShowString("Biotaitan System", LCM_MSG_TITLE);
+  LCM_ShowTitleString("Biotaitan System");
+  LCM_ShowParamString("f");
+  LCM_ShowValueString("f");
+  LCM_ShowInfoString("Select operation mode...", 0);
   LCM_DisplayFuncKey(g_TopMenu);
 }
 
@@ -323,7 +372,7 @@ void LCM_Initial(void)
   g_LcmTouch.TP_Init(1, LCM_WIDTH, LCM_HEIGHT);
 
   g_LcmDisplay.Fill_Screen(BLUE);
-  LCM_ShowMsg("System Initial...", 0);
+  LCM_ScreenShowMsg("System Initial...", 0);
 }
 
 //--------------------------------------------------
