@@ -6,7 +6,8 @@
 *      Author: silva_lin
 */
 
-#include "Arduino.h" 
+#include "Arduino.h"
+#include "math.h"
 #include "main.h"
 #include "temp_ctrl.h"
 #include <PID_v1.h>
@@ -20,9 +21,15 @@ PID g_Temp_PID(&g_PidData.Input, &g_PidData.Output, &g_PidData.SetPoint, 2, 5, 1
 uint16_t TEMP_ReadTemperature(uint8_t pin)
 {
   uint16_t temp;
+  uint16_t thermistor_r;
 
   temp = analogRead(pin);
-  return (temp * 16); //TBD
+  temp = (temp * 5 / 1023);
+  thermistor_r = ((ANALOG_VA * ANALOG_RVD) / (ANALOG_VA - temp));
+
+  temp = (1 / ((1 / THERM_BASE_DK)-((log(THERM_BASE_R / thermistor_r)) / THERM_BASE_B))) - THERM_BASE_DK;
+
+  return temp; //TBD
 }
 
 //--------------------------------------------------

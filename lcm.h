@@ -40,6 +40,9 @@
 #define WHITE   0xFFFF
 
 //--------------------------------------------------
+#define BUTTON_FUNC 1
+#define BUTTON_KEY  2  
+
 #define BUTTON_SPACING_X 49
 #define BUTTON_SPACING_Y 49
 
@@ -80,14 +83,16 @@ typedef struct
 }_ButtonInfo;
 
 //--------------------------------------------------
-void LCM_DisplayTop(void);
-void LCM_DisplayEngMode(void);
-void LCM_DisplayPtMode(void);
 void LCM_DisplayGrid(void);
 void LCM_DisplayKeyBoard(void);
+void LCM_DisplayFuncKey(_LcmMenuType *menu);
 void LCM_Initial(void);
+void LCM_ShowTitleString(uint8_t *str);
+void LCM_ShowParamString(uint8_t *str);
+void LCM_ShowValue(double value);
+void LCM_ShowInfoString(uint8_t *str, uint8_t contd);
 void LCM_ScreenShowMsg(uint8_t *str, uint8_t contd);
-void LCM_TouchScan(void);
+void LCM_TouchScan(uint8_t *type, uint8_t *num);
 //--------------------------------------------------
 
 #endif

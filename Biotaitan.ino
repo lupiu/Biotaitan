@@ -14,20 +14,16 @@ void setup() {
   
   Serial.begin(9600);
 
-  SYS_SetOpmode(SYSTEM_INIT);
+  SYS_SetOpmode(SYS_INIT);
 
   LCM_Initial();
-  //TEMP_Initial();
-  //OPT_Initial();
-  //SYS_Initial();
-  SYS_SetOpmode(LCM_TOP);
-  LCM_DisplayGrid();
-  LCM_DisplayKeyBoard();
-  LCM_DisplayTop();
+  TEMP_Initial();
+  OPT_Initial();
+  SYS_Initial();
 }
 
 //--------------------------------------------------
 void loop() {
   // put your main code here, to run repeatedly:
-  LCM_TouchScan();
+  SYS_SystemRun();
 }

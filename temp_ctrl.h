@@ -26,6 +26,13 @@
 #define PID_KD 200 // Derivative Constant
 
 #define PID_WINDOWSIZE 300
+
+#define ANALOG_VA 5.0 //analog Voltage
+#define ANALOG_RVD 8.25 //analog resistor (kohm)
+#define THERM_BASE_DK 273.15
+#define THERM_BASE_R 30
+#define THERM_BASE_B 3450
+
 //--------------------------------------------------
 typedef enum
 {

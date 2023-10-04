@@ -14,45 +14,6 @@
 LCDWIKI_SPI g_LcmDisplay(LCM_MODEL, LCM_CS, LCM_CD, LCM_RST, LCM_LED);
 LCDWIKI_TOUCH g_LcmTouch(LCM_TCS, LCM_TCLK, LCM_TDOUT, LCM_TDIN, LCM_TIRQ);
 
-_LcmMenuType g_TopMenu[9] = 
-{
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"USR",  NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"ENG",   LCM_DisplayEngMode},
-  {"   ",     NULL},
-  {"PT ",   LCM_DisplayPtMode},
-  {"BACK",  LCM_DisplayTop}
-};
-
-_LcmMenuType g_EMMenu[9] = 
-{
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"BACK",  LCM_DisplayTop}
-};
-
-_LcmMenuType g_PTMenu[9] = 
-{
-  {"NTC",   NULL},
-  {"OPT",   NULL},
-  {"HET",   NULL},
-  {"COL",   NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"   ",     NULL},
-  {"BACK",  LCM_DisplayTop}
-};
-
 _ButtonInfo g_kb_btn[15] = 
 {
   "1",    3,  BLACK,  BLUE, (0 * (GRID_SPACING + BUTTON_SPACING_X)), LCM_HEIGHT - (3 * (GRID_SPACING + BUTTON_SPACING_Y)),
@@ -163,7 +124,7 @@ void LCM_DisplayFuncKey(_LcmMenuType *menu)
     g_LcmDisplay.Set_Text_Size(g_func_btn[i].NameSize);
     g_LcmDisplay.Set_Text_colour(g_func_btn[i].NameColor);
     g_LcmDisplay.Set_Text_Back_colour(g_kb_btn[i].BgColor);
-    g_LcmDisplay.Print_String(menu[i].Name, g_func_btn[i].Px - strlen(g_func_btn[i].Name) * g_func_btn[i].NameSize * 6 / 2 + g_func_btn[i].NameSize / 2 + 1 + FUNCTION_SPACING_X /  2, g_func_btn[i].Py - g_func_btn[i].NameSize * 8 / 2 + g_func_btn[i].NameSize / 2 + 1 + FUNCTION_SPACING_Y /  2);
+    g_LcmDisplay.Print_String(menu[i].Name, g_func_btn[i].Px + 3, g_func_btn[i].Py - g_func_btn[i].NameSize * 8 / 2 + g_func_btn[i].NameSize / 2 + 1 + FUNCTION_SPACING_Y /  2);
   }
 }
 
@@ -203,16 +164,10 @@ void LCM_ShowParamString(uint8_t *str)
 }
 
 //--------------------------------------------------
-void LCM_ShowValueString(uint8_t *str)
+void LCM_ShowValue(double value)
 {
-  uint8_t i;
-  uint8_t  msg[20] = "            ";
-
-  for (i = 0; i < strlen(str); i++)
-    msg[i] = str[i];
-
   LCM_SetMsgText();
-  g_LcmDisplay.Print_String(msg, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), LCM_MSG_HEIGHT + 2);
+  g_LcmDisplay.Print_Number_Float(value, 2, (GRID_SPACING + (4 * (GRID_SPACING + BUTTON_SPACING_X))), LCM_MSG_HEIGHT + 2, '.', 4, ' ');
 }
 
 //--------------------------------------------------
@@ -263,31 +218,6 @@ void LCM_ScreenShowMsg(uint8_t *str, uint8_t contd)
   msg_line++;
   if (msg_line >= 11)
     msg_line = 0;
-
-}
-
-//--------------------------------------------------
-void LCM_DisplayPtMode(void)
-{
-  LCM_ShowTitleString("Part Test Mode");
-  LCM_DisplayFuncKey(g_PTMenu);
-}
-
-//--------------------------------------------------
-void LCM_DisplayEngMode(void)
-{
-  LCM_ShowTitleString("Engineering Mode");
-  LCM_DisplayFuncKey(g_EMMenu);
-}
-
-//--------------------------------------------------
-void LCM_DisplayTop(void)
-{
-  LCM_ShowTitleString("Biotaitan System");
-  LCM_ShowParamString("f");
-  LCM_ShowValueString("f");
-  LCM_ShowInfoString("Select operation mode...", 0);
-  LCM_DisplayFuncKey(g_TopMenu);
 }
 
 //--------------------------------------------------
@@ -304,60 +234,38 @@ boolean LCM_IsPressed(uint16_t px, uint16_t py, uint16_t x1, uint16_t y1, uint16
  }
 
 //--------------------------------------------------
-void LCM_TouchScan(void)
+void LCM_TouchScan(uint8_t *type, uint8_t *num)
 {  
   uint16_t i;
   uint16_t px = 0;
   uint16_t py = 0;
 
-  while(1)
-  {
-    g_LcmTouch.TP_Scan(0);
-    if (g_LcmTouch.TP_Get_State() & TP_PRES_DOWN) 
-    {
-      px = g_LcmTouch.x;
-      py = g_LcmTouch.y;
-
-      for (i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
-      {
-        if (LCM_IsPressed(px, py, g_func_btn[i].Px, g_func_btn[i].Py, (g_func_btn[i].Px + BUTTON_SPACING_X), (g_func_btn[i].Py + BUTTON_SPACING_Y)))
-        {
-          switch (SYS_GetOpmode())
-          {
-            case LCM_TOP :
-              if (g_TopMenu[i].CallBack != NULL)
-              {
-                g_TopMenu[i].CallBack();
-              }
-            break;
-
-            case LCM_ENGMODE :
-              if (g_EMMenu[i].CallBack != NULL)
-              {
-                g_EMMenu[i].CallBack();
-              }
-            break;
-
-            case LCM_PTMODE :
-              if (g_PTMenu[i].CallBack != NULL)
-              {
-                g_PTMenu[i].CallBack();
-              }
-            break;
   
-            default : ;  
-          }
-          break;
-        }
-      }
+  *type = 0;
+  *num = 255;
+  g_LcmTouch.TP_Scan(0);
+  if (g_LcmTouch.TP_Get_State() & TP_PRES_DOWN) 
+  {
+    px = g_LcmTouch.x;
+    py = g_LcmTouch.y;
 
-      for (i = 0; i < sizeof(g_kb_btn) / sizeof(_ButtonInfo); i++)
+    for (i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
+    {
+      if (LCM_IsPressed(px, py, g_func_btn[i].Px, g_func_btn[i].Py, (g_func_btn[i].Px + BUTTON_SPACING_X), (g_func_btn[i].Py + BUTTON_SPACING_Y)))
       {
-        if (LCM_IsPressed(px, py, g_kb_btn[i].Px, g_kb_btn[i].Py, (g_kb_btn[i].Px + BUTTON_SPACING_X), (g_kb_btn[i].Py + BUTTON_SPACING_Y)))
-        {
-          ///
-          break;
-        }
+        *type = BUTTON_FUNC;
+        *num = i;
+        break;
+      }
+    }
+
+    for (i = 0; i < sizeof(g_kb_btn) / sizeof(_ButtonInfo); i++)
+    {
+      if (LCM_IsPressed(px, py, g_kb_btn[i].Px, g_kb_btn[i].Py, (g_kb_btn[i].Px + BUTTON_SPACING_X), (g_kb_btn[i].Py + BUTTON_SPACING_Y)))
+      {
+        *type = BUTTON_KEY;
+        *num = i;
+        break;
       }
     }
   }

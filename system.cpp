@@ -13,9 +13,53 @@
 #include "temp_ctrl.h"
 
 //--------------------------------------------------
+_SysStatus g_SystemStatus = {SYS_INIT, 0};
+_LcmMenuType g_TopMenu[9] = 
+{
+  {"   ",     NULL},
+  {"USR",   NULL},
+  {"START",    NULL},
+  {"   ",     NULL},
+  {"ENG",   SYS_ChangeEmMode},
+  {"STOP",  NULL},
+  {"   ",     NULL},
+  {"PT ",   SYS_ChangePtMode},
+  {"BACK",  NULL}
+};
 
-_SysStatus g_SystemStatus = {SYSTEM_INIT, 0};
+_LcmMenuType g_EMMenu[9] = 
+{
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"START",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"STOP",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"BACK",  SYS_ChangeTopMode}
+};
 
+_LcmMenuType g_PTMenu[9] = 
+{
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"START",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"STOP",     NULL},
+  {"   ",     NULL},
+  {"   ",     NULL},
+  {"BACK",  SYS_ChangeTopMode}
+};
+
+_PrmPtMode g_PTParam[4] = 
+{
+  {"NTC",     {"TS1", 0}, {"TS2", 0}, {"TS3", 0}, {"TS4", 0}, {"TS5", 0}},
+  {"OPTIC",   {"LED1", 0}, {"LED2", 0}, {"LED3", 0}, {"LED4", 0}, NULL},
+  {"HEATER",  {"HEAT1", 25}, NULL, NULL, NULL, NULL},
+  {"COOLER",  {"COOL1", 25}, NULL, NULL, NULL, NULL}
+};
 //--------------------------------------------------
 void SYS_SetOpmode(_SysOpMode status) 
 {
@@ -39,7 +83,7 @@ void SYS_Shutdown(void)
 //--------------------------------------------------
 _SysErrCode SYS_PowerOnReset(void) 
 {
-  if (g_SystemStatus.status == SYSTEM_INIT)
+  if (g_SystemStatus.status == SYS_INIT)
   {
     LCM_ScreenShowMsg("System POR...", 1);
 
@@ -156,8 +200,104 @@ _SysErrCode SYS_PowerOnReset(void)
 }
 
 //--------------------------------------------------
+void SYS_ChangeTopMode(void)
+{
+  g_SystemStatus.status = SYS_TOP;
+  LCM_ShowTitleString("Biotaitan System");
+  LCM_ShowParamString("Parameter");
+  LCM_ShowValue(0);
+  LCM_ShowInfoString("Select operation mode...", 0);
+  LCM_DisplayFuncKey(g_TopMenu);
+}
+
+//--------------------------------------------------
+void SYS_ChangeEmMode(void)
+{
+  g_SystemStatus.status = SYS_ENGMODE;
+  LCM_ShowTitleString("Engineering Mode");
+  LCM_ShowParamString("Parameter");
+  LCM_ShowValue(0);
+  LCM_ShowInfoString("Select operation mode...", 0);
+  LCM_DisplayFuncKey(g_EMMenu);
+}
+
+//--------------------------------------------------
+void SYS_ChangePtMode(void)
+{
+  g_SystemStatus.status = SYS_PTMODE;
+  LCM_ShowTitleString("Part Test Mode");
+  LCM_ShowParamString("Parameter");
+  LCM_ShowValue(0);
+  LCM_ShowInfoString("touch UP or DN", 0);
+  LCM_DisplayFuncKey(g_PTMenu);
+}
+
+//--------------------------------------------------
+void SYS_PartTestRun(uint8_t key_type, uint8_t key_num)
+{
+  if (g_PTMenu[key_num].CallBack != NULL)
+  {
+    g_PTMenu[key_num].CallBack();
+  }
+
+  
+}
+
+//--------------------------------------------------
+void SYS_SystemRun(void)
+{
+  uint8_t key_type;
+  uint8_t key_num;
+
+  LCM_TouchScan(&key_type, &key_num);
+  if (key_type == BUTTON_FUNC)
+  {
+    switch (g_SystemStatus.status)
+    {
+      case SYS_TOP :
+        if (g_TopMenu[key_num].CallBack != NULL)
+        {
+          g_TopMenu[key_num].CallBack();
+        }
+      break;
+      case SYS_ENGMODE :
+        if (g_EMMenu[key_num].CallBack != NULL)
+        {
+          g_EMMenu[key_num].CallBack();
+        }
+      break;
+      case SYS_PTMODE :
+        if (g_PTMenu[key_num].CallBack != NULL)
+        {
+          g_PTMenu[key_num].CallBack();
+        }
+      break;
+      default :;
+    }
+  }
+  else if (key_type == BUTTON_KEY)
+  {
+    switch (g_SystemStatus.status)
+    {
+      case SYS_ENGMODE :
+
+      break;
+      case SYS_PTMODE :
+        if (g_PTMenu[key_num].CallBack != NULL)
+        {
+          g_PTMenu[key_num].CallBack();
+        }
+      break;
+      default :;
+    }
+
+  }
+}
+
+//--------------------------------------------------
 void SYS_Initial(void)
 {
+  /*
   if (SYS_PowerOnReset() != SYS_OK)
   {
     LCM_ScreenShowMsg("Initialization failed...", 1);
@@ -168,10 +308,14 @@ void SYS_Initial(void)
     LCM_ScreenShowMsg("System Initial OK!", 1);
     delay(1000);
     
-    g_SystemStatus.status = LCM_TOP;
+    g_SystemStatus.status = SYS_TOP;
     LCM_DisplayGrid();
     LCM_DisplayKeyBoard();
     LCM_DisplayTop();
   }
+  */
+  LCM_DisplayGrid();
+  LCM_DisplayKeyBoard();
+  SYS_ChangeTopMode();
 }
 //--------------------------------------------------
