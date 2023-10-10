@@ -7,6 +7,14 @@ uint8_t g_LedIntensityPin[4] = {A0, A1, A2, A3};
 uint8_t g_LedPinDefine[4] = {5, 6, 10, 11};
 uint8_t g_Ads1115_Pin[4] = {ADS1115_MUX_AIN0_GND, ADS1115_MUX_AIN1_GND, ADS1115_MUX_AIN2_GND, ADS1115_MUX_AIN3_GND};
 
+#define ADS1115_PGA ADS1115_PGA_0_256
+//ADS1115_PGA_6_144
+//ADS1115_PGA_4_096
+//ADS1115_PGA_2_048
+//ADS1115_PGA_1_024
+//ADS1115_PGA_0_512
+//ADS1115_PGA_0_256
+
 #define LIGHT_ON_TIME  1000
 
 ADS1115 ads1115 = ADS1115(ADS1115_I2C_ADDR_GND);
@@ -30,7 +38,7 @@ void setup() {
 	ads1115.reset();
 	ads1115.setDeviceMode(ADS1115_MODE_SINGLE);
 	ads1115.setDataRate(ADS1115_DR_250_SPS);
-	ads1115.setPga(ADS1115_PGA_0_512);
+	ads1115.setPga(ADS1115_PGA);
 
   pinMode(5, OUTPUT);
   analogWrite(5, 255);
@@ -97,11 +105,11 @@ void loop()
       }
       Serial.println();
       Serial.flush();
-      delay(200);
+      //delay(200);
     }
   }
 
-  //while(1);
+  while(1);
 }
 
 void Led_OffAll(void)
