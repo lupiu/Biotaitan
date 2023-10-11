@@ -53,23 +53,25 @@ _LcmMenuType g_PTMenu[9] =
   {"BACK",  SYS_ChangeTopMode}
 };
 
-_PrmPtMode g_PTParam[4] = 
+_PrmPtMode g_PTParam[1] = 
 {
-  {"NTC",     {"TS1", 0}, {"TS2", 0}, {"TS3", 0}, {"TS4", 0}, {"TS5", 0}},
-  {"OPTIC",   {"LED1", 0}, {"LED2", 0}, {"LED3", 0}, {"LED4", 0}, NULL},
-  {"HEATER",  {"HEAT1", 25}, NULL, NULL, NULL, NULL},
-  {"COOLER",  {"COOL1", 25}, NULL, NULL, NULL, NULL}
+  {"NTC",     {"TS1", 0}}
 };
+//  {"NTC",     {"TS1", 0}, {"TS2", 0}, {"TS3", 0}, {"TS4", 0}, {"TS5", 0}}
+//  {"OPTIC",   {"LED1", 0}, {"LED2", 0}, {"LED3", 0}, {"LED4", 0}, {NULL, NULL}},
+//  {"HEATER",  {"HEAT1", 25}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}},
+//  {"COOLER",  {"COOL1", 25}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}},
+//};
 //--------------------------------------------------
 void SYS_SetOpmode(_SysOpMode status) 
 {
-  g_SystemStatus.status = status;
+  g_SystemStatus.Status = status;
 }
 
 //--------------------------------------------------
 _SysOpMode SYS_GetOpmode(void) 
 {
-  return g_SystemStatus.status;
+  return g_SystemStatus.Status;
 }
 
 //--------------------------------------------------
@@ -83,7 +85,7 @@ void SYS_Shutdown(void)
 //--------------------------------------------------
 _SysErrCode SYS_PowerOnReset(void) 
 {
-  if (g_SystemStatus.status == SYS_INIT)
+  if (g_SystemStatus.Status == SYS_INIT)
   {
     LCM_ScreenShowMsg("System POR...", 1);
 
@@ -93,9 +95,9 @@ _SysErrCode SYS_PowerOnReset(void)
 
     //POR P2
     LCM_ScreenShowMsg("Heater On to 95c...", 1);
-    g_SystemStatus.time = millis();
+    g_SystemStatus.Time = millis();
 
-    while ((millis() - g_SystemStatus.time) < SYS_POR_P2T)
+    while ((millis() - g_SystemStatus.Time) < SYS_POR_P2T)
     {
       TEMP_TempCtrl(95);
     }
@@ -118,9 +120,9 @@ _SysErrCode SYS_PowerOnReset(void)
     LCM_ScreenShowMsg("LED 1 3 On", 1);
     OPT_LedOn(OPT_LED1);
     OPT_LedOn(OPT_LED3);
-    g_SystemStatus.time = millis();
+    g_SystemStatus.Time = millis();
 
-    while ((millis() - g_SystemStatus.time) < SYS_POR_P3T)
+    while ((millis() - g_SystemStatus.Time) < SYS_POR_P3T)
     {
       TEMP_TempCtrl(60);
     }
@@ -175,8 +177,8 @@ _SysErrCode SYS_PowerOnReset(void)
     OPT_LedOff(OPT_LED2);
     OPT_LedOff(OPT_LED4);
 
-    g_SystemStatus.time = millis();
-    while ((millis() - g_SystemStatus.time) < SYS_POR_P2T)
+    g_SystemStatus.Time = millis();
+    while ((millis() - g_SystemStatus.Time) < SYS_POR_P2T)
     {
       TEMP_TempCtrl(50);
     }
@@ -194,7 +196,7 @@ _SysErrCode SYS_PowerOnReset(void)
     //POR P6
     delay(SYS_POR_P6T);
     LCM_ScreenShowMsg("SHT20 Initial...", 1);
-    g_SystemStatus.time = millis();
+    g_SystemStatus.Time = millis();
     return SYS_OK;
   }
 }
@@ -202,7 +204,7 @@ _SysErrCode SYS_PowerOnReset(void)
 //--------------------------------------------------
 void SYS_ChangeTopMode(void)
 {
-  g_SystemStatus.status = SYS_TOP;
+  g_SystemStatus.Status = SYS_TOP;
   LCM_ShowTitleString("Biotaitan System");
   LCM_ShowParamString("Parameter");
   LCM_ShowValue(0);
@@ -213,7 +215,7 @@ void SYS_ChangeTopMode(void)
 //--------------------------------------------------
 void SYS_ChangeEmMode(void)
 {
-  g_SystemStatus.status = SYS_ENGMODE;
+  g_SystemStatus.Status = SYS_ENGMODE;
   LCM_ShowTitleString("Engineering Mode");
   LCM_ShowParamString("Parameter");
   LCM_ShowValue(0);
@@ -224,7 +226,7 @@ void SYS_ChangeEmMode(void)
 //--------------------------------------------------
 void SYS_ChangePtMode(void)
 {
-  g_SystemStatus.status = SYS_PTMODE;
+  g_SystemStatus.Status = SYS_PTMODE;
   LCM_ShowTitleString("Part Test Mode");
   LCM_ShowParamString("Parameter");
   LCM_ShowValue(0);
@@ -252,7 +254,7 @@ void SYS_SystemRun(void)
   LCM_TouchScan(&key_type, &key_num);
   if (key_type == BUTTON_FUNC)
   {
-    switch (g_SystemStatus.status)
+    switch (g_SystemStatus.Status)
     {
       case SYS_TOP :
         if (g_TopMenu[key_num].CallBack != NULL)
@@ -277,7 +279,7 @@ void SYS_SystemRun(void)
   }
   else if (key_type == BUTTON_KEY)
   {
-    switch (g_SystemStatus.status)
+    switch (g_SystemStatus.Status)
     {
       case SYS_ENGMODE :
 
@@ -308,7 +310,7 @@ void SYS_Initial(void)
     LCM_ScreenShowMsg("System Initial OK!", 1);
     delay(1000);
     
-    g_SystemStatus.status = SYS_TOP;
+    g_SystemStatus.Status = SYS_TOP;
     LCM_DisplayGrid();
     LCM_DisplayKeyBoard();
     LCM_DisplayTop();

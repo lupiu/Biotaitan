@@ -18,14 +18,16 @@ _PidData g_PidData;
 PID g_Temp_PID(&g_PidData.Input, &g_PidData.Output, &g_PidData.SetPoint, 2, 5, 1, DIRECT);
 
 //--------------------------------------------------
-uint16_t TEMP_ReadTemperature(uint8_t pin)
+float TEMP_ReadTemperature(uint8_t pin)
 {
-  uint16_t temp;
-  uint16_t thermistor_r;
+  float temp;
+  float thermistor_r;
 
   temp = analogRead(pin);
-  temp = (temp * 5 / 1023);
-  thermistor_r = ((ANALOG_VA * ANALOG_RVD) / (ANALOG_VA - temp));
+  temp = ((temp * ANALOG_VA) / 1023);
+  thermistor_r = ((temp * ANALOG_RVD) / (ANALOG_VA - temp));
+  if (thermistor_r <= THERM_MIN_R)
+    thermistor_r = THERM_MIN_R;
 
   temp = (1 / ((1 / THERM_BASE_DK)-((log(THERM_BASE_R / thermistor_r)) / THERM_BASE_B))) - THERM_BASE_DK;
 
@@ -69,11 +71,11 @@ void TEMP_FanOff(void)
 }
 
 //--------------------------------------------------
-void TEMP_TempCtrl(double temp_c)
+void TEMP_TempCtrl(double temp_c, uint8_t pin)
 {
   double now_time;
   g_TempData.TargetTemp_C = temp_c;
-  g_TempData.PresentTemp_C = TEMP_ReadTemperature(NTC_TS1);
+  g_TempData.PresentTemp_C = TEMP_ReadTemperature(pin);
 
   g_PidData.Input = g_TempData.PresentTemp_C;
   g_PidData.SetPoint = g_TempData.TargetTemp_C;

@@ -28,10 +28,11 @@
 #define PID_WINDOWSIZE 300
 
 #define ANALOG_VA 5.0 //analog Voltage
-#define ANALOG_RVD 8.25 //analog resistor (kohm)
-#define THERM_BASE_DK 273.15
-#define THERM_BASE_R 30
-#define THERM_BASE_B 3450
+#define ANALOG_RVD 8250 //analog resistor (ohm)
+#define THERM_BASE_DK 273.15 //K@0C
+#define THERM_BASE_R 30000 //R@0C
+#define THERM_BASE_B 3455 //0~105C
+#define THERM_MIN_R 127
 
 //--------------------------------------------------
 typedef enum
@@ -59,7 +60,7 @@ typedef struct
 
 //--------------------------------------------------
 void TEMP_Initial(void);
-uint16_t TEMP_ReadTemperature(uint8_t pin);
+float TEMP_ReadTemperature(uint8_t pin);
 void TEMP_TempCtrl(double temp_c);
 //--------------------------------------------------
 
