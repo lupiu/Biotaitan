@@ -56,7 +56,7 @@ typedef struct
 typedef struct
 {
   uint8_t Name[10];
-  _PrmDataType Mode;
+  _PrmDataType Mode[5];
 }_PrmPtMode;
 
 //--------------------------------------------------

@@ -16,16 +16,14 @@ void setup() {
 
   SYS_SetOpmode(SYS_INIT);
 
-  //LCM_Initial();
-  //TEMP_Initial();
-  //OPT_Initial();
-  //SYS_Initial();
+  LCM_Initial();
+  TEMP_Initial();
+  OPT_Initial();
+  SYS_Initial();
 }
 
 //--------------------------------------------------
 void loop() {
   // put your main code here, to run repeatedly:
-  //SYS_SystemRun();
-  TEMP_TempCtrl(50, NTC_TS1);
-  delay(1000);
+  SYS_SystemRun();
 }

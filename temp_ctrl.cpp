@@ -25,13 +25,14 @@ float TEMP_ReadTemperature(uint8_t pin)
 
   temp = analogRead(pin);
   temp = ((temp * ANALOG_VA) / 1023);
+
   thermistor_r = ((temp * ANALOG_RVD) / (ANALOG_VA - temp));
   if (thermistor_r <= THERM_MIN_R)
     thermistor_r = THERM_MIN_R;
 
   temp = (1 / ((1 / THERM_BASE_DK)-((log(THERM_BASE_R / thermistor_r)) / THERM_BASE_B))) - THERM_BASE_DK;
 
-  return temp; //TBD
+  return temp;
 }
 
 //--------------------------------------------------
@@ -71,7 +72,7 @@ void TEMP_FanOff(void)
 }
 
 //--------------------------------------------------
-void TEMP_TempCtrl(double temp_c, uint8_t pin)
+void TEMP_TempCtrl(float temp_c, uint8_t pin)
 {
   double now_time;
   g_TempData.TargetTemp_C = temp_c;
@@ -81,29 +82,34 @@ void TEMP_TempCtrl(double temp_c, uint8_t pin)
   g_PidData.SetPoint = g_TempData.TargetTemp_C;
   g_Temp_PID.Compute();
 
-  now_time = millis();
-  if ((now_time - g_PidData.PidStartTime) > PID_WINDOWSIZE)
+  if (g_PidData.Output >= 0)
   {
-    g_PidData.PidStartTime += PID_WINDOWSIZE;
-  }
-
-  if (g_PidData.Output > (now_time - g_PidData.PidStartTime))
-  {
-    TEMP_HeaterOn();
+    analogWrite(HEATER_CTRL, g_PidData.Output);
+    analogWrite(PELTIER_CTRL, 0);
   }
   else
   {
-    TEMP_HeaterOff();
+    analogWrite(HEATER_CTRL, 0);
+    analogWrite(PELTIER_CTRL, 0 - g_PidData.Output);
   }
+/*
+  if (millis() - g_PidData.PidStartTime >= 200)
+  {
+    Serial.print(F("NTC3:")); Serial.println(g_TempData.PresentTemp_C);//----------------
+    Serial.print(F("Output:")); Serial.println(g_PidData.Output);//----------------
+    g_PidData.PidStartTime = millis();
+  }
+*/
 }
 
 //--------------------------------------------------
 void PID_Initial(void)
 {
   g_PidData.PidStartTime = millis();
-  g_PidData.SetPoint = 100;
-  g_Temp_PID.SetOutputLimits(0, 255);
+  g_PidData.SetPoint = 25;
+  g_Temp_PID.SetOutputLimits(-255, 255);
   g_Temp_PID.SetMode(AUTOMATIC);
+  g_Temp_PID.SetTunings(PID_KP, PID_KI, PID_KD);
 
 }
 

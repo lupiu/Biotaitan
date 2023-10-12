@@ -17,13 +17,13 @@
 #define NTC_TS3 A2
 #define NTC_TS4 A3
 #define NTC_TS5 A4
-#define HEATER_CTRL 2
-#define PELTIER_CTRL 3
-#define FAN_CTRL 4
+#define HEATER_CTRL 6
+#define PELTIER_CTRL 7
+#define FAN_CTRL 8
 
-#define PID_KP 30  // Proportional constant
-#define PID_KI 0.7 // Integral Constant
-#define PID_KD 200 // Derivative Constant
+#define PID_KP 300  // Proportional constant
+#define PID_KI 20 // Integral Constant
+#define PID_KD 5 // Derivative Constant
 
 #define PID_WINDOWSIZE 300
 
@@ -53,15 +53,15 @@ typedef struct
 typedef struct
 {
   _TempCtrlStatus status;
-  double PresentTemp_C;
-  double TargetTemp_C;
+  float PresentTemp_C;
+  float TargetTemp_C;
   double CycleTime;
 }_TempCtrl;
 
 //--------------------------------------------------
 void TEMP_Initial(void);
 float TEMP_ReadTemperature(uint8_t pin);
-void TEMP_TempCtrl(double temp_c);
+void TEMP_TempCtrl(float temp_c, uint8_t pin);
 //--------------------------------------------------
 
 #endif

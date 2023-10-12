@@ -53,15 +53,13 @@ _LcmMenuType g_PTMenu[9] =
   {"BACK",  SYS_ChangeTopMode}
 };
 
-_PrmPtMode g_PTParam[1] = 
+_PrmPtMode g_PTParam[4] = 
 {
-  {"NTC",     {"TS1", 0}}
+  {"NTC",     {{"TS1",0}, {"TS2", 0}, {"TS3", 0}, {"TS4", 0}, {"TS5", 0}}},
+  {"OPTIC",   {{"LED1", 0}, {"LED2", 0}, {"LED3", 0}, {"LED4", 0}, NULL}},
+  {"HEATER",  {{"HEAT1", 25}, NULL, NULL, NULL, NULL}},
+  {"COOLER",  {{"COOL1", 25}, NULL, NULL, NULL, NULL}}
 };
-//  {"NTC",     {"TS1", 0}, {"TS2", 0}, {"TS3", 0}, {"TS4", 0}, {"TS5", 0}}
-//  {"OPTIC",   {"LED1", 0}, {"LED2", 0}, {"LED3", 0}, {"LED4", 0}, {NULL, NULL}},
-//  {"HEATER",  {"HEAT1", 25}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}},
-//  {"COOLER",  {"COOL1", 25}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}, {NULL, NULL}},
-//};
 //--------------------------------------------------
 void SYS_SetOpmode(_SysOpMode status) 
 {
@@ -77,9 +75,8 @@ _SysOpMode SYS_GetOpmode(void)
 //--------------------------------------------------
 void SYS_Shutdown(void) 
 {
-  //LCM_ShowMsg("Initialization failed...", 1);
-  //while(1);
-  return;
+  LCM_ScreenShowMsg("Initialization failed...", 1);
+  while(1);
 }
 
 //--------------------------------------------------
@@ -99,7 +96,7 @@ _SysErrCode SYS_PowerOnReset(void)
 
     while ((millis() - g_SystemStatus.Time) < SYS_POR_P2T)
     {
-      TEMP_TempCtrl(95);
+      TEMP_TempCtrl(95, NTC_TS3);
     }
 
     if (TEMP_ReadTemperature(NTC_TS1) == 95)
@@ -124,7 +121,7 @@ _SysErrCode SYS_PowerOnReset(void)
 
     while ((millis() - g_SystemStatus.Time) < SYS_POR_P3T)
     {
-      TEMP_TempCtrl(60);
+      TEMP_TempCtrl(60, NTC_TS3);
     }
 
     if (TEMP_ReadTemperature(NTC_TS1) == 60)
@@ -180,7 +177,7 @@ _SysErrCode SYS_PowerOnReset(void)
     g_SystemStatus.Time = millis();
     while ((millis() - g_SystemStatus.Time) < SYS_POR_P2T)
     {
-      TEMP_TempCtrl(50);
+      TEMP_TempCtrl(50, NTC_TS3);
     }
 
     if (TEMP_ReadTemperature(NTC_TS1) == 50)

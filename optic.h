@@ -13,15 +13,15 @@
 
 //--------------------------------------------------
 //paramters define
-#define OPT_LED1  22
-#define OPT_LED2  23
-#define OPT_LED3  24
-#define OPT_LED4  25
+#define OPT_LED1  2
+#define OPT_LED2  3
+#define OPT_LED3  4
+#define OPT_LED4  5
 
-#define OPT_PD1  A8
-#define OPT_PD2  A9
-#define OPT_PD3  A10
-#define OPT_PD4  A11
+#define OPT_PD1  A12
+#define OPT_PD2  A13
+#define OPT_PD3  A14
+#define OPT_PD4  A15
 
 //--------------------------------------------------
 
