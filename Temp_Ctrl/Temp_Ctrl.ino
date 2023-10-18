@@ -23,8 +23,14 @@
 #define THERM_BASE_B 3455 //0~105C
 #define THERM_MIN_R 127
 
-#define TOP_TEMP 50
-#define BOTTOM_TEMP 30
+#define BASE_TEMP 55
+#define TOP_TEMP 95
+#define BOTTOM_TEMP 65
+
+#define TOP_HOLDTIME 2000
+#define BOTTOM_HOLDTIME 5000
+#define TEMP_CYCLE 12
+
 //===================//
 typedef struct
 {
@@ -78,7 +84,6 @@ void PID_Initial(void)
 //--------------------------------------------------
 void TEMP_TempCtrl(float temp_c, uint8_t pin)
 {
-  double now_time;
   g_TempData.TargetTemp_C = temp_c;
   g_TempData.PresentTemp_C = TEMP_ReadTemperature(pin);
 
@@ -119,12 +124,74 @@ void setup() {
 //--------------------------------------------------
 void loop()
 {
-  uint8_t dir;
+  uint8_t mode;
+  double achieve_time;
+  static uint8_t achieve_flag = 0;
+  static uint8_t cycle_cnt = 0;
+  static uint8_t dir = 1;
 
-  dir = digitalRead(IO0);
-  if (dir == 0)
-    TEMP_TempCtrl(BOTTOM_TEMP, NTC_TS3);
+  mode = digitalRead(IO2);
+  if (mode == 1)
+  {
+    if (digitalRead(IO0) == 1)
+      TEMP_TempCtrl(TOP_TEMP, NTC_TS3);
+    else
+      TEMP_TempCtrl(BOTTOM_TEMP, NTC_TS3);
+  }
   else
-    TEMP_TempCtrl(TOP_TEMP, NTC_TS3);
-
+  { 
+    if (digitalRead(IO0) == 1)
+    {
+      TEMP_TempCtrl(BASE_TEMP, NTC_TS3);
+      cycle_cnt = 0;
+      dir = 1;
+    }
+    else
+    {
+      if (cycle_cnt < TEMP_CYCLE)
+      {
+        if (dir == 1)
+        {
+          TEMP_TempCtrl(TOP_TEMP, NTC_TS3);
+          if (achieve_flag == 0)
+          {
+            if (g_TempData.PresentTemp_C >= TOP_TEMP)
+            {
+              achieve_time = millis();
+              achieve_flag = 1;
+            }
+          }
+          else
+          {
+            if ((millis()  - achieve_time) >= TOP_HOLDTIME)
+            {
+              dir = 0;
+              achieve_flag = 0;
+            }
+          }
+        }
+        else
+        {
+          TEMP_TempCtrl(BOTTOM_TEMP, NTC_TS3);
+          if (achieve_flag == 0)
+          {
+            if (g_TempData.PresentTemp_C <= BOTTOM_TEMP)
+            {
+              achieve_time = millis();
+              achieve_flag = 1;
+            }
+          }
+          else
+          {
+            if ((millis()  - achieve_time) >= BOTTOM_HOLDTIME)
+            {
+              dir = 1;
+              achieve_flag = 0;
+              cycle_cnt++;
+            }
+          }
+        }
+      } 
+    }
+  }
 }
