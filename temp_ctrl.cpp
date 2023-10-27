@@ -13,7 +13,7 @@
 #include <PID_v1.h>
 
 //--------------------------------------------------
-_TempCtrl g_TempData = {IDLE, 25, 25};
+_TempCtrl d = {IDLE, 25, 25};
 _PidData g_PidData;
 PID g_Temp_PID(&g_PidData.Input, &g_PidData.Output, &g_PidData.SetPoint, 2, 5, 1, DIRECT);
 
