@@ -36,7 +36,22 @@ float TEMP_ReadTemperature(uint8_t pin)
 }
 
 //--------------------------------------------------
-void TEMP_PidCtrl(float temp_c, uint8_t pin)
+void TEMP_TecCtrl(uint8_t en)
+{
+  if (en)
+  {
+    analogWrite(TEC_FAN_CTRL, 255);
+    analogWrite(TEC_CTRL, TEC_PWM);
+  }
+  else
+  {
+    analogWrite(TEC_FAN_CTRL, 0);
+    analogWrite(TEC_CTRL, 0);
+  }
+}
+
+//--------------------------------------------------
+void TEMP_PidCal(float temp_c, uint8_t pin)
 {
   g_TempData.TargetTemp_C = temp_c;
   g_TempData.PresentTemp_C = TEMP_ReadTemperature(pin);
@@ -44,7 +59,11 @@ void TEMP_PidCtrl(float temp_c, uint8_t pin)
   g_TempPidData.Input = g_TempData.PresentTemp_C;
   g_TempPidData.SetPoint = g_TempData.TargetTemp_C;
   g_Temp_PID.Compute();
+}
 
+//--------------------------------------------------
+void TEMP_PidCtrl(uint8_t tec_en)
+{
   if (g_TempPidData.Output >= 0)
   {
     analogWrite(HEATER_CTRL, g_TempPidData.Output);
@@ -54,6 +73,7 @@ void TEMP_PidCtrl(float temp_c, uint8_t pin)
   {
     analogWrite(HEATER_CTRL, HEATER_KEEP_PWM);
     analogWrite(FAN_CTRL, 0 - g_TempPidData.Output);
+    TEMP_TecCtrl(tec_en);
   }
 
   Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData.Output);
@@ -66,9 +86,10 @@ uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, uint16_t holdtime)
   static uint8_t achieve_flag = 0;
   uint8_t done = 0;
   
-  TEMP_PidCtrl(temp_c, NTC_TS3);
+  TEMP_PidCal(temp_c, NTC_TS3);
   if (achieve_flag == 0)
   {
+    TEMP_PidCtrl(1);
     if ((dir == HIGH && g_TempData.PresentTemp_C >= temp_c) ||
        (dir == LOW && g_TempData.PresentTemp_C <= temp_c))
     {
@@ -78,6 +99,7 @@ uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, uint16_t holdtime)
   }
   else
   {
+    TEMP_PidCtrl(0);
     if ((millis()  - achieve_time) >= holdtime)
     {
       achieve_flag = 0;
@@ -93,6 +115,7 @@ void TEMP_AllOff(void)
 {
   analogWrite(HEATER_CTRL, 0);
   analogWrite(FAN_CTRL, 0);
+  TEMP_TecCtrl(0);
 }
 
 //--------------------------------------------------
@@ -107,9 +130,15 @@ void TEMP_Test(uint8_t mode)
     if (mode == 1)
     {
       if (digitalRead(SW_SEL3) == 1)
-        TEMP_PidCtrl(TOP_TEMP, NTC_TS3);
+      {
+        TEMP_PidCal(TOP_TEMP, NTC_TS3);
+        TEMP_PidCtrl(0);
+      }
       else
-        TEMP_PidCtrl(BOTTOM_TEMP, NTC_TS3);
+      {
+        TEMP_PidCal(BOTTOM_TEMP, NTC_TS3);
+        TEMP_PidCtrl(1);
+      }
     }
     else
     { 
@@ -151,13 +180,16 @@ void TEMP_Test(uint8_t mode)
             switch (CYCLE_STATUS)
             {
               case 0 : 
-                TEMP_PidCtrl(BASE_TEMP, NTC_TS3);
+                TEMP_PidCal(BASE_TEMP, NTC_TS3);
+                TEMP_PidCtrl(0);
               break;
               case 1 : 
-                TEMP_PidCtrl(BOTTOM_TEMP, NTC_TS3);
+                TEMP_PidCal(BOTTOM_TEMP, NTC_TS3);
+                TEMP_PidCtrl(0);
               break;
               case 2 : 
-                TEMP_PidCtrl(TOP_TEMP, NTC_TS3);
+                TEMP_PidCal(TOP_TEMP, NTC_TS3);
+                TEMP_PidCtrl(0);
               break;
               default : 
                 TEMP_AllOff();
@@ -188,8 +220,15 @@ void TEMP_Initial(void)
 
   pinMode(HEATER_CTRL, OUTPUT);
   analogWrite(HEATER_CTRL, 0);
+
   pinMode(FAN_CTRL, OUTPUT);
   analogWrite(FAN_CTRL, 0);
+
+  pinMode(TEC_FAN_CTRL, OUTPUT);
+  analogWrite(TEC_FAN_CTRL, 0);
+
+  pinMode(TEC_CTRL, OUTPUT);
+  analogWrite(TEC_CTRL, 0);
 
   TEMP_PidInitial();
 }

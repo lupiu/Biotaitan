@@ -12,10 +12,10 @@
 #include "Arduino.h"
 
 //--------------------------------------------------
-#define BTN_START 12
-#define SW_SEL3 8
-#define SW_SEL2 4
-#define SW_SEL1 2
+#define BTN_START 25
+#define SW_SEL3 24
+#define SW_SEL2 23
+#define SW_SEL1 22
 
 //--------------------------------------------------
 typedef enum

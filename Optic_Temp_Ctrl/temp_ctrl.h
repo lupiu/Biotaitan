@@ -17,6 +17,8 @@
 
 #define HEATER_CTRL 3
 #define FAN_CTRL 9
+#define TEC_FAN_CTRL 2
+#define TEC_CTRL 4
 
 #define PID_KP 300  // Proportional constant
 #define PID_KI 20 // Integral Constant
@@ -39,7 +41,10 @@
 #define BOTTOM_HOLDTIME 5000
 #define TEMP_CYCLE 1
 
-#define HEATER_KEEP_PWM 0
+#define HEATER_KEEP_PWM 0 //0~255
+
+#define TEC_ENABLE 1 //1 enable; 0 disable
+#define TEC_PWM 0 //0~255
 
 #define CYCLE_STATUS 3 //0:BASE 1:BOTTOM 2:TOP 3:All close
 
