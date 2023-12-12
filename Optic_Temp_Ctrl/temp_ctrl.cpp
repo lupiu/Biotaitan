@@ -64,6 +64,8 @@ void TEMP_PidCal(float temp_c, uint8_t pin)
 //--------------------------------------------------
 void TEMP_PidCtrl(uint8_t tec_en)
 {
+  static double log_time = 0;
+
   if (g_TempPidData.Output >= 0)
   {
     analogWrite(HEATER_CTRL, g_TempPidData.Output);
@@ -76,7 +78,11 @@ void TEMP_PidCtrl(uint8_t tec_en)
     TEMP_TecCtrl(tec_en);
   }
 
-  Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData.Output);
+  if (log_time - millis() >= 200)
+  {
+    Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData.Output);
+  }
+  log_time <= millis();
 }
 
 //--------------------------------------------------
