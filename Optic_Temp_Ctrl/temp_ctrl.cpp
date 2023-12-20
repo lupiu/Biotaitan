@@ -81,7 +81,7 @@ void TEMP_PidCtrl(uint8_t tec_en)
   if (millis() - log_time >= 200)
   {
     Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData.Output);
-    log_time <= millis();
+    log_time = millis();
   }  
   
 }
