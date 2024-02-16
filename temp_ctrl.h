@@ -34,6 +34,22 @@
 #define THERM_BASE_B 3455 //0~105C
 #define THERM_MIN_R 127
 
+#define BASE_ENABLE 1 //1:enable 0:disable //僅第一個Cycle有作用
+#define BASE_TEMP 55 //degrees Celsius
+#define BASE_HOLDTIME 2 //unit:sec
+
+#define TOP_TEMP 95
+#define BOTTOM_TEMP 65
+#define TOP_HOLDTIME 2
+#define BOTTOM_HOLDTIME 5
+#define TEMP_CYCLE 1
+
+#define HEATER_KEEP_PWM 0 //0~255
+
+#define TEC_ENABLE 0 //1 enable; 0 disable
+#define TEC_PWM 0 //0~255
+
+#define CYCLE_STATUS 3 //0:BASE 1:BOTTOM 2:TOP 3:All close
 //--------------------------------------------------
 typedef enum
 {

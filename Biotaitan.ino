@@ -14,11 +14,9 @@ void setup() {
   
   Serial.begin(115200);
 
-  SYS_SetOpmode(SYS_INIT);
-
   LCM_Initial();
   TEMP_Initial();
-  OPT_Initial();
+  //OPT_Initial();
   SYS_Initial();
 }
 

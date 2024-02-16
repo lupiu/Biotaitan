@@ -258,16 +258,6 @@ void LCM_TouchScan(uint8_t *type, uint8_t *num)
         break;
       }
     }
-
-    for (i = 0; i < sizeof(g_kb_btn) / sizeof(_ButtonInfo); i++)
-    {
-      if (LCM_IsPressed(px, py, g_kb_btn[i].Px, g_kb_btn[i].Py, (g_kb_btn[i].Px + BUTTON_SPACING_X), (g_kb_btn[i].Py + BUTTON_SPACING_Y)))
-      {
-        *type = BUTTON_KEY;
-        *num = i;
-        break;
-      }
-    }
   }
 }
 

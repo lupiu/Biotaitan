@@ -29,43 +29,24 @@ typedef enum
 
 typedef enum
 {
-  SYS_INIT = 0,
-  SYS_TOP,
-    SYS_USERMODE,
-    SYS_ENGMODE,
-    SYS_PTMODE,
-}_SysOpMode;
+  SYS_CH1 = 0,
+  SYS_CH2,
+  SYS_CH_MAX,
+}_SysChannel;
 
 typedef struct
 {
-  _SysOpMode Status;
-  double Time;
+  _SysChannel Channel;
+  uint8_t OnProcess[SYS_CH_MAX];
+  char Patient_ID[SYS_CH_MAX][15];
+  char Reagent_ID[SYS_CH_MAX][15];
+  uint8_t Cycle[SYS_CH_MAX];
 }_SysStatus;
-
-typedef struct
-{
-  uint8_t Name[10];
-  float Value;
-}_PrmDataType;
-
-typedef struct
-{
-  _PrmDataType Name;
-}_PrmEngMode;
-
-typedef struct
-{
-  uint8_t Name[10];
-  _PrmDataType Mode[5];
-}_PrmPtMode;
 
 //--------------------------------------------------
 void SYS_ChangeTopMode(void);
-void SYS_ChangeEmMode(void);
-void SYS_ChangePtMode(void);
+void SYS_ChangeChannel(_SysChannel ch);
 void SYS_Initial(void);
-void SYS_SetOpmode(_SysOpMode status);
-_SysOpMode SYS_GetOpmode(void);
 void SYS_SystemRun(void);
 //--------------------------------------------------
 
