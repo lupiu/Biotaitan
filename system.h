@@ -34,10 +34,18 @@ typedef enum
   SYS_CH_MAX,
 }_SysChannel;
 
+typedef enum
+{
+  SYS_CH_INIT = 0,
+  SYS_CH_PAT,
+  SYS_CH_REA,
+  SYS_CH_READY,
+  SYS_CH_RUN,
+}_SysChStatus;
+
 typedef struct
 {
-  _SysChannel Channel;
-  uint8_t OnProcess[SYS_CH_MAX];
+  _SysChStatus Status[SYS_CH_MAX];
   char Patient_ID[SYS_CH_MAX][15];
   char Reagent_ID[SYS_CH_MAX][15];
   uint8_t Cycle[SYS_CH_MAX];
@@ -45,7 +53,12 @@ typedef struct
 
 //--------------------------------------------------
 void SYS_ChangeTopMode(void);
-void SYS_ChangeChannel(_SysChannel ch);
+void SYS_BtnCH1_SEL(void);
+void SYS_BtnCH1_RE(void);
+void SYS_BtnCH1_STA(void);
+void SYS_BtnCH2_SEL(void);
+void SYS_BtnCH2_RE(void);
+void SYS_BtnCH2_STA(void);
 void SYS_Initial(void);
 void SYS_SystemRun(void);
 //--------------------------------------------------

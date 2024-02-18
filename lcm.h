@@ -46,10 +46,9 @@
 #define BUTTON_SPACING_X 49
 #define BUTTON_SPACING_Y 49
 
-#define FUNCTION_SPACING_X 76
+#define FUNCTION_SPACING_X 119
 #define FUNCTION_SPACING_Y 49
 #define GRID_SPACING 1
-#define FUNCTION_X_START ((5 * (GRID_SPACING + BUTTON_SPACING_X)))
 
 #define LCM_WIDTH 480
 #define LCM_HEIGHT 320
@@ -63,6 +62,9 @@
 #define LCM_MSG_SIZE 3
 #define LCM_MSG_HEIGHT (LCM_MSG_SIZE * 9)
 
+#define LCM_CHMSG_SIZE 2
+#define LCM_ChMSG_HEIGHT (LCM_CHMSG_SIZE * 9)
+#define LCM_CHMSG_Y LCM_HEIGHT - 1 - (3 * (GRID_SPACING + FUNCTION_SPACING_Y))
 //--------------------------------------------------
 typedef void (*_Btn_cb)(void);
 

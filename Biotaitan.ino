@@ -4,6 +4,7 @@
 #include "lcm.h"
 #include "optic.h"
 #include "system.h"
+#include "barcode.h"
 
 //--------------------------------------------------
 
@@ -17,6 +18,7 @@ void setup() {
   LCM_Initial();
   TEMP_Initial();
   //OPT_Initial();
+  BAR_Initial();
   SYS_Initial();
 }
 
