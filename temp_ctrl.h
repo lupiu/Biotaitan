@@ -2,7 +2,7 @@
 /*
 * temp_ctrl.h
 *
-*  Created on: 2023/09/14
+*  Created on: 2023/10/27
 *      Author: silva_lin
 */
 
@@ -12,20 +12,19 @@
 #include "Arduino.h"
 
 //--------------------------------------------------
-#define NTC_TS1 A0
-#define NTC_TS2 A1
-#define NTC_TS3 A2
-#define NTC_TS4 A3
-#define NTC_TS5 A4
-#define HEATER_CTRL 6
-#define PELTIER_CTRL 7
-#define FAN_CTRL 8
+#define TEMP_GROUP 2
+
+#define NTC_CH1 A4
+#define NTC_CH2 A5
+
+#define HEATER_CTRL1 3
+#define FAN_CTRL1 9
+#define HEATER_CTRL2 2
+#define FAN_CTRL2 4
 
 #define PID_KP 300  // Proportional constant
 #define PID_KI 20 // Integral Constant
 #define PID_KD 5 // Derivative Constant
-
-#define PID_WINDOWSIZE 300
 
 #define ANALOG_VA 5.0 //analog Voltage
 #define ANALOG_RVD 8250 //analog resistor (ohm)
@@ -44,20 +43,9 @@
 #define BOTTOM_HOLDTIME 5
 #define TEMP_CYCLE 1
 
-#define HEATER_KEEP_PWM 0 //0~255
-
-#define TEC_ENABLE 0 //1 enable; 0 disable
-#define TEC_PWM 0 //0~255
-
 #define CYCLE_STATUS 3 //0:BASE 1:BOTTOM 2:TOP 3:All close
-//--------------------------------------------------
-typedef enum
-{
-    IDLE  = 0,
-    MEASURE,
-    PID_EN,
-}_TempCtrlStatus;
 
+//===================//
 typedef struct
 {
   double PidStartTime;  
@@ -68,16 +56,18 @@ typedef struct
 
 typedef struct
 {
-  _TempCtrlStatus status;
+  uint8_t NTC;
+  uint8_t Heater;
+  uint8_t Fan;
   float PresentTemp_C;
   float TargetTemp_C;
-  double CycleTime;
+  double AchieveTime;
+  uint8_t AchieveFlag;
 }_TempCtrl;
 
 //--------------------------------------------------
 void TEMP_Initial(void);
-float TEMP_ReadTemperature(uint8_t pin);
-void TEMP_TempCtrl(float temp_c, uint8_t pin);
+void TEMP_Test(uint8_t mode);
 //--------------------------------------------------
 
 #endif

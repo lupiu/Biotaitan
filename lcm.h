@@ -95,6 +95,8 @@ void LCM_ShowValue(double value);
 void LCM_ShowInfoString(uint8_t *str, uint8_t contd);
 void LCM_ScreenShowMsg(uint8_t *str, uint8_t contd);
 void LCM_TouchScan(uint8_t *type, uint8_t *num);
+void LCM_ShowChannelID(int ch, int type, uint8_t *str);
+void LCM_UpdateFuncKey(int num, uint8_t *str);
 //--------------------------------------------------
 
 #endif

@@ -82,10 +82,10 @@ void LCM_DisplayFuncKey(_LcmMenuType *menu)
   g_LcmDisplay.Set_Text_colour(BLACK);
   g_LcmDisplay.Set_Text_Back_colour(BLUE);
   g_LcmDisplay.Print_String("P_ID:", GRID_SPACING + 2, LCM_CHMSG_Y + 2);
-  g_LcmDisplay.Print_String("R_ID:", GRID_SPACING + 2, LCM_CHMSG_Y + 2 + LCM_ChMSG_HEIGHT);
+  g_LcmDisplay.Print_String("R_ID:", GRID_SPACING + 2, LCM_CHMSG_Y + 2 + (2 * LCM_ChMSG_HEIGHT));
   g_LcmDisplay.Print_String("P_ID:", GRID_SPACING + 2 + (LCM_WIDTH / 2), LCM_CHMSG_Y + 2);
-  g_LcmDisplay.Print_String("R_ID:", GRID_SPACING + 2 + (LCM_WIDTH / 2), LCM_CHMSG_Y + 2 + LCM_ChMSG_HEIGHT);
-
+  g_LcmDisplay.Print_String("R_ID:", GRID_SPACING + 2 + (LCM_WIDTH / 2), LCM_CHMSG_Y + 2 + (2 * LCM_ChMSG_HEIGHT));
+  
   for(i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
   {
     g_LcmDisplay.Set_Text_Size(g_func_btn[i].NameSize);
@@ -95,6 +95,16 @@ void LCM_DisplayFuncKey(_LcmMenuType *menu)
   }
 }
 
+//--------------------------------------------------
+void LCM_UpdateFuncKey(int num, uint8_t *str)
+{
+  g_LcmDisplay.Set_Text_Mode(0);
+
+  g_LcmDisplay.Set_Text_Size(g_func_btn[num].NameSize);
+  g_LcmDisplay.Set_Text_colour(g_func_btn[num].NameColor);
+  g_LcmDisplay.Set_Text_Back_colour(g_func_btn[num].BgColor);
+  g_LcmDisplay.Print_String(str, g_func_btn[num].Px + 3, g_func_btn[num].Py - g_func_btn[num].NameSize * 8 / 2 + g_func_btn[num].NameSize / 2 + 1 + FUNCTION_SPACING_Y /  2);
+}
 //--------------------------------------------------
 void LCM_SetMsgText(void)
 {
@@ -188,6 +198,22 @@ void LCM_ScreenShowMsg(uint8_t *str, uint8_t contd)
 }
 
 //--------------------------------------------------
+void LCM_ShowChannelID(int ch, int type, uint8_t *str)
+{
+  uint8_t i;
+  uint8_t  msg[18] = "                  ";
+
+  g_LcmDisplay.Set_Text_Mode(0);
+  g_LcmDisplay.Set_Text_Size(LCM_CHMSG_SIZE);
+  g_LcmDisplay.Set_Text_colour(BLACK);
+  g_LcmDisplay.Set_Text_Back_colour(BLUE);
+  for (i = 0; i < strlen(msg); i++)
+    msg[i] = str[i];
+
+  g_LcmDisplay.Print(msg, GRID_SPACING + 2 + (ch * (LCM_WIDTH / 2)), LCM_CHMSG_Y + 2 + (((type * 2) + 1) * LCM_ChMSG_HEIGHT));
+}
+
+//--------------------------------------------------
 boolean LCM_IsPressed(uint16_t px, uint16_t py, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
     if((px > x1 && px < x2) && (py > y1 && py < y2))
@@ -236,8 +262,8 @@ void LCM_Initial(void)
   g_LcmTouch.TP_Set_Rotation(1);
   g_LcmTouch.TP_Init(1, LCM_WIDTH, LCM_HEIGHT);
 
-  g_LcmDisplay.Fill_Screen(BLUE);
-  LCM_ScreenShowMsg("System Initial...", 0);
+  //g_LcmDisplay.Fill_Screen(BLUE);
+  //LCM_ScreenShowMsg("System Initial...", 0);
 }
 
 //--------------------------------------------------

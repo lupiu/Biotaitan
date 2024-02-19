@@ -2,20 +2,20 @@
 /*
 * temp_ctrl.cpp
 *
-*  Created on: 2023/09/14
+*  Created on: 2023/10/27
 *      Author: silva_lin
 */
 
 #include "Arduino.h"
 #include "math.h"
-#include "main.h"
+#include "PID_v1.h"
 #include "temp_ctrl.h"
-#include <PID_v1.h>
 
 //--------------------------------------------------
-_TempCtrl g_TempData = {IDLE, 25, 25, 0};
-_PidData g_PidData;
-PID g_Temp_PID(&g_PidData.Input, &g_PidData.Output, &g_PidData.SetPoint, 2, 5, 1, DIRECT);
+_TempCtrl g_TempData[TEMP_GROUP] = {0, 0, 0, 25, 25};
+_PidData g_TempPidData[TEMP_GROUP];
+PID g_Temp_PID1(&g_TempPidData[0].Input, &g_TempPidData[0].Output, &g_TempPidData[0].SetPoint, PID_KP, PID_KI, PID_KD, DIRECT);
+PID g_Temp_PID2(&g_TempPidData[1].Input, &g_TempPidData[1].Output, &g_TempPidData[1].SetPoint, PID_KP, PID_KI, PID_KD, DIRECT);
 
 //--------------------------------------------------
 float TEMP_ReadTemperature(uint8_t pin)
@@ -36,96 +36,205 @@ float TEMP_ReadTemperature(uint8_t pin)
 }
 
 //--------------------------------------------------
-void TEMP_HeaterOn(void)
+void TEMP_PidCal(uint8_t ch,float temp_c)
 {
-  digitalWrite(HEATER_CTRL, 1);
+  g_TempData[ch].TargetTemp_C = temp_c;
+  g_TempData[ch].PresentTemp_C = TEMP_ReadTemperature(g_TempData[ch].NTC);
+
+  g_TempPidData[ch].Input = g_TempData[ch].PresentTemp_C;
+  g_TempPidData[ch].SetPoint = g_TempData[ch].TargetTemp_C;
+  if (ch == 0)
+    g_Temp_PID1.Compute();
+  else
+    g_Temp_PID2.Compute();
 }
 
 //--------------------------------------------------
-void TEMP_HeaterOff(void)
+void TEMP_PidCtrl(uint8_t ch)
 {
-  digitalWrite(HEATER_CTRL, 0);
-}
+  static double log_time = 0;
 
-//--------------------------------------------------
-void TEMP_PeltierOn(void)
-{
-  digitalWrite(PELTIER_CTRL, 1);
-}
-
-//--------------------------------------------------
-void TEMP_PeltierOff(void)
-{
-  digitalWrite(PELTIER_CTRL, 0);
-}
-
-//--------------------------------------------------
-void TEMP_FanOn(void)
-{
-  digitalWrite(FAN_CTRL, 1);
-}
-
-//--------------------------------------------------
-void TEMP_FanOff(void)
-{
-  digitalWrite(FAN_CTRL, 0);
-}
-
-//--------------------------------------------------
-void TEMP_TempCtrl(float temp_c, uint8_t pin)
-{
-  double now_time;
-  g_TempData.TargetTemp_C = temp_c;
-  g_TempData.PresentTemp_C = TEMP_ReadTemperature(pin);
-
-  g_PidData.Input = g_TempData.PresentTemp_C;
-  g_PidData.SetPoint = g_TempData.TargetTemp_C;
-  g_Temp_PID.Compute();
-
-  if (g_PidData.Output >= 0)
+  if (g_TempPidData[ch].Output >= 0)
   {
-    analogWrite(HEATER_CTRL, g_PidData.Output);
-    analogWrite(PELTIER_CTRL, 0);
+    analogWrite(g_TempData[ch].Heater, g_TempPidData[ch].Output);
+    analogWrite(g_TempData[ch].Fan, 0);
   }
   else
   {
-    analogWrite(HEATER_CTRL, 0);
-    analogWrite(PELTIER_CTRL, 0 - g_PidData.Output);
+    analogWrite(g_TempData[ch].Heater, 0);
+    analogWrite(g_TempData[ch].Fan, 0 - g_TempPidData[ch].Output);
   }
-/*
-  if (millis() - g_PidData.PidStartTime >= 200)
+
+  if (millis() - log_time >= 200)
   {
-    Serial.print(F("NTC3:")); Serial.println(g_TempData.PresentTemp_C);//----------------
-    Serial.print(F("Output:")); Serial.println(g_PidData.Output);//----------------
-    g_PidData.PidStartTime = millis();
-  }
-*/
+    Serial.print(F("CH1: ")); Serial.print(g_TempData[ch].PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData[ch].Output);
+    Serial.print(F("CH2: ")); Serial.print(g_TempData[ch].PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData[ch].Output);
+    log_time = millis();
+  }  
+  
 }
 
 //--------------------------------------------------
-void PID_Initial(void)
+uint8_t TEMP_CycleCtrl(uint8_t ch, float temp_c, uint8_t dir, uint16_t holdtime)
 {
-  g_PidData.PidStartTime = millis();
-  g_PidData.SetPoint = 25;
-  g_Temp_PID.SetOutputLimits(-255, 255);
-  g_Temp_PID.SetMode(AUTOMATIC);
-  g_Temp_PID.SetTunings(PID_KP, PID_KI, PID_KD);
+  uint8_t done = 0;
+  
+  TEMP_PidCal(temp_c, g_TempData[ch].NTC);
+  if (g_TempData[ch].AchieveFlag == 0)
+  {
+    TEMP_PidCtrl(ch);
+    if ((dir == HIGH && g_TempData[ch].PresentTemp_C >= temp_c) ||
+       (dir == LOW && g_TempData[ch].PresentTemp_C <= temp_c))
+    {
+      g_TempData[ch].AchieveTime = millis();
+      g_TempData[ch].AchieveFlag = 1;
+    }
+  }
+  else
+  {
+    TEMP_PidCtrl(ch);
+    if ((millis()  - g_TempData[ch].AchieveTime) >= holdtime)
+    {
+      g_TempData[ch].AchieveFlag = 0;
+      done = 1;
+    }
+  }
+  
+  return done;
+}
 
+//--------------------------------------------------
+void TEMP_AllOff(uint8_t ch)
+{
+  analogWrite(g_TempData[ch].Heater, 0);
+  analogWrite(g_TempData[ch].Fan, 0);
+}
+/*
+//--------------------------------------------------
+void TEMP_Test(uint8_t mode)
+{
+  static uint8_t cycle_cnt = 0;
+  static uint8_t dir = HIGH;
+  static uint8_t base_initial = LOW;
+
+  while(1)
+  {
+    if (mode == 1)
+    {
+      if (digitalRead(SW_SEL3) == 1)
+      {
+        TEMP_PidCal(TOP_TEMP, NTC_TS3);
+        TEMP_PidCtrl(0);
+      }
+      else
+      {
+        TEMP_PidCal(BOTTOM_TEMP, NTC_TS3);
+        TEMP_PidCtrl(1);
+      }
+    }
+    else
+    { 
+      if (digitalRead(BTN_START) == 0)
+      {
+        cycle_cnt = 0;
+        dir = HIGH;
+        base_initial = LOW;
+      }
+      else
+      {    
+        if (BASE_ENABLE == 1 && base_initial == LOW)
+        {
+          if (TEMP_CycleCtrl(BASE_TEMP, HIGH, BASE_HOLDTIME) == 1)
+          base_initial = HIGH;
+        }
+        else
+        {
+          if (cycle_cnt < TEMP_CYCLE)
+          {
+            if (dir == HIGH)
+            {
+              if (TEMP_CycleCtrl(TOP_TEMP, dir, TOP_HOLDTIME) == 1)
+              {
+                dir = LOW;
+              }
+            }
+            else
+            {
+              if (TEMP_CycleCtrl(BOTTOM_TEMP, dir, BOTTOM_HOLDTIME) == 1)
+              {
+                dir = HIGH;
+                cycle_cnt++;
+              }
+            }
+          }
+          else
+          {
+            switch (CYCLE_STATUS)
+            {
+              case 0 : 
+                TEMP_PidCal(BASE_TEMP, NTC_TS3);
+                TEMP_PidCtrl(0);
+              break;
+              case 1 : 
+                TEMP_PidCal(BOTTOM_TEMP, NTC_TS3);
+                TEMP_PidCtrl(0);
+              break;
+              case 2 : 
+                TEMP_PidCal(TOP_TEMP, NTC_TS3);
+                TEMP_PidCtrl(0);
+              break;
+              default : 
+                TEMP_AllOff();
+              break;
+            }
+          }
+        } 
+      }
+    }
+  }
+}
+*/
+//--------------------------------------------------
+void TEMP_PidInitial(void)
+{
+  uint8_t i;
+
+  for (i = 0; i < TEMP_GROUP; i++)
+  {
+    g_TempPidData[i].PidStartTime = millis();
+    g_TempPidData[i].SetPoint = 25;
+    g_Temp_PID1.SetOutputLimits(-255, 255);
+    g_Temp_PID1.SetMode(AUTOMATIC);
+    g_Temp_PID1.SetTunings(PID_KP, PID_KI, PID_KD);
+    g_Temp_PID2.SetOutputLimits(-255, 255);
+    g_Temp_PID2.SetMode(AUTOMATIC);
+    g_Temp_PID2.SetTunings(PID_KP, PID_KI, PID_KD);
+  }
 }
 
 //--------------------------------------------------
 void TEMP_Initial(void)
 {
-  pinMode(NTC_TS1, INPUT);
-  pinMode(NTC_TS2, INPUT);
-  pinMode(NTC_TS3, INPUT);
-  pinMode(NTC_TS4, INPUT);
-  pinMode(NTC_TS5, INPUT);
-  pinMode(HEATER_CTRL, OUTPUT);
-  pinMode(PELTIER_CTRL, OUTPUT);
-  pinMode(FAN_CTRL, OUTPUT);
+  pinMode(NTC_CH1, INPUT);
+  pinMode(NTC_CH2, INPUT);
 
-  PID_Initial();
+  pinMode(HEATER_CTRL1, OUTPUT);
+  analogWrite(HEATER_CTRL1, 0);
+  pinMode(HEATER_CTRL2, OUTPUT);
+  analogWrite(HEATER_CTRL2, 0);
+
+  pinMode(FAN_CTRL1, OUTPUT);
+  analogWrite(FAN_CTRL1, 0);
+  pinMode(HEATER_CTRL2, OUTPUT);
+  analogWrite(HEATER_CTRL2, 0);
+
+  g_TempData[0].NTC = NTC_CH1;
+  g_TempData[0].Heater = HEATER_CTRL1;
+  g_TempData[0].Fan = FAN_CTRL1;
+  g_TempData[1].NTC = NTC_CH2;
+  g_TempData[1].Heater = HEATER_CTRL2;
+  g_TempData[1].Fan = FAN_CTRL2;
+  TEMP_PidInitial();
 }
 
 //--------------------------------------------------
