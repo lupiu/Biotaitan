@@ -251,6 +251,11 @@ void SYS_StatusCheck(_SysChannel ch)
         TEMP_PidCal(ch, BASE_TEMP);
         TEMP_PidCtrl(ch);
       }
+      else
+      {
+        TEMP_AllOff(ch);
+      }
+
     }
     else
     {
