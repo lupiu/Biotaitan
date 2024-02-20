@@ -10,6 +10,7 @@
 #define _SYSTEM_H__
 
 #include "Arduino.h"
+#include "barcode.h"
 
 //--------------------------------------------------
 //paramters define
@@ -46,8 +47,8 @@ typedef enum
 typedef struct
 {
   _SysChStatus Status[SYS_CH_MAX];
-  char Patient_ID[SYS_CH_MAX][15];
-  char Reagent_ID[SYS_CH_MAX][15];
+  char Patient_ID[SYS_CH_MAX][BAR_LENGTH];
+  char Reagent_ID[SYS_CH_MAX][BAR_LENGTH];
   uint8_t Cycle[SYS_CH_MAX];
   uint8_t BT_Ready[SYS_CH_MAX];
   uint8_t TempDir[SYS_CH_MAX];

@@ -44,15 +44,27 @@ void TEMP_PidCal(uint8_t ch,float temp_c)
   g_TempPidData[ch].Input = g_TempData[ch].PresentTemp_C;
   g_TempPidData[ch].SetPoint = g_TempData[ch].TargetTemp_C;
   if (ch == 0)
+  {
     g_Temp_PID1.Compute();
+  }
   else
+  {
     g_Temp_PID2.Compute();
+  }
 }
 
 //--------------------------------------------------
 void TEMP_PidCtrl(uint8_t ch)
 {
   static double log_time = 0;
+
+  if (g_TempData[ch].PresentTemp_C >= SAFTY_TOP_TEMP || g_TempData[ch].PresentTemp_C <= SAFTY_BOTTOM_TEMP)
+  {
+    Serial.println(F("Tempture measure fail!!!"));
+    analogWrite(g_TempData[ch].Heater, 0);
+    analogWrite(g_TempData[ch].Fan, 0);
+    return;
+  }
 
   if (g_TempPidData[ch].Output >= 0)
   {
@@ -67,8 +79,8 @@ void TEMP_PidCtrl(uint8_t ch)
 
   if (millis() - log_time >= 200)
   {
-    Serial.print(F("CH1: ")); Serial.print(g_TempData[ch].PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData[ch].Output);
-    Serial.print(F("CH2: ")); Serial.print(g_TempData[ch].PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData[ch].Output);
+    Serial.print(F("CH1: ")); Serial.print(g_TempData[0].PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData[0].Output); Serial.print("\t"); 
+    Serial.print(F("CH2: ")); Serial.print(g_TempData[1].PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData[1].Output);
     log_time = millis();
   }  
   
@@ -79,7 +91,7 @@ uint8_t TEMP_CycleCtrl(uint8_t ch, float temp_c, uint8_t dir, uint16_t holdtime)
 {
   uint8_t done = 0;
   
-  TEMP_PidCal(temp_c, g_TempData[ch].NTC);
+  TEMP_PidCal(ch, temp_c);
   if (g_TempData[ch].AchieveFlag == 0)
   {
     TEMP_PidCtrl(ch);
@@ -109,91 +121,7 @@ void TEMP_AllOff(uint8_t ch)
   analogWrite(g_TempData[ch].Heater, 0);
   analogWrite(g_TempData[ch].Fan, 0);
 }
-/*
-//--------------------------------------------------
-void TEMP_Test(uint8_t mode)
-{
-  static uint8_t cycle_cnt = 0;
-  static uint8_t dir = HIGH;
-  static uint8_t base_initial = LOW;
 
-  while(1)
-  {
-    if (mode == 1)
-    {
-      if (digitalRead(SW_SEL3) == 1)
-      {
-        TEMP_PidCal(TOP_TEMP, NTC_TS3);
-        TEMP_PidCtrl(0);
-      }
-      else
-      {
-        TEMP_PidCal(BOTTOM_TEMP, NTC_TS3);
-        TEMP_PidCtrl(1);
-      }
-    }
-    else
-    { 
-      if (digitalRead(BTN_START) == 0)
-      {
-        cycle_cnt = 0;
-        dir = HIGH;
-        base_initial = LOW;
-      }
-      else
-      {    
-        if (BASE_ENABLE == 1 && base_initial == LOW)
-        {
-          if (TEMP_CycleCtrl(BASE_TEMP, HIGH, BASE_HOLDTIME) == 1)
-          base_initial = HIGH;
-        }
-        else
-        {
-          if (cycle_cnt < TEMP_CYCLE)
-          {
-            if (dir == HIGH)
-            {
-              if (TEMP_CycleCtrl(TOP_TEMP, dir, TOP_HOLDTIME) == 1)
-              {
-                dir = LOW;
-              }
-            }
-            else
-            {
-              if (TEMP_CycleCtrl(BOTTOM_TEMP, dir, BOTTOM_HOLDTIME) == 1)
-              {
-                dir = HIGH;
-                cycle_cnt++;
-              }
-            }
-          }
-          else
-          {
-            switch (CYCLE_STATUS)
-            {
-              case 0 : 
-                TEMP_PidCal(BASE_TEMP, NTC_TS3);
-                TEMP_PidCtrl(0);
-              break;
-              case 1 : 
-                TEMP_PidCal(BOTTOM_TEMP, NTC_TS3);
-                TEMP_PidCtrl(0);
-              break;
-              case 2 : 
-                TEMP_PidCal(TOP_TEMP, NTC_TS3);
-                TEMP_PidCtrl(0);
-              break;
-              default : 
-                TEMP_AllOff();
-              break;
-            }
-          }
-        } 
-      }
-    }
-  }
-}
-*/
 //--------------------------------------------------
 void TEMP_PidInitial(void)
 {
@@ -203,13 +131,14 @@ void TEMP_PidInitial(void)
   {
     g_TempPidData[i].PidStartTime = millis();
     g_TempPidData[i].SetPoint = 25;
-    g_Temp_PID1.SetOutputLimits(-255, 255);
-    g_Temp_PID1.SetMode(AUTOMATIC);
-    g_Temp_PID1.SetTunings(PID_KP, PID_KI, PID_KD);
-    g_Temp_PID2.SetOutputLimits(-255, 255);
-    g_Temp_PID2.SetMode(AUTOMATIC);
-    g_Temp_PID2.SetTunings(PID_KP, PID_KI, PID_KD);
   }
+  
+  g_Temp_PID1.SetOutputLimits(-255, 255);
+  g_Temp_PID1.SetMode(AUTOMATIC);
+  g_Temp_PID1.SetTunings(PID_KP, PID_KI, PID_KD);
+  g_Temp_PID2.SetOutputLimits(-255, 255);
+  g_Temp_PID2.SetMode(AUTOMATIC);
+  g_Temp_PID2.SetTunings(PID_KP, PID_KI, PID_KD);
 }
 
 //--------------------------------------------------

@@ -214,6 +214,22 @@ void LCM_ShowChannelID(int ch, int type, uint8_t *str)
 }
 
 //--------------------------------------------------
+void LCM_ShowCycleCnt(int ch, uint8_t *str)
+{
+  uint8_t i;
+  uint8_t  msg[18] = "                  ";
+
+  g_LcmDisplay.Set_Text_Mode(0);
+  g_LcmDisplay.Set_Text_Size(LCM_CHMSG_SIZE);
+  g_LcmDisplay.Set_Text_colour(BLACK);
+  g_LcmDisplay.Set_Text_Back_colour(BLUE);
+  for (i = 0; i < strlen(msg); i++)
+    msg[i] = str[i];
+
+  g_LcmDisplay.Print(msg, GRID_SPACING + 2 + (ch * (LCM_WIDTH / 2)), LCM_CHMSG_Y + 2 + ((4 * LCM_ChMSG_HEIGHT)));
+}
+
+//--------------------------------------------------
 boolean LCM_IsPressed(uint16_t px, uint16_t py, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 {
     if((px > x1 && px < x2) && (py > y1 && py < y2))

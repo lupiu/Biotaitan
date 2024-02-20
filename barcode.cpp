@@ -23,26 +23,24 @@ void BAR_AutoOn(void)
   }
   else
   {
-    if (millis() - time > 00)
-    {
-      blink = ~blink;
-      time = millis();
-    }
-
     if (blink == true)
-      digitalWrite(BAR_TRIG, BAR_ON);
-      if (millis() - time > 200)
+    {
+      if (millis() - time > 400)
       {
-        blink = ~blink;
+        digitalWrite(BAR_TRIG, BAR_OFF);
+        blink = false;
         time = millis();
       }
+    }
     else
-      digitalWrite(BAR_TRIG, BAR_OFF);
-      if (millis() - time > 500)
+    {
+      if (millis() - time > 400)
       {
-        blink = ~blink;
+        digitalWrite(BAR_TRIG, BAR_ON);
+        blink = true;
         time = millis();
       }
+    }
   }
 
 }
@@ -51,7 +49,6 @@ void BAR_AutoOn(void)
 void BAR_TrigOn(void)
 {
   g_Barcoede_status = 1;
-
 }
 
 //--------------------------------------------------
@@ -64,9 +61,10 @@ void BAR_TrigOff(void)
 int BAR_Read(char *id)
 {  
   char tmp = '0';
-  char barcode[15] = {0};
+  char barcode[BAR_LENGTH] = {0};
   int i = 0;
   double start_time;
+  int j = 0;
   
   if (Serial3.available() > 0)
   {
@@ -81,16 +79,11 @@ int BAR_Read(char *id)
           if (barcode[i] == 0x0A && barcode[i - 1] == 0x0D)
           {
             memcpy(id, barcode, i - 1);
-            Serial.print(barcode[0]);
-            Serial.print(barcode[1]);
-            Serial.print(barcode[2]);
-            Serial.print(barcode[3]);
-            Serial.print(barcode[4]);
-            Serial.print(barcode[5]);
-            Serial.print(barcode[6]);
-            Serial.print(barcode[7]);
-            Serial.print(barcode[8]);
-            Serial.println(barcode[9]);
+            for (j = 0; j < (i - 1); j++)
+            {
+              Serial.print(barcode[j]);
+            }
+            Serial.println("");
             return BAR_OK;
           }
         }
