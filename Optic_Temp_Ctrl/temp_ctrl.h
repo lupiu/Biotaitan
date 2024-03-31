@@ -48,6 +48,7 @@
 
 #define CYCLE_STATUS 3 //0:BASE 1:BOTTOM 2:TOP 3:All close
 
+#define WITH_OPT 1
 //===================//
 typedef struct
 {

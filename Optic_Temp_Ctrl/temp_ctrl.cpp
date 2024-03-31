@@ -11,6 +11,7 @@
 #include "PID_v1.h"
 #include "temp_ctrl.h"
 #include "system.h"
+#include "optic.h"
 
 //--------------------------------------------------
 _TempCtrl g_TempData = {25, 25, 0};
@@ -64,8 +65,6 @@ void TEMP_PidCal(float temp_c, uint8_t pin)
 //--------------------------------------------------
 void TEMP_PidCtrl(uint8_t tec_en)
 {
-  static double log_time = 0;
-
   if (g_TempPidData.Output >= 0)
   {
     analogWrite(HEATER_CTRL, g_TempPidData.Output);
@@ -76,14 +75,7 @@ void TEMP_PidCtrl(uint8_t tec_en)
     analogWrite(HEATER_CTRL, HEATER_KEEP_PWM);
     analogWrite(FAN_CTRL, 0 - g_TempPidData.Output);
     TEMP_TecCtrl(tec_en);
-  }
-
-  if (millis() - log_time >= 200)
-  {
-    Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.println(g_TempPidData.Output);
-    log_time = millis();
   }  
-  
 }
 
 //--------------------------------------------------
@@ -131,6 +123,7 @@ void TEMP_Test(uint8_t mode)
   static uint8_t cycle_cnt = 0;
   static uint8_t dir = HIGH;
   static uint8_t base_initial = LOW;
+  static double log_time = 0;
 
   while(1)
   {
@@ -145,6 +138,17 @@ void TEMP_Test(uint8_t mode)
       {
         TEMP_PidCal(BOTTOM_TEMP, NTC_TS3);
         TEMP_PidCtrl(1);
+      }
+
+      if (millis() - log_time >= 0)
+      {
+        Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
+        Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData.Output); Serial.print("\t");
+        if (WITH_OPT == 1)
+        {
+          OPT_Ctrl();
+        }
+        log_time = millis();
       }
     }
     else
@@ -204,6 +208,10 @@ void TEMP_Test(uint8_t mode)
             }
           }
         } 
+        if (WITH_OPT == 1)
+        {
+          OPT_Ctrl();
+        }
       }
     }
   }

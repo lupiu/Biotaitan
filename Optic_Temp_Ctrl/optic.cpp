@@ -33,7 +33,7 @@ int OPT_Led_On(uint8_t ch)
 
   led_pwm = analogRead(g_OptLedIntens[ch]);  
   led_pwm = map(led_pwm, 0, 1023, 0, 255); 
-  analogWrite(g_OptLed[ch], (0));
+  analogWrite(g_OptLed[ch], (led_pwm));
   return led_pwm;
 }
 
@@ -63,7 +63,8 @@ void OPT_Test(uint8_t op_mode)
   {
     if (op_mode == 0)
     {
-      ch = i % 4;
+      //ch = i % 4;
+      ch = 0;
       OPT_Led_OffAll();
       led_vr[0] = OPT_Led_On(ch);
     }
@@ -86,6 +87,7 @@ void OPT_Test(uint8_t op_mode)
     start_time = millis();
     while ((millis() - start_time) <= OPT_LIGHT_ON_TIME)
     {
+      Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");  
       Serial.print(F(" LED")); Serial.print(ch); Serial.print(F(": ")); Serial.print(led_vr[0]); Serial.print("\t");  
       if (op_mode == 1)
       {
@@ -104,6 +106,35 @@ void OPT_Test(uint8_t op_mode)
     }
   }
   OPT_Led_OffAll();
+}
+
+//--------------------------------------------------
+void OPT_Ctrl(void)
+{
+  uint16_t i, j;
+  static uint8_t ch = 0;
+  static double last_time = 0;
+  static int led_vr[2];
+  int adc_value[4];
+
+    if ((millis() - last_time) >= OPT_LIGHT_ON_TIME)
+    {
+      ch = (ch + 1) % 4;
+      OPT_Led_OffAll();
+      led_vr[0] = OPT_Led_On(ch);
+      last_time = millis();
+    }
+    Serial.print(F(" LED")); Serial.print(ch); Serial.print(F(": ")); Serial.print(led_vr[0]); Serial.print("\t");  
+
+    for (j = 0; j < 4; j++)
+    {
+      OPT_Pd_Measure(j, &adc_value[j]);
+      Serial.print(F(" PD")); Serial.print(j); Serial.print(F(": ")); Serial.print(adc_value[j]); Serial.print("\t");
+      Serial.flush();
+    }
+    Serial.println();
+    Serial.flush();
+    //delay(200);
 }
 
 //--------------------------------------------------

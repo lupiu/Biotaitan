@@ -4,10 +4,10 @@
 //===================//
 uint8_t g_op_mode;
 uint8_t g_LedIntensityPin[4] = {A0, A1, A2, A3};
-uint8_t g_LedPinDefine[4] = {5, 6, 10, 11};
+uint8_t g_LedPinDefine[4] = {5, 4, 3, 2};
 uint8_t g_Ads1115_Pin[4] = {ADS1115_MUX_AIN0_GND, ADS1115_MUX_AIN1_GND, ADS1115_MUX_AIN2_GND, ADS1115_MUX_AIN3_GND};
 
-#define ADS1115_PGA ADS1115_PGA_0_256
+#define ADS1115_PGA ADS1115_PGA_1_024
 //ADS1115_PGA_6_144
 //ADS1115_PGA_4_096
 //ADS1115_PGA_2_048
@@ -29,7 +29,7 @@ float readValue(uint8_t input) {
 
   int temp = ads1115.readRawValue();
   
-	return (0 - temp);
+	return (temp);
 }
 
 void setup() {
@@ -40,19 +40,20 @@ void setup() {
 	ads1115.setDataRate(ADS1115_DR_250_SPS);
 	ads1115.setPga(ADS1115_PGA);
 
-  pinMode(5, OUTPUT);
-  analogWrite(5, 255);
-  pinMode(6, OUTPUT);
-  analogWrite(6, 255);
-  pinMode(10, OUTPUT);
-  analogWrite(10, 255);
-  pinMode(11, OUTPUT);
-  analogWrite(11, 255);
+  pinMode(g_LedPinDefine[0], OUTPUT);
+  analogWrite(g_LedPinDefine[0], 0);
+  pinMode(g_LedPinDefine[1], OUTPUT);
+  analogWrite(g_LedPinDefine[1], 0);
+  pinMode(g_LedPinDefine[2], OUTPUT);
+  analogWrite(g_LedPinDefine[2], 0);
+  pinMode(g_LedPinDefine[3], OUTPUT);
+  analogWrite(g_LedPinDefine[3], 0);
 
-  pinMode(2, OUTPUT);
-  digitalWrite(2, LOW);
-  pinMode(3, INPUT_PULLUP);
-  g_op_mode = digitalRead(3);
+  //pinMode(2, OUTPUT);
+  //digitalWrite(2, LOW);
+  //pinMode(3, INPUT_PULLUP);
+  //g_op_mode = digitalRead(3);
+  g_op_mode = 0;
 }
 
 
@@ -105,10 +106,11 @@ void loop()
       }
       Serial.println();
       Serial.flush();
-      //delay(200);
+      delay(200);
     }
   }
-
+  
+  Led_OffAll();
   while(1);
 }
 
@@ -118,7 +120,7 @@ void Led_OffAll(void)
 
   for (i = 0; i < 4; i++)
   {
-    analogWrite(g_LedPinDefine[i], 255);
+    analogWrite(g_LedPinDefine[i], 0);
   }
 }
 
@@ -126,9 +128,10 @@ int Led_On(uint8_t ch)
 {
   int led_vr;
 
-  led_vr = analogRead(g_LedIntensityPin[ch]);  
-  led_vr = map(led_vr, 0, 1023, 0, 255); 
-  analogWrite(g_LedPinDefine[ch], (255 - led_vr));
+  //led_vr = analogRead(g_LedIntensityPin[ch]);  
+  //led_vr = map(led_vr, 0, 1023, 0, 255); 
+  led_vr = 128;
+  analogWrite(g_LedPinDefine[ch], led_vr);
   return led_vr;
 }
 

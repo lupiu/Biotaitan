@@ -23,6 +23,7 @@ void setup() {
 //--------------------------------------------------
 void loop()
 {
+  TEMP_Test(1);
   if (digitalRead(BTN_START) == 0)
   {
     switch (SYS_GetOpMode())
@@ -51,6 +52,7 @@ void loop()
         TEMP_Test(0);
         Serial.println(F(" SYS_TEMP_AUTO END"));
       break;
+
       default :;
     }
   }
