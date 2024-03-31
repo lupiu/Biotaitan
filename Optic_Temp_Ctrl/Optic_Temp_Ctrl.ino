@@ -23,7 +23,6 @@ void setup() {
 //--------------------------------------------------
 void loop()
 {
-  TEMP_Test(1);
   if (digitalRead(BTN_START) == 0)
   {
     switch (SYS_GetOpMode())
