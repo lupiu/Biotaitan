@@ -1,18 +1,12 @@
 //--------------------------------------------------
 /*
-* main.cpp
+* main.c
 *
 *  Created on: 2023/10/27
 *      Author: silva_lin
 */
 
 #include "main.h"
-#include "esp_err.h"
-#include "esp_log.h"
-
-#include "i2c_api.h"
-//#include "temp_ctrl.h"
-#include "optic.h"
 
 //--------------------------------------------------
 static const char *TAG = "main";

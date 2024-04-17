@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "name": "ESP-IDF",
+            "compilerPath": "${config:idf.toolsPathWin}\\tools\\riscv32-esp-elf\\esp-13.2.0_20230928\\riscv32-esp-elf\\bin\\riscv32-esp-elf-gcc.exe",
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
+            "includePath": [
+                "${config:idf.espIdfPath}/components/**",
+                "${config:idf.espIdfPathWin}/components/**",
+                "${config:idf.espAdfPath}/components/**",
+                "${config:idf.espAdfPathWin}/components/**",
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/lib/i2c_api",
+                "${workspaceFolder}/lib/i2c_api",
+                "${workspaceFolder}/lib/i2c_api",
+                "C:/Users/Silva/esp/v5.2.1/esp-idf/components/driver/i2c/include",
+                "C:/Users/Silva/esp/v5.2.1/esp-idf/components/driver/i2c/include",
+                "${workspaceFolder}/lib/optic",
+                "C:/Users/Silva/esp/v5.2.1/esp-idf/components/esp_timer/include"
+            ],
+            "browse": {
+                "path": [
+                    "${config:idf.espIdfPath}/components",
+                    "${config:idf.espIdfPathWin}/components",
+                    "${config:idf.espAdfPath}/components/**",
+                    "${config:idf.espAdfPathWin}/components/**",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": false
+            }
+        }
+    ],
+    "version": 4
+}

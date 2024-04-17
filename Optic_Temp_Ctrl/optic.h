@@ -31,7 +31,7 @@
 //ADS1115_PGA_0_512
 //ADS1115_PGA_0_256
 
-#define OPT_LIGHT_ON_TIME  1000
+#define OPT_LIGHT_ON_TIME  120
 
 //--------------------------------------------------
 
@@ -39,7 +39,7 @@
 //--------------------------------------------------
 void OPT_Initial(void);
 void OPT_Test(uint8_t op_mode);
-void OPT_Ctrl(void);
+void OPT_Ctrl(uint8_t ch);
 
 //--------------------------------------------------
 

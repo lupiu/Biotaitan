@@ -10,6 +10,8 @@
 #define _I2C_API_H__
 
 #include "esp_err.h"
+#include "esp_log.h"
+#include "driver/i2c.h"
 
 //--------------------------------------------------
 #define I2C0_MASTER_SCL_IO  GPIO_NUM_7

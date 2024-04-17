@@ -59,14 +59,15 @@ void OPT_Test(uint8_t op_mode)
   int led_vr[2];
   int adc_value[4];
 
-  for (i = 0; i < 60; i++)
+  for (i = 0; i < 600; i++)
   {
     if (op_mode == 0)
     {
-      //ch = i % 4;
-      ch = 0;
+      ch = i % 4;
+//      ch = 0;
       OPT_Led_OffAll();
       led_vr[0] = OPT_Led_On(ch);
+// Gaspard      led_vr[0] = OPT_Led_On(0);
     }
     else
     {
@@ -109,19 +110,23 @@ void OPT_Test(uint8_t op_mode)
 }
 
 //--------------------------------------------------
-void OPT_Ctrl(void)
+void OPT_Ctrl(uint8_t ch)
 {
   uint16_t i, j;
-  static uint8_t ch = 0;
   static double last_time = 0;
   static int led_vr[2];
   int adc_value[4];
 
+    if (ch == 4)
+    {
+      OPT_Led_OffAll();
+      return;
+    }
+
     if ((millis() - last_time) >= OPT_LIGHT_ON_TIME)
     {
-      ch = (ch + 1) % 4;
       OPT_Led_OffAll();
-      led_vr[0] = OPT_Led_On(ch);
+      led_vr[0] = OPT_Led_On(ch); //Gaspard
       last_time = millis();
     }
     Serial.print(F(" LED")); Serial.print(ch); Serial.print(F(": ")); Serial.print(led_vr[0]); Serial.print("\t");  

@@ -65,6 +65,14 @@ void TEMP_PidCal(float temp_c, uint8_t pin)
 //--------------------------------------------------
 void TEMP_PidCtrl(uint8_t tec_en)
 {
+    if (g_TempData.PresentTemp_C >= SAFTY_TOP_TEMP || g_TempData.PresentTemp_C <= SAFTY_BOTTOM_TEMP)
+  {
+    Serial.println(F("Tempture measure fail!!!"));
+    analogWrite(HEATER_CTRL, 0);
+    analogWrite(FAN_CTRL, 0);
+    return;
+  }
+
   if (g_TempPidData.Output >= 0)
   {
     analogWrite(HEATER_CTRL, g_TempPidData.Output);
@@ -79,7 +87,7 @@ void TEMP_PidCtrl(uint8_t tec_en)
 }
 
 //--------------------------------------------------
-uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, uint16_t holdtime)
+uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, double holdtime) //uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, uint16_t holdtime)-Gaspard uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, uint16_t holdtime)
 {
   static double achieve_time;
   static uint8_t achieve_flag = 0;
@@ -142,11 +150,13 @@ void TEMP_Test(uint8_t mode)
 
       if (millis() - log_time >= 0)
       {
-        Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
+        Serial.print(F(" T:")); Serial.print((millis()/1000)); Serial.print("\t");
+        // gaspard Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
         Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData.Output); Serial.print("\t");
+        // gaspard Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData.Output); Serial.print("\t");
         if (WITH_OPT == 1)
         {
-          OPT_Ctrl();
+          OPT_Ctrl(0);
         }
         log_time = millis();
       }
@@ -208,9 +218,36 @@ void TEMP_Test(uint8_t mode)
             }
           }
         } 
-        if (WITH_OPT == 1)
+        if (millis() - log_time >= 0)
         {
-          OPT_Ctrl();
+          Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
+          Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData.Output); Serial.print("\t");
+          if (WITH_OPT == 1)
+          {
+            if (dir == HIGH )
+            {
+              if (g_TempData.PresentTemp_C >= RISE_OPT_ON_T)
+              {
+                OPT_Ctrl(OPT_ON_SEL);
+              }
+              else if (g_TempData.PresentTemp_C >= RISE_OPT_OFF_T)
+              {
+                OPT_Ctrl(4);
+              }
+            }
+            else
+            {
+              if (g_TempData.PresentTemp_C <= FALL_OPT_ON_T)
+              {
+                OPT_Ctrl(OPT_ON_SEL);
+              }
+              else if (g_TempData.PresentTemp_C <= FALL_OPT_OFF_T)
+              {
+                OPT_Ctrl(4);
+              }
+            }            
+          }
+          log_time = millis();
         }
       }
     }
