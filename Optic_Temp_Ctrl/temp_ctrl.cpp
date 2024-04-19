@@ -247,6 +247,8 @@ void TEMP_Test(uint8_t mode)
               }
             }            
           }
+          Serial.println();
+          Serial.flush();
           log_time = millis();
         }
       }

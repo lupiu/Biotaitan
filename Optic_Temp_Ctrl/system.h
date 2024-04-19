@@ -17,6 +17,8 @@
 #define SW_SEL2 23
 #define SW_SEL1 22
 
+#define OP_MODE 4
+
 //--------------------------------------------------
 typedef enum
 {

@@ -25,7 +25,7 @@ void loop()
 {
   if (digitalRead(BTN_START) == 0)
   {
-    switch (SYS_GetOpMode())
+    switch (OP_MODE)
     {
       case SYS_LED_SINGLE :
         Serial.println(F(" SYS_LED_SINGLE START"));

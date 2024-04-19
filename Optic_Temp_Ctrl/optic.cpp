@@ -137,8 +137,8 @@ void OPT_Ctrl(uint8_t ch)
       Serial.print(F(" PD")); Serial.print(j); Serial.print(F(": ")); Serial.print(adc_value[j]); Serial.print("\t");
       Serial.flush();
     }
-    Serial.println();
-    Serial.flush();
+    //Serial.println();
+    //Serial.flush();
     //delay(200);
 }
 
