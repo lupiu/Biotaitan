@@ -32,7 +32,8 @@ int OPT_Led_On(uint8_t ch)
   int led_pwm;
 
   led_pwm = analogRead(g_OptLedIntens[ch]);  
-  led_pwm = map(led_pwm, 0, 1023, 0, 255); 
+  led_pwm = map(led_pwm, 0, 1023, 0, 255);
+  led_pwm = 255;
   analogWrite(g_OptLed[ch], (led_pwm));
   return led_pwm;
 }

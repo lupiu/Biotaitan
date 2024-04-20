@@ -27,6 +27,11 @@ void SYS_Initial(void)
   pinMode(SW_SEL1, INPUT_PULLUP);
 
   g_SysOpMode = ((digitalRead(SW_SEL1) * 4) + (digitalRead(SW_SEL2) * 2) + digitalRead(SW_SEL3));
+  if (g_SysOpMode == 7)
+  {
+    g_SysOpMode = OP_MODE;
+  }
+
 }
 
 //--------------------------------------------------

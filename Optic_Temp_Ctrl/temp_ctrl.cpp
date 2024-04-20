@@ -218,6 +218,7 @@ void TEMP_Test(uint8_t mode)
             }
           }
         } 
+
         if (millis() - log_time >= 0)
         {
           Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
@@ -226,22 +227,22 @@ void TEMP_Test(uint8_t mode)
           {
             if (dir == HIGH )
             {
-              if (g_TempData.PresentTemp_C >= RISE_OPT_ON_T)
+              if (g_TempData.PresentTemp_C >= RISE_OPT_ON_T && g_TempData.PresentTemp_C <= RISE_OPT_OFF_T)
               {
                 OPT_Ctrl(OPT_ON_SEL);
               }
-              else if (g_TempData.PresentTemp_C >= RISE_OPT_OFF_T)
+              else
               {
                 OPT_Ctrl(4);
               }
             }
             else
             {
-              if (g_TempData.PresentTemp_C <= FALL_OPT_ON_T)
+              if (g_TempData.PresentTemp_C <= FALL_OPT_ON_T && g_TempData.PresentTemp_C >= FALL_OPT_OFF_T)
               {
                 OPT_Ctrl(OPT_ON_SEL);
               }
-              else if (g_TempData.PresentTemp_C <= FALL_OPT_OFF_T)
+              else
               {
                 OPT_Ctrl(4);
               }
