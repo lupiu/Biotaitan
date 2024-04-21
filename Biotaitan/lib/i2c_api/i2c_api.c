@@ -9,31 +9,25 @@
 #include "i2c_api.h"
 
 //--------------------------------------------------
+i2c_master_bus_handle_t g_i2c_handle;
 
 //--------------------------------------------------
-esp_err_t i2c_master_init(int port) {
-    int i2c_master_port = port;
-    i2c_config_t conf;
+i2c_master_bus_handle_t I2C_GetHandle(void)
+{
+    return g_i2c_handle;
+}
 
-    if (i2c_master_port == 0)
-    {
-        conf.mode = I2C_MODE_MASTER;
-        conf.sda_io_num = I2C0_MASTER_SDA_IO;
-        conf.scl_io_num = I2C0_MASTER_SCL_IO;
-        conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
-        conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-        conf.master.clk_speed = I2C0_MASTER_FREQ_HZ;
-    }
-    else
-    {
-        conf.mode = I2C_MODE_MASTER;
-        conf.sda_io_num = I2C0_MASTER_SDA_IO;
-        conf.scl_io_num = I2C0_MASTER_SCL_IO;
-        conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
-        conf.scl_pullup_en = GPIO_PULLUP_ENABLE;
-        conf.master.clk_speed = I2C0_MASTER_FREQ_HZ;
-    }
+//--------------------------------------------------
+void I2C_Init(void)
+{
+    i2c_master_bus_config_t i2c_mst_config = {
+    .clk_source = I2C_CLK_SRC_DEFAULT,
+    .i2c_port  = I2C0_MASTER_NUM,
+    .sda_io_num = I2C0_MASTER_SDA_IO,
+    .scl_io_num = I2C0_MASTER_SCL_IO,
+    .glitch_ignore_cnt = 7,
+    .flags.enable_internal_pullup = true,
+    };  
 
-    i2c_param_config(i2c_master_port, &conf);
-    return i2c_driver_install(i2c_master_port, conf.mode, I2C_MASTER_RX_BUF_DISABLE, I2C_MASTER_TX_BUF_DISABLE, 0);
+    ESP_ERROR_CHECK(i2c_new_master_bus(&i2c_mst_config, &g_i2c_handle));
 }

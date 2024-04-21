@@ -74,7 +74,7 @@ void OPT_Test(uint8_t op_mode)
     start_time = esp_timer_get_time();
     while ((esp_timer_get_time() - start_time) <= OPT_LIGHT_ON_TIME)
     {
-      printf("T:%lld\tLED:%d:\t", esp_timer_get_time(), ch);
+      printf("T:%lld\tLED%d:\t", esp_timer_get_time(), ch);
       if (op_mode == 1)
       {
         printf("LED%d:\t", ch + 1);
@@ -121,7 +121,14 @@ void OPT_Ctrl(void)
 //--------------------------------------------------
 void OPT_ADS1115_Initial(void)
 {
-    ads1115_config(I2C_NUM_0,  ADS1115_I2C_ADDR_GND);
+    i2c_device_config_t dev_cfg = {
+      .dev_addr_length = I2C_ADDR_BIT_LEN_7,
+      .device_address = ADS1115_I2C_ADDR_GND,
+      .scl_speed_hz = I2C0_MASTER_FREQ_HZ,
+    };
+    i2c_master_dev_handle_t dev_handle;
+    ESP_ERROR_CHECK(i2c_master_bus_add_device(I2C_GetHandle(), &dev_cfg, &dev_handle));
+
     ads1115_set_mode(&g_OptAds1115, ADS1115_MODE_SINGLE);
     ads1115_set_sps(&g_OptAds1115, ADS1115_SPS_250);
     ads1115_set_pga(&g_OptAds1115, OPT_ADS1115_PGA);

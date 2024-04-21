@@ -11,7 +11,7 @@
 
 #include "esp_err.h"
 #include "esp_log.h"
-#include "driver/i2c.h"
+#include "driver/i2c_master.h"
 
 //--------------------------------------------------
 #define I2C0_MASTER_SCL_IO  GPIO_NUM_7
@@ -19,13 +19,9 @@
 #define I2C0_MASTER_NUM     0
 #define I2C0_MASTER_FREQ_HZ 400000
 
-#define I2C_MASTER_TX_BUF_DISABLE   0
-#define I2C_MASTER_RX_BUF_DISABLE   0
-#define I2C_MASTER_TIMEOUT_MS       1000
-
 //--------------------------------------------------
-esp_err_t i2c_master_init(int port);
-
+void I2C_Init(void);
+i2c_master_bus_handle_t I2C_GetHandle(void);
 //--------------------------------------------------
 
 #endif

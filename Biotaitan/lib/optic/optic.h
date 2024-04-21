@@ -11,6 +11,7 @@
 
 #include <driver/gpio.h>
 #include <esp_timer.h>
+#include "i2c_api.h"
 #include "ADS1115.h"
 
 //--------------------------------------------------

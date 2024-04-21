@@ -8,8 +8,10 @@
 #include "Arduino.h"
 #include "ADS1115-Driver.h"
 #include "optic.h"
+#include "system.h"
 
 //--------------------------------------------------
+uint8_t g_LedPwm[4] = {LED1_PWM, LED2_PWM, LED3_PWM, LED4_PWM};
 uint8_t g_OptLedIntens[4] = {OPT_LED1_INTENS, OPT_LED2_INTENS, OPT_LED3_INTENS, OPT_LED4_INTENS};
 uint8_t g_OptLed[4] = {OPT_LED1, OPT_LED2, OPT_LED3, OPT_LED4};
 uint8_t g_OptAds1115Mode[4] = {ADS1115_MUX_AIN0_GND, ADS1115_MUX_AIN1_GND, ADS1115_MUX_AIN2_GND, ADS1115_MUX_AIN3_GND};
@@ -31,10 +33,16 @@ int OPT_Led_On(uint8_t ch)
 {
   int led_pwm;
 
-  led_pwm = analogRead(g_OptLedIntens[ch]);  
-  led_pwm = map(led_pwm, 0, 1023, 0, 255);
-  led_pwm = 255;
-  analogWrite(g_OptLed[ch], (led_pwm));
+  if (SYS_GetOpMode() == 7)
+  {
+    led_pwm = g_LedPwm[ch];
+  }
+  else
+  {
+    led_pwm = analogRead(g_OptLedIntens[ch]);  
+    led_pwm = map(led_pwm, 0, 1023, 0, 255);
+  }
+  analogWrite(g_OptLed[ch], led_pwm);
   return led_pwm;
 }
 

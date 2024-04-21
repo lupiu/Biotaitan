@@ -18,12 +18,14 @@ static const char *TAG = "main";
 //--------------------------------------------------
 void app_main()
 {
-    i2c_master_init(I2C0_MASTER_NUM);
+    I2C_Init();
     OPT_Initial();
     //TEMP_Initial();
 
     while (1)
     {
+        vTaskDelay(100);
+        //OPT_Test(0);
         if (BTN_START == 0)
         {
             switch (OPMODE)
