@@ -33,7 +33,7 @@ int OPT_Led_On(uint8_t ch)
 {
   int led_pwm;
 
-  if (SYS_GetOpMode() == 7)
+  if (SYS_GetBoardSel() == 1)
   {
     led_pwm = g_LedPwm[ch];
   }
@@ -49,6 +49,7 @@ int OPT_Led_On(uint8_t ch)
 //--------------------------------------------------
 void OPT_Pd_Measure(uint8_t ch, int *adc_value)
 {	
+  int val;
   g_OptAds1115.setMultiplexer(g_OptAds1115Mode[ch]);
 	g_OptAds1115.startSingleConvertion();
 
@@ -56,7 +57,14 @@ void OPT_Pd_Measure(uint8_t ch, int *adc_value)
 
 	while (g_OptAds1115.getOperationalStatus() == 0);
 
- *adc_value  = g_OptAds1115.readRawValue();
+  val = g_OptAds1115.readRawValue();
+  if (val == -1)
+  {
+    Serial.println("");
+    Serial.println(F("ADC Read Fail!!!"));
+    SYS_ErrorReset();
+  }
+ *adc_value  = val;
 }
 
 //--------------------------------------------------

@@ -32,6 +32,8 @@ typedef enum
 //--------------------------------------------------
 void SYS_Initial(void);
 _SysOpmode SYS_GetOpMode();
+uint8_t SYS_GetBoardSel();
+void SYS_ErrorReset();
 
 //--------------------------------------------------
 

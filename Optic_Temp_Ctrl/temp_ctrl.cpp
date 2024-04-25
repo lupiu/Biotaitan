@@ -65,12 +65,11 @@ void TEMP_PidCal(float temp_c, uint8_t pin)
 //--------------------------------------------------
 void TEMP_PidCtrl(uint8_t tec_en)
 {
-    if (g_TempData.PresentTemp_C >= SAFTY_TOP_TEMP || g_TempData.PresentTemp_C <= SAFTY_BOTTOM_TEMP)
+  if (g_TempData.PresentTemp_C >= SAFTY_TOP_TEMP || g_TempData.PresentTemp_C <= SAFTY_BOTTOM_TEMP)
   {
-    Serial.println(F("Tempture measure fail!!!"));
-    analogWrite(HEATER_CTRL, 0);
-    analogWrite(FAN_CTRL, 0);
-    return;
+    Serial.println("");
+    Serial.println(F("Tempture over safty range!!!"));
+    SYS_ErrorReset();
   }
 
   if (g_TempPidData.Output >= 0)
