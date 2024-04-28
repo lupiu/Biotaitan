@@ -19,6 +19,14 @@
         "i2c_master.h": "c",
         "i2c_api.h": "c",
         "ads1115.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "task.h": "c",
+        "freertos.h": "c",
+        "gpio_types.h": "c",
+        "gpio.h": "c",
+        "lcm.h": "c",
+        "semphr.h": "c",
+        "esp_err.h": "c",
+        "spi_api.h": "c"
     }
 }

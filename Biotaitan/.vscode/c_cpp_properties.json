@@ -11,12 +11,11 @@
                 "${config:idf.espAdfPathWin}/components/**",
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/lib/i2c_api",
-                "${workspaceFolder}/lib/i2c_api",
-                "${workspaceFolder}/lib/i2c_api",
-                "C:/Users/Silva/esp/v5.2.1/esp-idf/components/driver/i2c/include",
                 "C:/Users/Silva/esp/v5.2.1/esp-idf/components/driver/i2c/include",
                 "${workspaceFolder}/lib/optic",
-                "C:/Users/Silva/esp/v5.2.1/esp-idf/components/esp_timer/include"
+                "${workspaceFolder}/lib/lcm",
+                "C:/Users/Silva/esp/v5.2.1/esp-idf/components/esp_timer/include",
+                "${workspaceFolder}/lib/spi_api"
             ],
             "browse": {
                 "path": [

@@ -14,49 +14,24 @@ static const char *TAG = "main";
 #define OPMODE SYS_TEMP_AUTO
 
 //--------------------------------------------------
+void LCM_Task(void * pvParametersoid)
+{
+    while(1)
+    {
+        printf("MCP2515_send_Task loop\n " );
+        vTaskDelay(1000);
+    }
+}
 
 //--------------------------------------------------
 void app_main()
 {
+    SPI_Init();
+    LCM_Init();
     I2C_Init();
     OPT_Initial();
     //TEMP_Initial();
 
-    while (1)
-    {
-        vTaskDelay(100);
-        //OPT_Test(0);
-        if (BTN_START == 0)
-        {
-            switch (OPMODE)
-            {
-                case SYS_LED_SINGLE :
-                ESP_LOGI(TAG, "SYS_LED_SINGLE START");
-                OPT_Test(0);
-                ESP_LOGI(TAG, "SYS_LED_SINGLE END");
-                break;
-
-                case SYS_LED_DUAL :
-                ESP_LOGI(TAG, "SYS_LED_DUAL START");
-                OPT_Test(1);
-                ESP_LOGI(TAG, "SYS_LED_DUAL END");
-                break;
-
-                case SYS_TEMP_MANUAL_H :
-                case SYS_TEMP_MANUAL_L :
-                ESP_LOGI(TAG, "SYS_TEMP_MANUAL START");
-                //TEMP_Test(1);
-                ESP_LOGI(TAG, "SYS_TEMP_MANUAL END");
-                break;
-
-                case SYS_TEMP_AUTO :
-                ESP_LOGI(TAG, "SYS_TEMP_AUTO START");
-                //TEMP_Test(0);
-                ESP_LOGI(TAG, "SYS_TEMP_AUTO END");
-                break;
-
-                default :;
-            }
-        }
-    }
+    xTaskCreatePinnedToCore(LCM_Task, "LCM_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
+    while (1);
 }
