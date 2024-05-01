@@ -1,28 +1,24 @@
 //--------------------------------------------------
 /*
-* main.h
+* system.h
 *
 *  Created on: 2023/10/27
 *      Author: silva_lin
 */
 
-#ifndef _MAIN_H__
-#define _MAIN_H__
+#ifndef _SYSTEM_H__
+#define _SYSTEM_H__
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
-#include "esp_err.h"
-#include "esp_log.h"
-
-#include "i2c_api.h"
-#include "spi_api.h"
-//#include "temp_ctrl.h"
-#include "optic.h"
-#include "lcm.h"
+#include "Arduino.h"
 
 //--------------------------------------------------
-#define BTN_START  9
+#define BTN_START 25
+#define SW_SEL3 24
+#define SW_SEL2 23
+#define SW_SEL1 22
+
+#define OP_MODE SYS_TEMP_AUTO
+
 
 //--------------------------------------------------
 typedef enum
@@ -33,6 +29,12 @@ typedef enum
   SYS_TEMP_MANUAL_L,
   SYS_TEMP_AUTO,
 }_SysOpmode;
+
+//--------------------------------------------------
+void SYS_Initial(void);
+_SysOpmode SYS_GetOpMode();
+uint8_t SYS_GetBoardSel();
+void SYS_ErrorReset();
 
 //--------------------------------------------------
 

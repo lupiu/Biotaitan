@@ -9,27 +9,34 @@
 #ifndef _OPTIC_H__
 #define _OPTIC_H__
 
-#include <driver/gpio.h>
-#include <esp_timer.h>
-#include "i2c_api.h"
-#include "ADS1115.h"
+#include "Arduino.h"
 
 //--------------------------------------------------
 //paramters define
-#define OPT_LED1  GPIO_NUM_10
-#define OPT_LED2  GPIO_NUM_11
-#define OPT_LED3  GPIO_NUM_2
-#define OPT_LED4  GPIO_NUM_3
+#define OPT_LED1_INTENS  A0
+#define OPT_LED2_INTENS  A1
+#define OPT_LED3_INTENS  A2
+#define OPT_LED4_INTENS  A3
 
-#define OPT_ADS1115_PGA ADS1115_FSR_1_024
-//ADS1115_FSR_6_144,
-//ADS1115_FSR_4_096,
-//ADS1115_FSR_2_048,
-//ADS1115_FSR_1_024,
-//ADS1115_FSR_0_512,
-//ADS1115_FSR_0_256,
+#define OPT_LED1  5
+#define OPT_LED2  6
+#define OPT_LED3  10
+#define OPT_LED4  11
 
-#define OPT_LIGHT_ON_TIME  120
+#define LED1_PWM 0 //0~255
+#define LED2_PWM 0 //0~255
+#define LED3_PWM 0 //0~255
+#define LED4_PWM 0 //0~255
+
+#define OPT_ADS1115_PGA ADS1115_PGA_1_024
+//ADS1115_PGA_6_144
+//ADS1115_PGA_4_096
+//ADS1115_PGA_2_048
+//ADS1115_PGA_1_024
+//ADS1115_PGA_0_512
+//ADS1115_PGA_0_256
+
+#define OPT_LIGHT_ON_TIME  1200
 
 //--------------------------------------------------
 
@@ -37,7 +44,7 @@
 //--------------------------------------------------
 void OPT_Initial(void);
 void OPT_Test(uint8_t op_mode);
-void OPT_Ctrl(void);
+void OPT_Ctrl(uint8_t ch);
 
 //--------------------------------------------------
 
