@@ -15,9 +15,9 @@
 #include "hal/gpio_types.h"
 
 //--------------------------------------------------
-#define SPI_MASTER_MISO  GPIO_NUM_18
-#define SPI_MASTER_MOSI  GPIO_NUM_20
-#define SPI_MASTER_CLK  GPIO_NUM_19
+#define SPI_MASTER_MISO  GPIO_NUM_37
+#define SPI_MASTER_MOSI  GPIO_NUM_39
+#define SPI_MASTER_CLK  GPIO_NUM_38
 #define SPI_MASTER_NUM  SPI2_HOST
 
 //--------------------------------------------------

@@ -11,15 +11,22 @@
 #include "temp_ctrl.h"
 #include "optic.h"
 #include "lcm.h"
+#include "spi_api.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+
 
 //--------------------------------------------------
 void setup() {
     Serial.begin(115200);
     Serial.setDebugOutput(true);
 
-    SYS_Initial();
-    TEMP_Initial();
-    OPT_Initial();
+    //SYS_Initial();
+    //TEMP_Initial();
+    //OPT_Initial();
+
+    SPI_Init();
     LCM_Initial();
 }
 

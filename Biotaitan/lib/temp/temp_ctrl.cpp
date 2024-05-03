@@ -269,7 +269,6 @@ void TEMP_PidInitial(void)
 //--------------------------------------------------
 void TEMP_Initial(void)
 {
-  pinMode(NTC_TS1, INPUT);
   pinMode(NTC_TS3, INPUT);
 
   pinMode(HEATER_CTRL, OUTPUT);

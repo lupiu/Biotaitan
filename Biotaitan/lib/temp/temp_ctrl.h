@@ -12,13 +12,12 @@
 #include "Arduino.h"
 
 //--------------------------------------------------
-#define NTC_TS1 A4
-#define NTC_TS3 A5
+#define NTC_TS3 15
 
-#define HEATER_CTRL 3
-#define FAN_CTRL 9
-#define TEC_FAN_CTRL 2
-#define TEC_CTRL 4
+#define HEATER_CTRL 4
+#define FAN_CTRL 5
+#define TEC_FAN_CTRL -1
+#define TEC_CTRL -1
 
 #define PID_KP 300  // Proportional constant
 #define PID_KI 20 // Integral Constant

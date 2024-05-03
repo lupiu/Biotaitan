@@ -9,13 +9,21 @@
 #ifndef _LCM_H__
 #define _LCM_H__
 
+#include "Arduino.h"
+#include "driver/spi_master.h"
 #include "esp_err.h"
+#include "esp_log.h"
 #include "spi_api.h"
 #include <driver/gpio.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
+#include <lvgl.h>
+
 
 //--------------------------------------------------
 //paramters define
-#define LCM_SPI_CSN  GPIO_NUM_21
+#define LCM_SPI_CSN  GPIO_NUM_40
 
 //--------------------------------------------------
 

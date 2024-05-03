@@ -12,10 +12,10 @@
 #include "Arduino.h"
 
 //--------------------------------------------------
-#define BTN_START 25
-#define SW_SEL3 24
-#define SW_SEL2 23
-#define SW_SEL1 22
+#define BTN_START -1
+#define SW_SEL3 -1
+#define SW_SEL2 -1
+#define SW_SEL1 -1
 
 #define OP_MODE SYS_TEMP_AUTO
 

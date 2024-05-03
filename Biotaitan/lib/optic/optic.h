@@ -18,10 +18,10 @@
 #define OPT_LED3_INTENS  A2
 #define OPT_LED4_INTENS  A3
 
-#define OPT_LED1  5
-#define OPT_LED2  6
-#define OPT_LED3  10
-#define OPT_LED4  11
+#define OPT_LED1  18
+#define OPT_LED2  8
+#define OPT_LED3  9
+#define OPT_LED4  10
 
 #define LED1_PWM 0 //0~255
 #define LED2_PWM 0 //0~255
