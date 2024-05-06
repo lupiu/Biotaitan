@@ -11,19 +11,24 @@
 //--------------------------------------------------
 
 //--------------------------------------------------
-//--------------------------------------------------
 void SD_Task(void * pvParametersoid)
 {
     while(1)
     {
-        // 与SD卡通信
-        File dataFile = SD.open("data.txt", FILE_WRITE);
-        if (dataFile) {
-            dataFile.println("Hello, SD card!");
-            dataFile.close();
-            Serial.println("数据写入到SD卡成功！");
-        } else {
-            Serial.println("无法打开文件！");
+        if (xSemaphoreTake(g_SPI_Semaphore, portMAX_DELAY) == pdTRUE)
+        {
+            SPI.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI);
+            // 与SD卡通信
+            File dataFile = SD.open("/data.txt", FILE_WRITE);
+            if (dataFile) {
+                dataFile.println("Hello, SD card!");
+                dataFile.close();
+                Serial.println("数据写入到SD卡成功！");
+            } else {
+
+                Serial.println("数据写入到SD卡成功！");
+            }
+            xSemaphoreGive(g_SPI_Semaphore);
         }
 
         // 与另一个SPI设备通信
@@ -32,7 +37,7 @@ void SD_Task(void * pvParametersoid)
         //digitalWrite(otherDeviceSelectPin, HIGH); // 禁用设备
 
         // 可以在此添加其他操作或延时
-        delay(1000);
+        delay(5000);
     }
 }
 //--------------------------------------------------
@@ -44,12 +49,12 @@ void SD_Initial(void)
 
     // 初始化SD卡
     if (!SD.begin(SD_SPI_CSN)) {
-    Serial.println("SD 卡初始化失败！");
+    Serial.println("SD Card Fail！");
     return;
     }
-    Serial.println("SD 卡初始化成功！");
+    Serial.println("SD Card OK！");
 
-    xTaskCreatePinnedToCore(SD_Task, "SD_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
+    xTaskCreatePinnedToCore((TaskFunction_t)SD_Task, "SD_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
 }
 
 //--------------------------------------------------

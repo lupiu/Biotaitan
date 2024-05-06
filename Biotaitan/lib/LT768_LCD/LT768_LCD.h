@@ -3,14 +3,10 @@
 #include "Arduino.h"
 #include <Wire.h>
 #include <SPI.h>
+#include "spi_api.h"
 
 #define Arduino_SPI     1 //1:use SPI to drive LT768
 #define Arduino_IIC     0 //1:use IIC to drive LT768
-
-#define SPI_MASTER_MISO  GPIO_NUM_37
-#define SPI_MASTER_MOSI  GPIO_NUM_39
-#define SPI_MASTER_CLK  GPIO_NUM_38
-#define LCM_SPI_CSN  GPIO_NUM_40
 
 class LT768LCD
 {

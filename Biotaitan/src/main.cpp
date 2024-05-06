@@ -11,11 +11,10 @@
 #include "temp_ctrl.h"
 #include "optic.h"
 #include "lcm.h"
+#include "sd_card.h"
 #include "spi_api.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
 
+//--------------------------------------------------
 
 //--------------------------------------------------
 void setup() {
@@ -28,6 +27,7 @@ void setup() {
 
     SPI_Init();
     LCM_Initial();
+    SD_Initial();
 }
 
 //--------------------------------------------------

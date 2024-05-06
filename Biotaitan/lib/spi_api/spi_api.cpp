@@ -9,19 +9,17 @@
 #include "spi_api.h"
 
 //--------------------------------------------------
-static const char *TAG = "spi";
+SemaphoreHandle_t g_SPI_Semaphore;
 
 //--------------------------------------------------
 void SPI_Init(void)
 {
-    ESP_LOGI(TAG, "SPI_Init!");
-    spi_bus_config_t SPI_MASTER_buscfg  = {0};
-    SPI_MASTER_buscfg.miso_io_num      = SPI_MASTER_MISO;
-    SPI_MASTER_buscfg.mosi_io_num      = SPI_MASTER_MOSI;
-    SPI_MASTER_buscfg.sclk_io_num      = SPI_MASTER_CLK;
-    SPI_MASTER_buscfg.quadwp_io_num    = -1;
-    SPI_MASTER_buscfg.quadhd_io_num    = -1;
-    SPI_MASTER_buscfg.max_transfer_sz  = 0;
+    g_SPI_Semaphore = xSemaphoreCreateMutex();
 
-    ESP_ERROR_CHECK(spi_bus_initialize(SPI_MASTER_NUM, &SPI_MASTER_buscfg, SPI_DMA_CH_AUTO));
+    pinMode(LCM_SPI_CSN, OUTPUT);
+    digitalWrite(LCM_SPI_CSN, HIGH);
+
+    pinMode(SD_SPI_CSN, OUTPUT);
+    digitalWrite(SD_SPI_CSN, HIGH);
+
 }

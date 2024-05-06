@@ -10,14 +10,8 @@
 #define _LCM_H__
 
 #include "Arduino.h"
-#include "driver/spi_master.h"
 #include "esp_err.h"
-#include "esp_log.h"
 #include "spi_api.h"
-#include <driver/gpio.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
-#include "freertos/semphr.h"
 #include "LT768.h"
 #include "LT768_LCD.h"
 #include "LT768_Lib.h"
@@ -25,8 +19,6 @@
 
 //--------------------------------------------------
 //paramters define
-#define LCM_SPI_CSN  GPIO_NUM_40
-
 #define TOUCH_SDA GPIO_NUM_6
 #define TOUCH_SCL GPIO_NUM_7
 #define TOUCH_INT GPIO_NUM_42
@@ -99,6 +91,7 @@
 
 //--------------------------------------------------
 void LCM_Initial(void);
+void LCM_Task(void * pvParametersoid);
 
 //--------------------------------------------------
 
