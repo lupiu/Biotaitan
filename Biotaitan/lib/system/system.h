@@ -30,6 +30,15 @@ typedef enum
   SYS_TEMP_AUTO,
 }_SysOpmode;
 
+typedef enum
+{
+  SYS_INIT = 0,
+  SYS_SELF_TEST,
+  SYS_LOGIN,
+  SYS_REGISTER,
+  SYS_MAIN,
+}_SysStatus;
+
 //--------------------------------------------------
 void SYS_Initial(void);
 _SysOpmode SYS_GetOpMode();

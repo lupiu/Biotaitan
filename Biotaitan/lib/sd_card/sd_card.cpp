@@ -54,7 +54,7 @@ void SD_Initial(void)
     }
     Serial.println("SD Card OK！");
 
-    xTaskCreatePinnedToCore((TaskFunction_t)SD_Task, "SD_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
+    //xTaskCreatePinnedToCore((TaskFunction_t)SD_Task, "SD_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
 }
 
 //--------------------------------------------------

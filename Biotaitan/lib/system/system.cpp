@@ -12,6 +12,7 @@
 
 //--------------------------------------------------
 _SysOpmode g_SysOpMode;
+_SysStatus g_SysStatus;
 uint8_t g_BoardSel = 0;
 
 //--------------------------------------------------
@@ -40,20 +41,18 @@ void SYS_ErrorReset()
 }
 
 //--------------------------------------------------
+void System_Task(void * pvParametersoid)
+{
+    while(1)
+    {
+    }
+}
+//--------------------------------------------------
 void SYS_Initial(void)
 {
-  pinMode(BTN_START, INPUT_PULLUP);
-  pinMode(SW_SEL3, INPUT_PULLUP);
-  pinMode(SW_SEL2, INPUT_PULLUP);
-  pinMode(SW_SEL1, INPUT_PULLUP);
-
-  g_SysOpMode = (_SysOpmode)((digitalRead(SW_SEL1) * 4) + (digitalRead(SW_SEL2) * 2) + digitalRead(SW_SEL3));
-  if (g_SysOpMode == 7)
-  {
-    g_BoardSel = 1;
-    g_SysOpMode = OP_MODE;
-  }
-
+    g_SysStatus = SYS_INIT;
+    
+    xTaskCreatePinnedToCore((TaskFunction_t)System_Task, "System_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
 }
 
 //--------------------------------------------------

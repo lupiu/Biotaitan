@@ -21,13 +21,14 @@ void setup() {
     Serial.begin(115200);
     Serial.setDebugOutput(true);
 
-    //SYS_Initial();
-    //TEMP_Initial();
-    //OPT_Initial();
+    TEMP_Initial();
+    OPT_Initial();
 
     SPI_Init();
     LCM_Initial();
     SD_Initial();
+
+    SYS_Initial();
 }
 
 //--------------------------------------------------

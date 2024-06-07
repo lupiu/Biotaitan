@@ -117,7 +117,7 @@ void LCM_Initial(void)
     tp.begin();
     tp.setRotation(ROTATION_INVERTED);
 
-    xTaskCreatePinnedToCore((TaskFunction_t)LCM_Task, "LCM_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
+    //xTaskCreatePinnedToCore((TaskFunction_t)LCM_Task, "LCM_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
 }
 
 //--------------------------------------------------

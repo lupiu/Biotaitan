@@ -16,8 +16,6 @@
 
 #define HEATER_CTRL 4
 #define FAN_CTRL 5
-#define TEC_FAN_CTRL -1
-#define TEC_CTRL -1
 
 #define PID_KP 300  // Proportional constant
 #define PID_KI 20 // Integral Constant
