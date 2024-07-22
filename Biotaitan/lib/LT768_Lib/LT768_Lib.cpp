@@ -168,7 +168,10 @@ void LT768Lib::Set_LCD_Panel(void)
   LT768.RGB_16b_16bpp();
       //LT768.RGB_16b_24bpp_mode1();
     //LT768.RGB_16b_24bpp_mode2();
-  LT768.MemWrite_Left_Right_Top_Down(); 
+  //LT768.MemRead_Right_Left_Top_Down();
+  //LT768.MemWrite_Left_Right_Top_Down(); 
+  LT768.MemWrite_Right_Left_Top_Down(); 
+  //LT768.MemWrite_Top_Down_Left_Right();
   //LT768.MemWrite_Down_Top_Left_Right();
       
 //**[03h]**//

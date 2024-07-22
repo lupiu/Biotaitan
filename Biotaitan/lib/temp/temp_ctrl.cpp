@@ -25,7 +25,7 @@ float TEMP_ReadTemperature(uint8_t pin)
   float thermistor_r;
 
   temp = analogRead(pin);
-  temp = ((temp * ANALOG_VA) / 1023);
+  temp = ((temp * ANALOG_VA) / 4095);
 
   thermistor_r = ((temp * ANALOG_RVD) / (ANALOG_VA - temp));
   if (thermistor_r <= THERM_MIN_R)
@@ -34,21 +34,6 @@ float TEMP_ReadTemperature(uint8_t pin)
   temp = (1 / ((1 / THERM_BASE_DK)-((log(THERM_BASE_R / thermistor_r)) / THERM_BASE_B))) - THERM_BASE_DK;
 
   return temp;
-}
-
-//--------------------------------------------------
-void TEMP_TecCtrl(uint8_t en)
-{
-  if (en)
-  {
-    analogWrite(TEC_FAN_CTRL, 255);
-    analogWrite(TEC_CTRL, TEC_PWM);
-  }
-  else
-  {
-    analogWrite(TEC_FAN_CTRL, 0);
-    analogWrite(TEC_CTRL, 0);
-  }
 }
 
 //--------------------------------------------------
@@ -81,7 +66,6 @@ void TEMP_PidCtrl(uint8_t tec_en)
   {
     analogWrite(HEATER_CTRL, HEATER_KEEP_PWM);
     analogWrite(FAN_CTRL, 0 - g_TempPidData.Output);
-    TEMP_TecCtrl(tec_en);
   }  
 }
 
@@ -121,7 +105,6 @@ void TEMP_AllOff(void)
 {
   analogWrite(HEATER_CTRL, 0);
   analogWrite(FAN_CTRL, 0);
-  TEMP_TecCtrl(0);
 }
 
 //--------------------------------------------------
@@ -131,6 +114,7 @@ void TEMP_Test(uint8_t mode)
   static uint8_t dir = HIGH;
   static uint8_t base_initial = LOW;
   static double log_time = 0;
+  static uint8_t btn = 0;
 
   while(1)
   {
@@ -162,14 +146,15 @@ void TEMP_Test(uint8_t mode)
     }
     else
     { 
-      if (digitalRead(BTN_START) == 0)
+      if (btn == 0)
       {
         cycle_cnt = 0;
         dir = HIGH;
         base_initial = LOW;
+        btn = 1;
       }
       else
-      {    
+      {
         if (BASE_ENABLE == 1 && base_initial == LOW)
         {
           if (TEMP_CycleCtrl(BASE_TEMP, HIGH, BASE_HOLDTIME) == 1)
@@ -245,7 +230,7 @@ void TEMP_Test(uint8_t mode)
               {
                 OPT_Ctrl(4);
               }
-            }            
+            }
           }
           Serial.println();
           Serial.flush();
@@ -276,12 +261,6 @@ void TEMP_Initial(void)
 
   pinMode(FAN_CTRL, OUTPUT);
   analogWrite(FAN_CTRL, 0);
-
-  pinMode(TEC_FAN_CTRL, OUTPUT);
-  analogWrite(TEC_FAN_CTRL, 0);
-
-  pinMode(TEC_CTRL, OUTPUT);
-  analogWrite(TEC_CTRL, 0);
 
   TEMP_PidInitial();
 }

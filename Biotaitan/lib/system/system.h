@@ -17,6 +17,8 @@
 #define SW_SEL2 -1
 #define SW_SEL1 -1
 
+#define STATUS_LED 41
+
 #define OP_MODE SYS_TEMP_AUTO
 
 

@@ -23,10 +23,10 @@
 #define OPT_LED3  9
 #define OPT_LED4  10
 
-#define LED1_PWM 0 //0~255
-#define LED2_PWM 0 //0~255
-#define LED3_PWM 0 //0~255
-#define LED4_PWM 0 //0~255
+#define LED1_PWM 255 //0~255
+#define LED2_PWM 255 //0~255
+#define LED3_PWM 255 //0~255
+#define LED4_PWM 255 //0~255
 
 #define OPT_ADS1115_PGA ADS1115_PGA_1_024
 //ADS1115_PGA_6_144

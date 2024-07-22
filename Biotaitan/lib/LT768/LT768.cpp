@@ -134,7 +134,7 @@ void LT768EF::Check_Busy_Draw(void)
 
 //[00h]=========================================================================
 
-void LT768EF::LT768_SW_Reset(void)//IC Reset¡A¦ý
+void LT768EF::LT768_SW_Reset(void)//IC Resetï¿½Aï¿½ï¿½
 {
   unsigned char temp;
 
@@ -1332,7 +1332,7 @@ XDB[7:0] Pull-Up Enable
 void LT768EF::XPDAT18_Set_GPIO_D7(void)
 {
 /*
-XPDAT[18] ¡V not scan function select
+XPDAT[18] ï¿½V not scan function select
 0: GPIO-D7
 1: KOUT[4]
 */
@@ -1345,7 +1345,7 @@ XPDAT[18] ¡V not scan function select
 void LT768EF::XPDAT18_Set_KOUT4(void)
 {
 /*
-XPDAT[18] ¡V not scan function select
+XPDAT[18] ï¿½V not scan function select
 0: GPIO-D7
 1: KOUT[4]
 */
@@ -1358,7 +1358,7 @@ XPDAT[18] ¡V not scan function select
 void LT768EF::XPDAT17_Set_GPIO_D5(void)
 {
 /*
-XPDAT[17] ¡V not scan function select
+XPDAT[17] ï¿½V not scan function select
 0: GPIO-D5
 1: KOUT[2]
 */
@@ -1371,7 +1371,7 @@ XPDAT[17] ¡V not scan function select
 void LT768EF::XPDAT17_Set_KOUT2(void)
 {
 /*
-XPDAT[17] ¡V not scan function select
+XPDAT[17] ï¿½V not scan function select
 0: GPIO-D5
 1: KOUT[2]
 */
@@ -1384,7 +1384,7 @@ XPDAT[17] ¡V not scan function select
 void LT768EF::XPDAT16_Set_GPIO_D4(void)
 {
 /*
-XPDAT[16] ¡V not scan function select
+XPDAT[16] ï¿½V not scan function select
 0: GPIO-D4
 1: KOUT[1]
 */
@@ -1397,7 +1397,7 @@ XPDAT[16] ¡V not scan function select
 void LT768EF::XPDAT16_Set_KOUT1(void)
 {
 /*
-XPDAT[16] ¡V not scan function select
+XPDAT[16] ï¿½V not scan function select
 0: GPIO-D4
 1: KOUT[1]
 */
@@ -1410,7 +1410,7 @@ XPDAT[16] ¡V not scan function select
 void LT768EF::XPDAT9_Set_GPIO_D3(void)
 {
 /*
-XPDAT[9] ¡V not scan function select
+XPDAT[9] ï¿½V not scan function select
 0: GPIO-D3
 1: KOUT[3]
 */
@@ -1423,7 +1423,7 @@ XPDAT[9] ¡V not scan function select
 void LT768EF::XPDAT9_Set_KOUT3(void)
 {
 /*
-XPDAT[9] ¡V not scan function select
+XPDAT[9] ï¿½V not scan function select
 0: GPIO-D3
 1: KOUT[3]
 */
@@ -1436,7 +1436,7 @@ XPDAT[9] ¡V not scan function select
 void LT768EF::XPDAT8_Set_GPIO_D2(void)
 {
 /*
-XPDAT[8] ¡V not scan function select
+XPDAT[8] ï¿½V not scan function select
 0: GPIO-D2
 1: KIN[3]
 */
@@ -1449,7 +1449,7 @@ XPDAT[8] ¡V not scan function select
 void LT768EF::XPDAT8_Set_KIN3(void)
 {
 /*
-XPDAT[8] ¡V not scan function select
+XPDAT[8] ï¿½V not scan function select
 0: GPIO-D2
 1: KIN[3]
 */
@@ -1462,7 +1462,7 @@ XPDAT[8] ¡V not scan function select
 void LT768EF::XPDAT2_Set_GPIO_D6(void)
 {
 /*
-XPDAT[2] ¡V not scan function select
+XPDAT[2] ï¿½V not scan function select
 0: GPIO-D6
 1: KIN[4]
 */
@@ -1475,7 +1475,7 @@ XPDAT[2] ¡V not scan function select
 void LT768EF::XPDAT2_Set_KIN4(void)
 {
 /*
-XPDAT[2] ¡V not scan function select
+XPDAT[2] ï¿½V not scan function select
 0: GPIO-D6
 1: KIN[4]
 */
@@ -1488,7 +1488,7 @@ XPDAT[2] ¡V not scan function select
 void LT768EF::XPDAT1_Set_GPIO_D1(void)
 {
 /*
-XPDAT[1] ¡V not scan function select
+XPDAT[1] ï¿½V not scan function select
 0: GPIO-D1
 1: KIN[2]
 */
@@ -1501,7 +1501,7 @@ XPDAT[1] ¡V not scan function select
 void LT768EF::XPDAT1_Set_KIN2(void)
 {
 /*
-XPDAT[1] ¡V not scan function select
+XPDAT[1] ï¿½V not scan function select
 0: GPIO-D1
 1: KIN[2]
 */
@@ -1514,7 +1514,7 @@ XPDAT[1] ¡V not scan function select
 void LT768EF::XPDAT0_Set_GPIO_D0(void)
 {
 /*
-XPDAT[0] ¡V not scan function select
+XPDAT[0] ï¿½V not scan function select
 0: GPIO-D0
 1: KIN[1]
 */
@@ -1527,7 +1527,7 @@ XPDAT[0] ¡V not scan function select
 void LT768EF::XPDAT0_Set_KIN1(void)
 {
 /*
-XPDAT[0] ¡V not scan function select
+XPDAT[0] ï¿½V not scan function select
 0: GPIO-D0
 1: KIN[1]
 */
@@ -1598,8 +1598,8 @@ PIP 1 window always on top of PIP 2 window.
 void LT768EF::Select_PIP1_Parameter(void)
 {
 /*
-0: To configure PIP 1¡¦s parameters.
-1: To configure PIP 2¡¦s parameters..
+0: To configure PIP 1ï¿½ï¿½s parameters.
+1: To configure PIP 2ï¿½ï¿½s parameters..
 */
   unsigned char temp;
   LT768_LCD.LCD_CmdWrite(0x10);
@@ -1610,8 +1610,8 @@ void LT768EF::Select_PIP1_Parameter(void)
 void LT768EF::Select_PIP2_Parameter(void)
 {
 /*
-0: To configure PIP 1¡¦s parameters.
-1: To configure PIP 2¡¦s parameters..
+0: To configure PIP 1ï¿½ï¿½s parameters.
+1: To configure PIP 2ï¿½ï¿½s parameters..
 */
   unsigned char temp;
   LT768_LCD.LCD_CmdWrite(0x10);
@@ -2117,8 +2117,8 @@ void LT768EF::Idle_DE_Low(void)
 {
 /*  
 DE IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§DE¡¨ output is low.
-1 : Pin ¡§DE¡¨ output is high.
+0 : Pin ï¿½ï¿½DEï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½DEï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2131,8 +2131,8 @@ void LT768EF::Idle_DE_High(void)
 {
 /*  
 DE IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§DE¡¨ output is low.
-1 : Pin ¡§DE¡¨ output is high.
+0 : Pin ï¿½ï¿½DEï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½DEï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2145,8 +2145,8 @@ void LT768EF::Idle_PCLK_Low(void)
 {
 /*  
 PCLK IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§PCLK¡¨ output is low.
-1 : Pin ¡§PCLK¡¨ output is high.
+0 : Pin ï¿½ï¿½PCLKï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½PCLKï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2159,8 +2159,8 @@ void LT768EF::Idle_PCLK_High(void)
 {
 /*  
 PCLK IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§PCLK¡¨ output is low.
-1 : Pin ¡§PCLK¡¨ output is high.
+0 : Pin ï¿½ï¿½PCLKï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½PCLKï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2173,8 +2173,8 @@ void LT768EF::Idle_PDAT_Low(void)
 {
 /*  
 PDAT IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pins ¡§PDAT[23:0]¡¨ output is low.
-1 : Pins ¡§PCLK[23:0]¡¨ output is high.
+0 : Pins ï¿½ï¿½PDAT[23:0]ï¿½ï¿½ output is low.
+1 : Pins ï¿½ï¿½PCLK[23:0]ï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2187,8 +2187,8 @@ void LT768EF::Idle_PDAT_High(void)
 {
 /*  
 PDAT IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pins ¡§PDAT[23:0]¡¨ output is low.
-1 : Pins ¡§PCLK[23:0]¡¨ output is high.
+0 : Pins ï¿½ï¿½PDAT[23:0]ï¿½ï¿½ output is low.
+1 : Pins ï¿½ï¿½PCLK[23:0]ï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2201,8 +2201,8 @@ void LT768EF::Idle_HSYNC_Low(void)
 {
 /*  
 HSYNC IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§HSYNC¡¨ output is low.
-1 : Pin ¡§HSYNC¡¨ output is high.
+0 : Pin ï¿½ï¿½HSYNCï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½HSYNCï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2215,8 +2215,8 @@ void LT768EF::Idle_HSYNC_High(void)
 {
 /*  
 HSYNC IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§HSYNC¡¨ output is low.
-1 : Pin ¡§HSYNC¡¨ output is high.
+0 : Pin ï¿½ï¿½HSYNCï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½HSYNCï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2229,8 +2229,8 @@ void LT768EF::Idle_VSYNC_Low(void)
 {
 /*  
 VSYNC IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§VSYNC¡¨ output is low.
-1 : Pin ¡§VSYNC¡¨ output is high.
+0 : Pin ï¿½ï¿½VSYNCï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½VSYNCï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2243,8 +2243,8 @@ void LT768EF::Idle_VSYNC_High(void)
 {
 /*  
 VSYNC IDLE STATE(When STANDBY or DISPLAY OFF )
-0 : Pin ¡§VSYNC¡¨ output is low.
-1 : Pin ¡§VSYNC¡¨ output is high.
+0 : Pin ï¿½ï¿½VSYNCï¿½ï¿½ output is low.
+1 : Pin ï¿½ï¿½VSYNCï¿½ï¿½ output is high.
 */
   unsigned char temp;
   
@@ -2450,7 +2450,7 @@ void LT768EF::Main_Image_Width(unsigned short WX)
 [24h] Main Image Width [7:0]
 [25h] Main Image Width [12:8]
 Unit: Pixel.
-It must be divisible by 4. MIW Bit [1:0] tie to ¡§0¡¨ internally.
+It must be divisible by 4. MIW Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 The value is physical pixel number. Maximum value is 8188 pixels
 */
   LT768_LCD.LCD_RegisterWrite(0x24,WX);
@@ -2464,7 +2464,7 @@ void LT768EF::Main_Window_Start_XY(unsigned short WX,unsigned short HY)
 [27h] Main Window Upper-Left corner X-coordination [12:8]
 Reference Main Image coordination.
 Unit: Pixel
-It must be divisible by 4. MWULX Bit [1:0] tie to ¡§0¡¨ internally.
+It must be divisible by 4. MWULX Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 X-axis coordination plus Horizontal display width cannot large than 8188.
 
 [28h] Main Window Upper-Left corner Y-coordination [7:0]
@@ -2487,9 +2487,9 @@ void LT768EF::PIP_Display_Start_XY(unsigned short WX,unsigned short HY)
 [2Bh] PIP Window Display Upper-Left corner X-coordination [12:8]
 Reference Main Window coordination.
 Unit: Pixel
-It must be divisible by 4. PWDULX Bit [1:0] tie to ¡§0¡¨ internally.
+It must be divisible by 4. PWDULX Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 X-axis coordination should less than horizontal display width.
-According to bit of Select Configure PIP 1 or 2 Window¡¦s parameters. 
+According to bit of Select Configure PIP 1 or 2 Windowï¿½ï¿½s parameters. 
 Function bit will be configured for relative PIP window.
 
 [2Ch] PIP Window Display Upper-Left corner Y-coordination [7:0]
@@ -2497,7 +2497,7 @@ Function bit will be configured for relative PIP window.
 Reference Main Window coordination.
 Unit: Pixel
 Y-axis coordination should less than vertical display height.
-According to bit of Select Configure PIP 1 or 2 Window¡¦s parameters.
+According to bit of Select Configure PIP 1 or 2 Windowï¿½ï¿½s parameters.
 Function bit will be configured for relative PIP window.
 */
   LT768_LCD.LCD_RegisterWrite(0x2A,WX);
@@ -2527,10 +2527,10 @@ void LT768EF::PIP_Image_Width(unsigned short WX)
 [32h] PIP Image Width [7:0]
 [33h] PIP Image Width [12:8]
 Unit: Pixel.
-It must be divisible by 4. PIW Bit [1:0] tie to ¡§0¡¨ internally.
+It must be divisible by 4. PIW Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 The value is physical pixel number.
 This width should less than horizontal display width.
-According to bit of Select Configure PIP 1 or 2 Window¡¦s parameters.
+According to bit of Select Configure PIP 1 or 2 Windowï¿½ï¿½s parameters.
 Function bit will be configured for relative PIP window.
 */
   LT768_LCD.LCD_RegisterWrite(0x32,WX);
@@ -2544,9 +2544,9 @@ void LT768EF::PIP_Window_Image_Start_XY(unsigned short WX,unsigned short HY)
 [35h] PIP Window Image Upper-Left corner X-coordination [12:8]
 Reference PIP Image coordination.
 Unit: Pixel
-It must be divisible by 4. PWIULX Bit [1:0] tie to ¡§0¡¨ internally.
+It must be divisible by 4. PWIULX Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 X-axis coordination plus PIP image width cannot large than 8188.
-According to bit of Select Configure PIP 1 or 2 Window¡¦s parameters. 
+According to bit of Select Configure PIP 1 or 2 Windowï¿½ï¿½s parameters. 
 Function bit will be configured for relative PIP window.
 
 [36h] PIP Windows Display Upper-Left corner Y-coordination [7:0]
@@ -2554,7 +2554,7 @@ Function bit will be configured for relative PIP window.
 Reference PIP Image coordination.
 Unit: Pixel
 Y-axis coordination plus PIP window height should less than 8191.
-According to bit of Select Configure PIP 1 or 2 Window¡¦s parameters. 
+According to bit of Select Configure PIP 1 or 2 Windowï¿½ï¿½s parameters. 
 Function bit will be configured for relative PIP window.
 */
   LT768_LCD.LCD_RegisterWrite(0x34,WX);
@@ -2572,14 +2572,14 @@ void LT768EF::PIP_Window_Width_Height(unsigned short WX,unsigned short HY)
 Unit: Pixel.
 It must be divisible by 4. The value is physical pixel number.
 Maximum value is 8188 pixels.
-According to bit of Select Configure PIP 1 or 2 Window¡¦s parameters. 
+According to bit of Select Configure PIP 1 or 2 Windowï¿½ï¿½s parameters. 
 Function bit will be configured for relative PIP window.
 
 [3Ah] PIP Window Height [7:0]
 [3Bh] PIP Window Height [10:8]
 Unit: Pixel
 The value is physical pixel number. Maximum value is 8191 pixels.
-According to bit of Select Configure PIP 1 or 2 Window¡¦s parameters. 
+According to bit of Select Configure PIP 1 or 2 Windowï¿½ï¿½s parameters. 
 Function bit will be configured for relative PIP window.
 */
   LT768_LCD.LCD_RegisterWrite(0x38,WX);
@@ -2774,13 +2774,13 @@ void LT768EF::Text_Cursor_H_V(unsigned short WX,unsigned short HY)
 [3Eh]
 Text Cursor Horizontal Size Setting[4:0]
 Unit : Pixel
-Zero-based number. Value ¡§0¡¨ means 1 pixel.
+Zero-based number. Value ï¿½ï¿½0ï¿½ï¿½ means 1 pixel.
 Note : When font is enlarged, the cursor setting will multiply the
 same times as the font enlargement.
 [3Fh]
 Text Cursor Vertical Size Setting[4:0]
 Unit : Pixel
-Zero-based number. Value ¡§0¡¨ means 1 pixel.
+Zero-based number. Value ï¿½ï¿½0ï¿½ï¿½ means 1 pixel.
 Note : When font is enlarged, the cursor setting will multiply the
 same times as the font enlargement.
 */
@@ -2937,7 +2937,7 @@ Canvas addressing mode
 void LT768EF::Memory_8bpp_Mode(void) 
 {
 /*
-Canvas image¡¦s color depth & memory R/W data width
+Canvas imageï¿½ï¿½s color depth & memory R/W data width
 In Block Mode:
 00: 8bpp
 01: 16bpp
@@ -2957,7 +2957,7 @@ X1: 16-bits memory data read/write
 void LT768EF::Memory_16bpp_Mode(void)  
 {
 /*
-Canvas image¡¦s color depth & memory R/W data width
+Canvas imageï¿½ï¿½s color depth & memory R/W data width
 In Block Mode:
 00: 8bpp
 01: 16bpp
@@ -2977,7 +2977,7 @@ X1: 16-bits memory data read/write
 void LT768EF::Memory_24bpp_Mode(void)  
 {
 /*
-Canvas image¡¦s color depth & memory R/W data width
+Canvas imageï¿½ï¿½s color depth & memory R/W data width
 In Block Mode:
 00: 8bpp
 01: 16bpp
@@ -3077,7 +3077,7 @@ void LT768EF::Start_Triangle_Fill(void)
   Check_Busy_Draw();
 }
 //[68h][69h][6Ah][6Bh]=========================================================================
-//ÏßÆðµã
+//ï¿½ï¿½ï¿½ï¿½ï¿½
 void LT768EF::Line_Start_XY(unsigned short WX,unsigned short HY)
 {
 /*
@@ -3099,7 +3099,7 @@ void LT768EF::Line_Start_XY(unsigned short WX,unsigned short HY)
   LT768_LCD.LCD_DataWrite(HY>>8);
 }
 //[6Ch][6Dh][6Eh][6Fh]=========================================================================
-//ÏßÖÕµã
+//ï¿½ï¿½ï¿½Õµï¿½
 void LT768EF::Line_End_XY(unsigned short WX,unsigned short HY)
 {
 /*
@@ -3121,7 +3121,7 @@ void LT768EF::Line_End_XY(unsigned short WX,unsigned short HY)
   LT768_LCD.LCD_DataWrite(HY>>8);
 }
 //[68h]~[73h]=========================================================================
-//¤T¨¤-ÂI1
+//ï¿½Tï¿½ï¿½-ï¿½I1
 void LT768EF::Triangle_Point1_XY(unsigned short WX,unsigned short HY)
 {
 /*
@@ -3142,7 +3142,7 @@ void LT768EF::Triangle_Point1_XY(unsigned short WX,unsigned short HY)
   LT768_LCD.LCD_CmdWrite(0x6B);
   LT768_LCD.LCD_DataWrite(HY>>8);
 }
-//¤T¨¤-ÂI2
+//ï¿½Tï¿½ï¿½-ï¿½I2
 void LT768EF::Triangle_Point2_XY(unsigned short WX,unsigned short HY)
 {
 /*
@@ -3163,7 +3163,7 @@ void LT768EF::Triangle_Point2_XY(unsigned short WX,unsigned short HY)
   LT768_LCD.LCD_CmdWrite(0x6F);
   LT768_LCD.LCD_DataWrite(HY>>8);
 }
-//¤T¨¤-ÂI3
+//ï¿½Tï¿½ï¿½-ï¿½I3
 void LT768EF::Triangle_Point3_XY (unsigned short WX,unsigned short HY)
 {
 /*
@@ -3455,7 +3455,7 @@ void LT768EF::Set_PWM_Prescaler_1_to_256(unsigned short WX)
 /*
 PWM Prescaler Register
 These 8 bits determine prescaler value for Timer 0 and 1.
-Time base is ¡§Core_Freq / (Prescaler + 1)¡¨
+Time base is ï¿½ï¿½Core_Freq / (Prescaler + 1)ï¿½ï¿½
 */
   WX=WX-1;
   LT768_LCD.LCD_CmdWrite(0x84);
@@ -3874,7 +3874,7 @@ void LT768EF::Set_Timer0_Count_Buffer(unsigned short WX)
 Timer 0 count buffer register
 Count buffer register total has 16 bits.
 When timer counter equal to 0 will cause PWM timer reload Count buffer register if reload_en bit set as enable.
-It may read back timer counter¡¦s real time value when PWM timer start.
+It may read back timer counterï¿½ï¿½s real time value when PWM timer start.
 */
   LT768_LCD.LCD_CmdWrite(0x8A);
   LT768_LCD.LCD_DataWrite(WX);
@@ -3902,7 +3902,7 @@ void LT768EF::Set_Timer1_Count_Buffer(unsigned short WX)
 Timer 0 count buffer register
 Count buffer register total has 16 bits.
 When timer counter equal to 0 will cause PWM timer reload Count buffer register if reload_en bit set as enable.
-It may read back timer counter¡¦s real time value when PWM timer start.
+It may read back timer counterï¿½ï¿½s real time value when PWM timer start.
 */
   LT768_LCD.LCD_CmdWrite(0x8E);
   LT768_LCD.LCD_DataWrite(WX);
@@ -4284,7 +4284,7 @@ void LT768EF::BTE_S0_Memory_Start_Address(unsigned long Addr)
 [94h] BTE S0 Memory Start Address [15:8]
 [95h] BTE S0 Memory Start Address [23:16]
 [96h] BTE S0 Memory Start Address [31:24]
-Bit [1:0] tie to ¡§0¡¨ internally.
+Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 */
   LT768_LCD.LCD_RegisterWrite(0x93,Addr);
   LT768_LCD.LCD_RegisterWrite(0x94,Addr>>8);
@@ -4300,7 +4300,7 @@ void LT768EF::BTE_S0_Image_Width(unsigned short WX)
 [97h] BTE S0 Image Width [7:0]
 [98h] BTE S0 Image Width [12:8]
 Unit: Pixel.
-Bit [1:0] tie to ¡§0¡¨ internally.
+Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 */
   LT768_LCD.LCD_RegisterWrite(0x97,WX);
   LT768_LCD.LCD_RegisterWrite(0x98,WX>>8);
@@ -4334,7 +4334,7 @@ void LT768EF::BTE_S1_Memory_Start_Address(unsigned long Addr)
 [9Eh] BTE S1 Memory Start Address [15:8]
 [9Fh] BTE S1 Memory Start Address [23:16]
 [A0h] BTE S1 Memory Start Address [31:24]
-Bit [1:0] tie to ¡§0¡¨ internally.
+Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 */
   LT768_LCD.LCD_RegisterWrite(0x9D,Addr);
   LT768_LCD.LCD_RegisterWrite(0x9E,Addr>>8);
@@ -4392,7 +4392,7 @@ void LT768EF::BTE_S1_Image_Width(unsigned short WX)
 [A1h] BTE S1 Image Width [7:0]
 [A2h] BTE S1 Image Width [12:8]
 Unit: Pixel.
-Bit [1:0] tie to ¡§0¡¨ internally.
+Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 */
   LT768_LCD.LCD_RegisterWrite(0xA1,WX);
   LT768_LCD.LCD_RegisterWrite(0xA2,WX>>8);
@@ -4426,7 +4426,7 @@ void LT768EF::BTE_Destination_Memory_Start_Address(unsigned long Addr)
 [A8h] BTE Destination Memory Start Address [15:8]
 [A9h] BTE Destination Memory Start Address [23:16]
 [AAh] BTE Destination Memory Start Address [31:24]
-Bit [1:0] tie to ¡§0¡¨ internally.
+Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 */
   LT768_LCD.LCD_RegisterWrite(0xA7,Addr);
   LT768_LCD.LCD_RegisterWrite(0xA8,Addr>>8);
@@ -4442,7 +4442,7 @@ void LT768EF::BTE_Destination_Image_Width(unsigned short WX)
 [ABh] BTE Destination Image Width [7:0]
 [ACh] BTE Destination Image Width [12:8]
 Unit: Pixel.
-Bit [1:0] tie to ¡§0¡¨ internally.
+Bit [1:0] tie to ï¿½ï¿½0ï¿½ï¿½ internally.
 */
   LT768_LCD.LCD_RegisterWrite(0xAB,WX);
   LT768_LCD.LCD_RegisterWrite(0xAC,WX>>8);
@@ -4557,8 +4557,8 @@ void LT768EF::Select_SFI_Font_Mode(void)
 {
 /*[bit6]
 Serial Flash /ROM Access Mode
-0: Font mode ¡V for external cgrom
-1: DMA mode ¡V for cgram , pattern , bootstart image or osd
+0: Font mode ï¿½V for external cgrom
+1: DMA mode ï¿½V for cgram , pattern , bootstart image or osd
 */
   unsigned char temp;
   LT768_LCD.LCD_CmdWrite(0xB7);
@@ -4570,8 +4570,8 @@ void LT768EF::Select_SFI_DMA_Mode(void)
 {
 /*[bit6]
 Serial Flash /ROM Access Mode
-0: Font mode ¡V for external cgrom
-1: DMA mode ¡V for cgram , pattern , bootstart image or osd
+0: Font mode ï¿½V for external cgrom
+1: DMA mode ï¿½V for cgram , pattern , bootstart image or osd
 */
   unsigned char temp;
   LT768_LCD.LCD_CmdWrite(0xB7);
@@ -5111,7 +5111,7 @@ Font Height Setting
 01b : 12x24 / 24x24.
 10b : 16x32 / 32x32.
 *** User-defined Font width is decided by font code. Genitop
-serial flash¡¦s font width is decided by font code or GT Font ROM
+serial flashï¿½ï¿½s font width is decided by font code or GT Font ROM
 control register.
 */
   unsigned char temp;
@@ -5129,7 +5129,7 @@ Font Height Setting
 01b : 12x24 / 24x24.
 10b : 16x32 / 32x32.
 *** User-defined Font width is decided by font code. Genitop
-serial flash¡¦s font width is decided by font code or GT Font ROM
+serial flashï¿½ï¿½s font width is decided by font code or GT Font ROM
 control register.
 */
   unsigned char temp;
@@ -5147,7 +5147,7 @@ Font Height Setting
 01b : 12x24 / 24x24.
 10b : 16x32 / 32x32.
 *** User-defined Font width is decided by font code. Genitop
-serial flash¡¦s font width is decided by font code or GT Font ROM
+serial flashï¿½ï¿½s font width is decided by font code or GT Font ROM
 control register.
 */
   unsigned char temp;
@@ -5897,11 +5897,11 @@ Note : This bit is always read as 0.
 Generate stop condition and be cleared by hardware automatically
 Note : This bit is always read as 0.
 [bit5]
-READ(READ and WRITE can¡¦t be used simultaneously)
+READ(READ and WRITE canï¿½ï¿½t be used simultaneously)
 Read form slave and be cleared by hardware automatically
 Note : This bit is always read as 0.
 [bit4]
-WRITE(READ and WRITE can¡¦t be used simultaneously)
+WRITE(READ and WRITE canï¿½ï¿½t be used simultaneously)
 Write to slave and be cleared by hardware automatically
 Note : This bit is always read as 0.
 [bit3] ACKNOWLEDGE
@@ -6308,7 +6308,7 @@ unsigned char LT768EF::Numbers_of_Key_Hit(void)
    unsigned char temp;
    LT768_LCD.LCD_CmdWrite(0xFC);
    temp = LT768_LCD.LCD_DataRead();   //read key touch number
-   temp = temp & 0x03;   //¤U
+   temp = temp & 0x03;   //ï¿½U
    return temp;
 }
 

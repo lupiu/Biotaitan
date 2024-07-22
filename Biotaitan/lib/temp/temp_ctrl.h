@@ -21,8 +21,8 @@
 #define PID_KI 20 // Integral Constant
 #define PID_KD 5 // Derivative Constant
 
-#define ANALOG_VA 5.0 //analog Voltage
-#define ANALOG_RVD 8250 //analog resistor (ohm)
+#define ANALOG_VA 3.3 //analog Voltage
+#define ANALOG_RVD 3300 //analog resistor (ohm)
 #define THERM_BASE_DK 273.15 //K@0C
 #define THERM_BASE_R 33800 //32800//R@0C 30000
 #define THERM_BASE_B 3950 //3950//0~105C 3455
