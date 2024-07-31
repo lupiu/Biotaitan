@@ -27,6 +27,35 @@
 #define TOUCH_HEIGHT 480
 
 //--------------------------------------------------
+#define BUTTON_X 150
+#define BUTTON_Y 80
+#define BUTTON_SPACING_X 40
+#define BUTTON_SPACING_Y 20
+
+#define LCM_MSG_START_X 30
+#define LCM_MSG_START_Y 60
+#define LCM_MSG_SIZE 32
+
+//--------------------------------------------------
+typedef struct
+{
+    uint8_t Name[10];
+    uint8_t NameSize;
+    uint16_t NameColor;
+    uint16_t BgColor;
+    uint16_t Px;
+    uint16_t Py;
+}_ButtonInfo;
+
+typedef void (*_Btn_cb)(void);
+
+typedef struct
+{
+    char Name[10];
+    _Btn_cb CallBack;
+}_LcmMenuType;
+
+//--------------------------------------------------
 /*color65k*/
 #define White          0xFFFF
 #define Black          0x0000
@@ -92,6 +121,9 @@
 //--------------------------------------------------
 void LCM_Initial(void);
 void LCM_Task(void * pvParametersoid);
+void LCM_ShowInfoString(char *str, uint8_t contd);
+void LCM_DisplayFuncKey(_LcmMenuType *menu);
+void LCM_TouchScan(uint8_t *num);
 
 //--------------------------------------------------
 

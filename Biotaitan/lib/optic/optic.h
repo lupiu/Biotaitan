@@ -45,6 +45,7 @@
 void OPT_Initial(void);
 void OPT_Test(uint8_t op_mode);
 void OPT_Ctrl(uint8_t ch);
+void OPT_Led_OffAll(void);
 
 //--------------------------------------------------
 

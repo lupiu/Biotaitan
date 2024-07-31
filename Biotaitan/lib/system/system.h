@@ -39,13 +39,24 @@ typedef enum
   SYS_LOGIN,
   SYS_REGISTER,
   SYS_MAIN,
+  SYS_RUNNIG,
 }_SysStatus;
+
+typedef struct
+{
+  u8_t ScnUpdated;
+  _SysStatus Status;
+}_SysHdl;
 
 //--------------------------------------------------
 void SYS_Initial(void);
 _SysOpmode SYS_GetOpMode();
 uint8_t SYS_GetBoardSel();
 void SYS_ErrorReset();
+void SYS_BtnF0(void);
+void SYS_BtnF1(void);
+void SYS_BtnF2(void);
+void SYS_BtnF3(void);
 
 //--------------------------------------------------
 

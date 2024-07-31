@@ -33,17 +33,9 @@ int OPT_Led_On(uint8_t ch)
 {
   int led_pwm;
 
-  if (SYS_GetBoardSel() == 1)
-  {
     led_pwm = g_LedPwm[ch];
-  }
-  else
-  {
-    led_pwm = analogRead(g_OptLedIntens[ch]);  
-    led_pwm = map(led_pwm, 0, 1023, 0, 255);
-  }
-  analogWrite(g_OptLed[ch], led_pwm);
-  return led_pwm;
+    analogWrite(g_OptLed[ch], led_pwm);
+    return led_pwm;
 }
 
 //--------------------------------------------------

@@ -13,6 +13,14 @@
 TAMC_GT911 tp = TAMC_GT911(TOUCH_SDA, TOUCH_SCL, -1, TOUCH_RST, TOUCH_WIDTH, TOUCH_HEIGHT);
 
 //--------------------------------------------------
+_ButtonInfo g_func_btn[4] = 
+{
+    "F0", 2,  Black,  Blue2, ((0 * (BUTTON_X + BUTTON_SPACING_X)) + BUTTON_SPACING_X + (BUTTON_X / 2)), (TOUCH_HEIGHT - (1 * (BUTTON_Y / 2)) - BUTTON_SPACING_Y),
+    "F1", 2,  Black,  Blue2, ((1 * (BUTTON_X + BUTTON_SPACING_X)) + BUTTON_SPACING_X + (BUTTON_X / 2)), (TOUCH_HEIGHT - (1 * (BUTTON_Y / 2)) - BUTTON_SPACING_Y),
+    "F2", 2,  Black,  Blue2, ((2 * (BUTTON_X + BUTTON_SPACING_X)) + BUTTON_SPACING_X + (BUTTON_X / 2)), (TOUCH_HEIGHT - (1 * (BUTTON_Y / 2)) - BUTTON_SPACING_Y),
+    "F3", 2,  Black,  Blue2, ((3 * (BUTTON_X + BUTTON_SPACING_X)) + BUTTON_SPACING_X + (BUTTON_X / 2)), (TOUCH_HEIGHT - (1 * (BUTTON_Y / 2)) - BUTTON_SPACING_Y),
+};
+//--------------------------------------------------
 void LCM_Task(void * pvParametersoid)
 {
     static u8_t cnt = 0;
@@ -90,6 +98,88 @@ void LCM_Task(void * pvParametersoid)
 }
 
 //--------------------------------------------------
+void LCM_DisplayFuncKey(_LcmMenuType *menu)
+{
+    uint16_t i;
+
+    //for(i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
+    for(i = 0; i < 1; i++)
+    {
+        LT768_Lib.LT768_DrawCircleSquare_Fill(g_func_btn[i].Px - (BUTTON_X / 2), g_func_btn[i].Py - (BUTTON_Y / 2), g_func_btn[i].Px + (BUTTON_X / 2), g_func_btn[i].Py + (BUTTON_Y / 2), 20 , 20, Blue2);
+        LT768_Lib.LT768_Print_Internal_Font_String(g_func_btn[i].Px - (strlen(menu[i].Name) * LCM_MSG_SIZE / 2 / 2), g_func_btn[i].Py - (LCM_MSG_SIZE / 2), Black, Blue2, menu[i].Name);
+    }
+}
+
+//--------------------------------------------------
+boolean LCM_IsPressed(uint16_t px, uint16_t py, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+{
+    if((px > x1 && px < x2) && (py > y1 && py < y2))
+    {
+        return true;  
+    } 
+    else
+    {
+        return false;  
+    }
+ }
+
+//--------------------------------------------------
+void LCM_TouchScan(uint8_t *num)
+{
+    uint16_t i;
+    uint16_t px = 0;
+    uint16_t py = 0;
+    static u8_t key_rls = 1;
+
+    num[0] = 255;
+    tp.read();
+    if (tp.isTouched)
+    {
+        if (key_rls == 1)
+        {
+            key_rls = 0;
+            px = tp.points[0].x;
+            py = tp.points[0].y;
+
+            for (i = 0; i < sizeof(g_func_btn) / sizeof(_ButtonInfo); i++)
+            {
+                if (LCM_IsPressed(px, py, (g_func_btn[i].Px - (BUTTON_X / 2)), (g_func_btn[i].Py - (BUTTON_Y / 2)), (g_func_btn[i].Px + (BUTTON_X / 2)), (g_func_btn[i].Py + (BUTTON_X / 2))))
+                {
+                    num[0] = i;
+                    break;
+                }
+            }
+        }
+        delay(20);
+    }
+    else
+    {
+        key_rls = 1;
+    }
+}
+
+//--------------------------------------------------
+void LCM_ShowInfoString(char *str, uint8_t contd)
+{
+    static uint8_t msg_line_num = 9;
+    static uint8_t msg_line = 0;
+    uint8_t i;
+
+    if (contd == 0)
+    {
+        msg_line = 0;
+    }
+
+    if (msg_line == 0)
+        LT768_Lib.LT768_DrawSquare_Fill(0, LCM_MSG_START_Y, TOUCH_WIDTH, (LCM_MSG_START_Y + ((msg_line_num + 1) * LCM_MSG_SIZE)), Blue);
+
+    LT768_Lib.LT768_Print_Internal_Font_String(LCM_MSG_START_X, (LCM_MSG_START_Y + (msg_line * LCM_MSG_SIZE)) , Black, Blue, str);
+    msg_line++;
+    if (msg_line >= msg_line_num)
+        msg_line = 0;
+}
+
+//--------------------------------------------------
 void LT768_Initial(void)
 {
     LT768_LCD.Parallel_Init();
@@ -118,7 +208,6 @@ void LCM_Initial(void)
     tp.begin();
     tp.setRotation(ROTATION_INVERTED);
 
-    LT768_Lib.LT768_DrawSquare_Fill(0,0,LCD_XSIZE_TFT,LCD_YSIZE_TFT,Blue);
     //xTaskCreatePinnedToCore((TaskFunction_t)LCM_Task, "LCM_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
 }
 

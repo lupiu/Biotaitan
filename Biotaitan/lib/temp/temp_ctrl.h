@@ -73,6 +73,7 @@ typedef struct
 //--------------------------------------------------
 void TEMP_Initial(void);
 void TEMP_Test(uint8_t mode);
+void TEMP_AllOff(void);
 //--------------------------------------------------
 
 #endif
