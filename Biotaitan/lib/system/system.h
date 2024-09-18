@@ -57,7 +57,7 @@ void SYS_BtnF0(void);
 void SYS_BtnF1(void);
 void SYS_BtnF2(void);
 void SYS_BtnF3(void);
-
+void SYS_ChangeStatus(_SysStatus status);
 //--------------------------------------------------
 
 #endif

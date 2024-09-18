@@ -9,6 +9,7 @@
 #include "ADS1115-Driver.h"
 #include "optic.h"
 #include "system.h"
+#include "temp_ctrl.h"
 
 //--------------------------------------------------
 uint8_t g_LedPwm[4] = {LED1_PWM, LED2_PWM, LED3_PWM, LED4_PWM};
@@ -119,12 +120,14 @@ void OPT_Test(uint8_t op_mode)
 }
 
 //--------------------------------------------------
-void OPT_Ctrl(uint8_t ch)
+void OPT_Ctrl(uint8_t ch, bool *is_difference_large, uint8_t cycle_cnt)
 {
   uint16_t i, j;
   static double last_time = 0;
-  static int led_vr[2];
+  static int led_vr[4];
   int adc_value[4];
+  int optOnSel[3] = {OPT_ON_SEL2, OPT_ON_SEL3, OPT_ON_SEL4};
+  static int previous_adc_value[4];
 
     if (ch == 4)
     {
@@ -136,18 +139,67 @@ void OPT_Ctrl(uint8_t ch)
     {
       OPT_Led_OffAll();
       led_vr[0] = OPT_Led_On(ch); //Gaspard
+      if (OPT_num>=2)
+      {
+        for (int i = 1; i <= (OPT_num-1) ; ++i) 
+        {
+          led_vr[i] = OPT_Led_On(optOnSel[i - 1]);
+        }
+      }
+      
       last_time = millis();
     }
-    Serial.print(F(" LED")); Serial.print(ch); Serial.print(F(": ")); Serial.print(led_vr[0]); Serial.print("\t");  
+    //Serial.print(F(" LED")); Serial.print(ch); Serial.print(F(": ")); Serial.print(led_vr[0]); Serial.print("\t");
+    Serial.print(ch);
+    delay(3);
+    if (OPT_num>=2)
+    {
+      for (int i = 1; i <= (OPT_num-1) ; ++i)
+      {
+        Serial.print(optOnSel[i - 1]);
+        delay(3);
+      }
+    }
+    Serial.print("\t");
+    delay(5);
 
     for (j = 0; j < 4; j++)
     {
       OPT_Pd_Measure(j, &adc_value[j]);
-      Serial.print(F(" PD")); Serial.print(j); Serial.print(F(": ")); Serial.print(adc_value[j]); Serial.print("\t");
-      Serial.flush();
+      //Serial.print(F(" PD")); Serial.print(j); Serial.print(F(": ")); Serial.print(adc_value[j]); Serial.print("\t");
+      Serial.print(adc_value[j]);
+      delay(7);
+      Serial.print("\t");
+      delay(5);
     }
+
+    if (cycle_cnt == 4)
+    {
+      for (int j = 0; j < 4; j++)
+      {
+        previous_adc_value[j] = adc_value[j];
+      }
+    }
+
+    if (cycle_cnt>1 && cycle_cnt % 5 == 0)
+    {
+      for (int j = 0; j < 4; j++)
+      {
+        int difference = adc_value[j] - previous_adc_value[j];
+        //Serial.print(difference);
+        //delay(5);
+        //Serial.print("\t");
+        //delay(5);
+        if (difference > 300)
+        {
+          *is_difference_large = true;
+        }
+        previous_adc_value[j] = adc_value[j];
+      }
+    }
+
     //Serial.println();
-    //Serial.flush();
+    Serial.flush();
     //delay(200);
 }
 

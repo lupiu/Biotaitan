@@ -58,12 +58,55 @@ void SYS_BtnF0(void)
     if (g_SysHdl.Status == SYS_MAIN)
     {
         SYS_ChangeStatus(SYS_RUNNIG);
-        LCM_ShowInfoString("Start!!!", 1);
+        //LCM_ShowInfoString("Start!!!", 1);
+        Serial.print(F("Time"));
+        delay(5);
+        Serial.print("\t");
+        delay(5);
+        Serial.print(F("Temp(*100)"));
+        delay(8);
+        Serial.print("\t");
+        delay(5);
+        Serial.print(F("C"));
+        delay(5);
+        Serial.print("\t");
+        delay(5);
+        Serial.print(F("LED"));
+        delay(5);
+        Serial.print("\t");
+        delay(5);
+        Serial.print(F("PD0"));
+        delay(5);
+        Serial.print("\t");
+        delay(5);
+        Serial.print(F("PD1"));
+        delay(5);
+        Serial.print("\t");
+        delay(5);
+        Serial.print(F("PD2"));
+        delay(5);
+        Serial.print("\t");
+        delay(5);
+        Serial.print(F("PD3"));
+        delay(5);
+        Serial.print("\t");
+        delay(5);
+        Serial.println();
+        delay(5);
     }
     else if (g_SysHdl.Status == SYS_RUNNIG)
-    {
+    {   
+        analogWrite(HEATER_CTRL, 0);
+        while (TEMP_ReadTemperature(NTC_TS3)>StopTemp)
+        {
+            analogWrite(FAN_CTRL, 255);
+            delay(1000);
+        }
+        //LCM_ShowInfoString("Stop!!!", 1);
         SYS_ChangeStatus(SYS_MAIN);
-        LCM_ShowInfoString("Stop!!!", 1);
+        ResetTempVariables();
+        delay(1000);
+        Serial.begin(115200);
     }
 }
 
@@ -109,9 +152,9 @@ void System_Task(void * pvParametersoid)
     {
         if (g_SysHdl.Status == SYS_INIT)
         {
-            LCM_ShowInfoString("System Initialize...", 1);
-            delay(500);
-            LCM_ShowInfoString("System Ready.", 1);
+            //LCM_ShowInfoString("System Initialize...", 1);
+            //delay(500);
+            //LCM_ShowInfoString("System Ready.", 1);
             SYS_ChangeStatus(SYS_MAIN);
         }
         else if (g_SysHdl.Status == SYS_MAIN)
@@ -148,12 +191,11 @@ void SYS_Initial(void)
     pinMode(STATUS_LED, OUTPUT);
     digitalWrite(STATUS_LED, 1);
 
-    LT768_Lib.LT768_DrawSquare_Fill(0,0,LCD_XSIZE_TFT,LCD_YSIZE_TFT,Blue);
+    LT768_Lib.LT768_DrawSquare_Fill(0,0,LCD_XSIZE_TFT,LCD_YSIZE_TFT,White);
     LT768_Lib.LT768_Select_Internal_Font_Init(24,2,2,0,1);
-    LT768_Lib.LT768_Print_Internal_Font_String(LCM_MSG_START_X,2,Black,Blue,"Biotaitan System");
+    LT768_Lib.LT768_Print_Internal_Font_String(LCM_MSG_START_X,2,Black,White,"Biotaitan System");
     LT768_Lib.LT768_DrawLine_Width(0, 55, 800, 55, Black, 2);
     LT768_Lib.LT768_Select_Internal_Font_Init(LCM_MSG_SIZE,1,1,1,1);
     xTaskCreatePinnedToCore((TaskFunction_t)System_Task, "System_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
 }
-
 //--------------------------------------------------

@@ -12,12 +12,14 @@
 #include "temp_ctrl.h"
 #include "system.h"
 #include "optic.h"
+#include "lcm.h"
 
 //--------------------------------------------------
 _TempCtrl g_TempData = {25, 25, 0};
 _PidData g_TempPidData;
 PID g_Temp_PID(&g_TempPidData.Input, &g_TempPidData.Output, &g_TempPidData.SetPoint, PID_KP, PID_KI, PID_KD, DIRECT);
-
+uint8_t btn = 0;
+uint8_t achieve_flag = 0;
 //--------------------------------------------------
 float TEMP_ReadTemperature(uint8_t pin)
 {
@@ -73,10 +75,11 @@ void TEMP_PidCtrl(uint8_t tec_en)
 uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, double holdtime) //uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, uint16_t holdtime)-Gaspard uint8_t TEMP_CycleCtrl(float temp_c, uint8_t dir, uint16_t holdtime)
 {
   static double achieve_time;
-  static uint8_t achieve_flag = 0;
+  //static uint8_t achieve_flag = 0;
   uint8_t done = 0;
   
   TEMP_PidCal(temp_c, NTC_TS3);
+
   if (achieve_flag == 0)
   {
     TEMP_PidCtrl(1);
@@ -114,43 +117,75 @@ void TEMP_Test(uint8_t mode)
   static uint8_t dir = HIGH;
   static uint8_t base_initial = LOW;
   static double log_time = 0;
-  static uint8_t btn = 0;
+  static double new_time = 0;
+  //static uint8_t btn = 0;
+  static uint8_t loop_counter = 0;
+  static bool is_difference_large = false;
 
-    if (btn == 0)
+  if (btn == 0)
+  {
+    cycle_cnt = 0;
+    dir = HIGH;
+    base_initial = LOW;
+    log_time = 0;
+    new_time = millis();
+    loop_counter = 0;
+    is_difference_large = false;
+    btn = 1;
+    achieve_flag = 0;
+  }
+  else
+  {
+    if (BASE_ENABLE == 1 && base_initial == LOW)
     {
-      cycle_cnt = 0;
-      dir = HIGH;
-      base_initial = LOW;
-      btn = 1;
+      if (TEMP_CycleCtrl(BASE_TEMP, HIGH, BASE_HOLDTIME) == 1)
+      base_initial = HIGH;
     }
     else
-    {
-      if (BASE_ENABLE == 1 && base_initial == LOW)
+    { 
+      if (cycle_cnt==0)
       {
-        if (TEMP_CycleCtrl(BASE_TEMP, HIGH, BASE_HOLDTIME) == 1)
-        base_initial = HIGH;
+        cycle_cnt=1;
       }
-      else
+      else if (cycle_cnt==1)
       {
-        if (cycle_cnt < TEMP_CYCLE)
+        if (dir == HIGH)
         {
-          if (dir == HIGH)
+          if (TEMP_CycleCtrl(INITIAL_TOP_TEMP, dir, INITIAL_TOP_HOLDTIME) == 1)
           {
-            if (TEMP_CycleCtrl(TOP_TEMP, dir, TOP_HOLDTIME) == 1)
-            {
-              dir = LOW;
-            }
-          }
-          else
-          {
-            if (TEMP_CycleCtrl(BOTTOM_TEMP, dir, BOTTOM_HOLDTIME) == 1)
-            {
-              dir = HIGH;
-              cycle_cnt++;
-            }
+            dir = LOW;
           }
         }
         else
+        {
+          if (TEMP_CycleCtrl(INITIAL_BOTTOM_TEMP, dir, INITIAL_BOTTOM_HOLDTIME) == 1)
+          {
+            dir = HIGH;
+            cycle_cnt++;
+          }
+        }
+      }
+      else if (cycle_cnt>1 && cycle_cnt < (TEMP_CYCLE+1))
+      {
+        if (dir == HIGH)
+        {
+          if (TEMP_CycleCtrl(TOP_TEMP, dir, TOP_HOLDTIME) == 1)
+          {
+            dir = LOW;
+          }
+        }
+        else
+        {
+          if (TEMP_CycleCtrl(BOTTOM_TEMP, dir, BOTTOM_HOLDTIME) == 1)
+          {
+            dir = HIGH;
+            cycle_cnt++;
+          }
+        }
+      }
+      else
+      {
+        if (loop_counter<250)
         {
           switch (CYCLE_STATUS)
           {
@@ -166,47 +201,89 @@ void TEMP_Test(uint8_t mode)
               TEMP_PidCal(TOP_TEMP, NTC_TS3);
               TEMP_PidCtrl(0);
             break;
-            default : 
-              TEMP_AllOff();
+            default :
+              if (g_TempData.PresentTemp_C>StopTemp)
+              {
+                TEMP_CycleCtrl(StopTemp, LOW, 0);
+              }
+              else
+              {
+                TEMP_AllOff();
+                OPT_Led_OffAll();
+              }
+            loop_counter++;
             break;
           }
         }
-      } 
-
-      if (millis() - log_time >= 0)
-      {
-        Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
-        Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData.Output); Serial.print("\t");
-        if (WITH_OPT == 1)
+        else
         {
-          if (dir == HIGH )
+          SYS_ChangeStatus(SYS_MAIN);
+          //LCM_ShowInfoString("End!!!", 1);
+          if (is_difference_large==true)
           {
-            if (g_TempData.PresentTemp_C >= RISE_OPT_ON_T && g_TempData.PresentTemp_C <= RISE_OPT_OFF_T)
-            {
-              OPT_Ctrl(OPT_ON_SEL);
-            }
-            else
-            {
-              OPT_Ctrl(4);
-            }
+            LCM_ShowInfoString_red("Positive", 1);
           }
           else
           {
-            if (g_TempData.PresentTemp_C <= FALL_OPT_ON_T && g_TempData.PresentTemp_C >= FALL_OPT_OFF_T)
-            {
-              OPT_Ctrl(OPT_ON_SEL);
-            }
-            else
-            {
-              OPT_Ctrl(4);
-            }
+            LCM_ShowInfoString_red("Negative", 1);
+          }
+          delay(1000);
+          Serial.begin(115200);
+          SYS_ChangeStatus(SYS_INIT);
+          btn=0;
+        }
+      }
+    } 
+
+    if (millis() - log_time >= OPT_LIGHT_ON_TIME)
+    {
+      //Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
+      //Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData.Output); Serial.print("\t");
+      Serial.print(millis()-new_time,0);
+      delay(8);
+      Serial.print("\t");
+      delay(5);
+      Serial.print(g_TempData.PresentTemp_C*100,0);
+      delay(7);
+      Serial.print("\t");
+      delay(5);
+      Serial.print(cycle_cnt);
+      delay(5);
+      Serial.print("\t");
+      delay(5);
+
+      if (WITH_OPT == 1)
+      {
+        if (dir == HIGH )
+        {
+          if (g_TempData.PresentTemp_C >= RISE_OPT_ON_T && g_TempData.PresentTemp_C <= RISE_OPT_OFF_T)
+          {
+            OPT_Ctrl(OPT_ON_SEL, &is_difference_large, cycle_cnt);
+          }
+          else
+          {
+            OPT_Ctrl(4, &is_difference_large, cycle_cnt);
           }
         }
-        Serial.println();
-        Serial.flush();
-        log_time = millis();
+        else
+        {
+          if (g_TempData.PresentTemp_C <= FALL_OPT_ON_T && g_TempData.PresentTemp_C >= FALL_OPT_OFF_T)
+          {
+            OPT_Ctrl(OPT_ON_SEL, &is_difference_large, cycle_cnt);
+          }
+          else
+          {
+            OPT_Ctrl(4, &is_difference_large, cycle_cnt);
+          }
+        }
       }
+
+      Serial.println();
+      delay(5);
+      Serial.flush();
+      log_time = millis();
     }
+  }
 }
 
 //--------------------------------------------------
@@ -234,3 +311,7 @@ void TEMP_Initial(void)
 }
 
 //--------------------------------------------------
+void ResetTempVariables(void)
+{
+  btn = 0;
+}

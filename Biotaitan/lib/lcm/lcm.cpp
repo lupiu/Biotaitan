@@ -11,7 +11,7 @@
 //--------------------------------------------------
 //spi_device_handle_t g_lcm_handle;
 TAMC_GT911 tp = TAMC_GT911(TOUCH_SDA, TOUCH_SCL, -1, TOUCH_RST, TOUCH_WIDTH, TOUCH_HEIGHT);
-
+uint8_t msg_line = 0;
 //--------------------------------------------------
 _ButtonInfo g_func_btn[4] = 
 {
@@ -106,6 +106,7 @@ void LCM_DisplayFuncKey(_LcmMenuType *menu)
     for(i = 0; i < 1; i++)
     {
         LT768_Lib.LT768_DrawCircleSquare_Fill(g_func_btn[i].Px - (BUTTON_X / 2), g_func_btn[i].Py - (BUTTON_Y / 2), g_func_btn[i].Px + (BUTTON_X / 2), g_func_btn[i].Py + (BUTTON_Y / 2), 20 , 20, Blue2);
+        LT768_Lib.LT768_Select_Internal_Font_Init(32,1,1,0,1);
         LT768_Lib.LT768_Print_Internal_Font_String(g_func_btn[i].Px - (strlen(menu[i].Name) * LCM_MSG_SIZE / 2 / 2), g_func_btn[i].Py - (LCM_MSG_SIZE / 2), Black, Blue2, menu[i].Name);
     }
 }
@@ -161,8 +162,8 @@ void LCM_TouchScan(uint8_t *num)
 //--------------------------------------------------
 void LCM_ShowInfoString(char *str, uint8_t contd)
 {
-    static uint8_t msg_line_num = 9;
-    static uint8_t msg_line = 0;
+    static uint8_t msg_line_num = 9; //9
+    //static uint8_t msg_line = 0;
     uint8_t i;
 
     if (contd == 0)
@@ -171,9 +172,31 @@ void LCM_ShowInfoString(char *str, uint8_t contd)
     }
 
     if (msg_line == 0)
-        LT768_Lib.LT768_DrawSquare_Fill(0, LCM_MSG_START_Y, TOUCH_WIDTH, (LCM_MSG_START_Y + ((msg_line_num + 1) * LCM_MSG_SIZE)), Blue);
+        LT768_Lib.LT768_DrawSquare_Fill(0, LCM_MSG_START_Y, TOUCH_WIDTH, (LCM_MSG_START_Y + ((msg_line_num + 1) * LCM_MSG_SIZE+28)), White);
 
-    LT768_Lib.LT768_Print_Internal_Font_String(LCM_MSG_START_X, (LCM_MSG_START_Y + (msg_line * LCM_MSG_SIZE)) , Black, Blue, str);
+    LT768_Lib.LT768_Print_Internal_Font_String(LCM_MSG_START_X, (LCM_MSG_START_Y + (msg_line * LCM_MSG_SIZE+28)) , Black, White, str);
+    msg_line++;
+    if (msg_line >= msg_line_num)
+        msg_line = 0;
+}
+
+//--------------------------------------------------
+void LCM_ShowInfoString_red(char *str, uint8_t contd)
+{
+    static uint8_t msg_line_num = 6; //9
+    //static uint8_t msg_line = 0;
+    uint8_t i;
+
+    if (contd == 0)
+    {
+        msg_line = 0;
+    }
+
+    if (msg_line == 0)
+        LT768_Lib.LT768_DrawSquare_Fill(0, LCM_MSG_START_Y, TOUCH_WIDTH, (LCM_MSG_START_Y + ((msg_line_num + 1) * (LCM_MSG_SIZE+15))), White);
+
+    LT768_Lib.LT768_Select_Internal_Font_Init(24,2,2,0,1);
+    LT768_Lib.LT768_Print_Internal_Font_String(LCM_MSG_START_X, (LCM_MSG_START_Y + (msg_line * (LCM_MSG_SIZE+15))) , Red, White, str);
     msg_line++;
     if (msg_line >= msg_line_num)
         msg_line = 0;

@@ -34,7 +34,7 @@
 
 #define LCM_MSG_START_X 30
 #define LCM_MSG_START_Y 60
-#define LCM_MSG_SIZE 32
+#define LCM_MSG_SIZE 32 //32
 
 //--------------------------------------------------
 typedef struct
@@ -122,9 +122,9 @@ typedef struct
 void LCM_Initial(void);
 void LCM_Task(void * pvParametersoid);
 void LCM_ShowInfoString(char *str, uint8_t contd);
+void LCM_ShowInfoString_red(char *str, uint8_t contd);
 void LCM_DisplayFuncKey(_LcmMenuType *menu);
 void LCM_TouchScan(uint8_t *num);
-
 //--------------------------------------------------
 
 #endif
