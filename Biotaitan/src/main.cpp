@@ -22,15 +22,15 @@ void setup() {
     Serial.begin(115200);
     Serial.setDebugOutput(true);
 
-//    TEMP_Initial();
-//    OPT_Initial();
+    TEMP_Initial();
+    OPT_Initial();
 
-//    SPI_Init();
-//    LCM_Initial();
+    SPI_Init();
+    LCM_Initial();
     //SD_Initial();
     BCR_Initial();
 
-//    SYS_Initial();
+    SYS_Initial();
 }
 
 //--------------------------------------------------

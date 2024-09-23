@@ -9,20 +9,45 @@
 #include "barcode.h"
 
 //--------------------------------------------------
-static const int BCR_RX_BUF = 1024;
-uint8_t g_bcr_enable = 0;
+_BcrHandle g_BcrHDL = {0};
 
 //--------------------------------------------------
 void BCR_Enable(void)
 {
-    g_bcr_enable = 1;
+    g_BcrHDL.enable = 1;
+    g_BcrHDL.datavalid = 0;
+    g_BcrHDL.rxbytes = 0;
+    memset(g_BcrHDL.data, 0, BCR_RX_BUF);
 }
 
 //--------------------------------------------------
 void BCR_Disable(void)
 {
-    g_bcr_enable = 0;
+    g_BcrHDL.enable = 0;
 }
+
+//--------------------------------------------------
+void BCR_GetStatus(uint8_t *enalbe, uint8_t *valid, uint16_t *rxbytes)
+{
+    *enalbe = g_BcrHDL.enable;
+    *valid = g_BcrHDL.datavalid;
+    *rxbytes = g_BcrHDL.rxbytes;
+}
+
+//--------------------------------------------------
+void BCR_GetData(char *data, uint16_t size)
+{
+    uint16_t i;
+
+    for (i = 0; i < size; i++)
+    {
+        data[i] = g_BcrHDL.data[i];
+    }
+    g_BcrHDL.datavalid = 0;
+    g_BcrHDL.rxbytes = 0;
+    memset(g_BcrHDL.data, 0, BCR_RX_BUF);
+}
+
 //--------------------------------------------------
 void BCR_Beep(int ms)
 {
@@ -35,7 +60,7 @@ void BCR_Beep(int ms)
 void UART_Initial(void)
 {
     const uart_config_t uart_config = {
-        .baud_rate = 115200,
+        .baud_rate = 9600,
         .data_bits = UART_DATA_8_BITS,
         .parity = UART_PARITY_DISABLE,
         .stop_bits = UART_STOP_BITS_1,
@@ -48,29 +73,53 @@ void UART_Initial(void)
 }
 
 //--------------------------------------------------
+void BCR_Setting(void)
+{
+    while(1)
+    {
+        digitalWrite(BCR_TRIG, 0);
+        delay(50);
+        digitalWrite(BCR_TRIG, 1);
+
+        g_BcrHDL.rxbytes = uart_read_bytes(UART_NUM_1, g_BcrHDL.data, BCR_RX_BUF, 50 / portTICK_PERIOD_MS);
+        if (g_BcrHDL.rxbytes > 0)
+        {
+            BCR_Beep(20);
+        }
+        delay(500);
+    }
+}
+
+//--------------------------------------------------
 void BCR_Task(void * pvParametersoid)
 {
-    static const char *RX_TASK_TAG = "RX_TASK";
+    uint8_t i;
 
     while(1)
     {
-        //if (g_bcr_enable)
-        if (1)
+        if (g_BcrHDL.enable)
         {
             digitalWrite(BCR_TRIG, 0);
-            delay(20);
+            delay(50);
             digitalWrite(BCR_TRIG, 1);
 
-            uint8_t* data = (uint8_t*) malloc(BCR_RX_BUF + 1);
-            const int rxBytes = uart_read_bytes(UART_NUM_1, data, BCR_RX_BUF, 200 / portTICK_PERIOD_MS);
-            Serial.println(rxBytes);
-            if (rxBytes > 0) {
-                data[rxBytes] = 0;
-                Serial.print(F("Read"));Serial.print(rxBytes);Serial.print(F("bytes:"));Serial.println(data[0]);
-                ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
+            g_BcrHDL.rxbytes = uart_read_bytes(UART_NUM_1, g_BcrHDL.data, BCR_RX_BUF, 50 / portTICK_PERIOD_MS);
+            if (g_BcrHDL.rxbytes > 0)
+            {
+                BCR_Disable();
+                g_BcrHDL.datavalid = 1;
+                BCR_Beep(20);
+                g_BcrHDL.data[g_BcrHDL.rxbytes] = 0;
+                /*
+                Serial.print(F("Read "));Serial.print(g_BcrHDL.rxbytes);Serial.println(F(" bytes:"));
+                for (i = 0; i < g_BcrHDL.rxbytes; i++)
+                {
+                    Serial.println(g_BcrHDL.data[i]);
+                }
+                */
             }
-            free(data);
         }
+        delay(100);
     }
 }
 

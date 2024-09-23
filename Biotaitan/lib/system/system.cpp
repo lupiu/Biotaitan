@@ -11,6 +11,7 @@
 #include "temp_ctrl.h"
 #include "optic.h"
 #include "lcm.h"
+#include "barcode.h"
 
 //--------------------------------------------------
 _SysHdl g_SysHdl = {0};
@@ -144,6 +145,35 @@ void SYS_BtnScan(_LcmMenuType *menu)
 }
 
 //--------------------------------------------------
+void BCR_Test(void)
+{
+    static double prev_time = 0;
+    uint8_t enable;  
+    uint8_t datavalid;  
+    uint16_t rxbytes;
+    uint16_t i;
+    char data[BCR_RX_BUF];
+
+    BCR_GetStatus(&enable, &datavalid, &rxbytes);
+
+    if (datavalid == 1 && rxbytes > 0)
+    {
+        BCR_GetData(data, rxbytes);
+        Serial.print(F("Read "));Serial.print(rxbytes);Serial.println(F(" bytes:"));
+        for (i = 0; i < rxbytes; i++)
+        {
+            Serial.println(data[i]);
+        }
+        prev_time = millis();
+    }   
+ 
+    if ((millis() - prev_time > 3000) && enable == 0)
+    {
+        BCR_Enable();
+    }
+}
+
+//--------------------------------------------------
 void System_Task(void * pvParametersoid)
 {
     uint8_t key_num;
@@ -181,6 +211,7 @@ void System_Task(void * pvParametersoid)
         //OPT_Test(0);
         //TEMP_Test(0);
         //delay(50);
+        BCR_Test();
     }
 }
 //--------------------------------------------------
