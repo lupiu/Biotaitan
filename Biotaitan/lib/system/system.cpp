@@ -145,6 +145,12 @@ void SYS_BtnScan(_LcmMenuType *menu)
 }
 
 //--------------------------------------------------
+void SYS_CheckCover(int *status)
+{
+    *status = 1 - digitalRead(COVER_IN);
+}
+
+//--------------------------------------------------
 void BCR_Test(void)
 {
     static double prev_time = 0;
@@ -211,7 +217,7 @@ void System_Task(void * pvParametersoid)
         //OPT_Test(0);
         //TEMP_Test(0);
         //delay(50);
-        BCR_Test();
+        //BCR_Test();
     }
 }
 //--------------------------------------------------
@@ -221,6 +227,7 @@ void SYS_Initial(void)
 
     pinMode(STATUS_LED, OUTPUT);
     digitalWrite(STATUS_LED, 1);
+    pinMode(COVER_IN, INPUT);
 
     LT768_Lib.LT768_DrawSquare_Fill(0,0,LCD_XSIZE_TFT,LCD_YSIZE_TFT,White);
     LT768_Lib.LT768_Select_Internal_Font_Init(24,2,2,0,1);

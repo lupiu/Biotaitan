@@ -18,6 +18,7 @@
 #define SW_SEL1 -1
 
 #define STATUS_LED 41
+#define COVER_IN 16
 
 #define OP_MODE SYS_TEMP_AUTO
 
