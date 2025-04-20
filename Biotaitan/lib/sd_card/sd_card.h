@@ -18,7 +18,7 @@
 
 //--------------------------------------------------
 void SD_Initial(void);
-void SD_Task(void * pvParametersoid);
+void SD_WriteLog(const char *str);
 
 //--------------------------------------------------
 

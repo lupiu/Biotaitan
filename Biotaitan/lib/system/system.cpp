@@ -12,6 +12,7 @@
 #include "optic.h"
 #include "lcm.h"
 #include "barcode.h"
+#include "sd_card.h"
 
 //--------------------------------------------------
 _SysHdl g_SysHdl = {0};
@@ -188,9 +189,9 @@ void System_Task(void * pvParametersoid)
     {
         if (g_SysHdl.Status == SYS_INIT)
         {
-            //LCM_ShowInfoString("System Initialize...", 1);
-            //delay(500);
-            //LCM_ShowInfoString("System Ready.", 1);
+            LCM_ShowInfoString("System Initialize...", 1);
+            delay(500);
+            LCM_ShowInfoString("System Ready.", 1);
             SYS_ChangeStatus(SYS_MAIN);
         }
         else if (g_SysHdl.Status == SYS_MAIN)
@@ -216,7 +217,7 @@ void System_Task(void * pvParametersoid)
         }
         //OPT_Test(0);
         //TEMP_Test(0);
-        //delay(50);
+        delay(1000);
         //BCR_Test();
     }
 }
@@ -224,7 +225,7 @@ void System_Task(void * pvParametersoid)
 void SYS_Initial(void)
 {
     g_SysHdl.Status = SYS_INIT;
-
+    
     pinMode(STATUS_LED, OUTPUT);
     digitalWrite(STATUS_LED, 1);
     pinMode(COVER_IN, INPUT);
@@ -234,6 +235,8 @@ void SYS_Initial(void)
     LT768_Lib.LT768_Print_Internal_Font_String(LCM_MSG_START_X,2,Black,White,"Biotaitan System");
     LT768_Lib.LT768_DrawLine_Width(0, 55, 800, 55, Black, 2);
     LT768_Lib.LT768_Select_Internal_Font_Init(LCM_MSG_SIZE,1,1,1,1);
+
+    SPI.endTransaction();
     xTaskCreatePinnedToCore((TaskFunction_t)System_Task, "System_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
 }
 //--------------------------------------------------

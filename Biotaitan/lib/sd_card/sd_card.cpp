@@ -7,54 +7,55 @@
 */
 
 #include "sd_card.h"
+#include "lcm.h"
 
+SPIClass spiSD(HSPI);
 //--------------------------------------------------
-
-//--------------------------------------------------
-void SD_Task(void * pvParametersoid)
+void SD_WriteLog(const char *str)
 {
-    while(1)
+    if (xSemaphoreTake(g_SPI_Semaphore, portMAX_DELAY) == pdTRUE)
     {
-        if (xSemaphoreTake(g_SPI_Semaphore, portMAX_DELAY) == pdTRUE)
-        {
-            SPI.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI);
+        spiSD.end();
+        spiSD.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI, -1);
+        if (SD.begin(SD_SPI_CSN, spiSD)) {
             // 与SD卡通信
-            File dataFile = SD.open("/data.txt", FILE_WRITE);
+            File dataFile = SD.open("/Log.txt", FILE_APPEND);
             if (dataFile) {
-                dataFile.println("Hello, SD card!");
+                dataFile.println(str);
                 dataFile.close();
-                Serial.println("数据写入到SD卡成功！");
+                Serial.println("SD卡寫入成功！");
             } else {
-
-                Serial.println("数据写入到SD卡成功！");
+                Serial.println("SD卡寫入失敗！");
             }
-            xSemaphoreGive(g_SPI_Semaphore);
+        } else {
+            Serial.println("SD卡啟用失敗！");
         }
-
-        // 与另一个SPI设备通信
-        //digitalWrite(otherDeviceSelectPin, LOW); // 启用设备
-        // 在此处执行与另一个SPI设备相关的操作
-        //digitalWrite(otherDeviceSelectPin, HIGH); // 禁用设备
-
-        // 可以在此添加其他操作或延时
-        delay(5000);
+        xSemaphoreGive(g_SPI_Semaphore);
     }
+    spiSD.endTransaction();
+    spiSD.end();
+    SPI.end();
+    SPI.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI,-1);
 }
+
 //--------------------------------------------------
 void SD_Initial(void)
 {
-    SPI.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI);
+    spiSD.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI, -1);
+    //spiSD.setFrequency(1000000);
+
     pinMode(SD_SPI_CSN, OUTPUT);
     digitalWrite(SD_SPI_CSN, HIGH);
 
     // 初始化SD卡
-    if (!SD.begin(SD_SPI_CSN)) {
-    Serial.println("SD Card Fail！");
-    return;
+    if (!SD.begin(SD_SPI_CSN, spiSD))
+    {
+        Serial.println("SD Card Initial Fail！");
+        while(1);
     }
-    Serial.println("SD Card OK！");
-
-    //xTaskCreatePinnedToCore((TaskFunction_t)SD_Task, "SD_Task", 4096, NULL, 0, NULL, tskNO_AFFINITY);
+    Serial.println("SD Card Initial OK！");
+    spiSD.end();
+    SPI.end();
+    SPI.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI,-1);
+    spiSD.setHwCs(1);
 }
-
-//--------------------------------------------------

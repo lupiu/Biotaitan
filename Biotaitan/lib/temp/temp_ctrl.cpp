@@ -13,6 +13,7 @@
 #include "system.h"
 #include "optic.h"
 #include "lcm.h"
+#include "sd_card.h"
 
 //--------------------------------------------------
 _TempCtrl g_TempData = {25, 25, 0};
@@ -239,7 +240,10 @@ void TEMP_Test(uint8_t mode)
     {
       //Serial.print(F(" T:")); Serial.print(millis()); Serial.print("\t");
       //Serial.print(F("NTC_TS3: ")); Serial.print(g_TempData.PresentTemp_C); Serial.print("\t"); Serial.print(F("Out: ")); Serial.print(g_TempPidData.Output); Serial.print("\t");
-      Serial.print(millis()-new_time,0);
+      //Serial.print(millis()-new_time,0);
+      String tempStr = String(millis() - new_time);
+      Serial.print(tempStr);
+      SD_WriteLog(tempStr.c_str());
       delay(8);
       Serial.print("\t");
       delay(5);

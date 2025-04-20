@@ -25,17 +25,6 @@ void LCM_Task(void * pvParametersoid)
 {
     static u8_t cnt = 0;
     static u8_t key_rls = 1;
-/*
-    for (;;) {
-        
-        if (xSemaphoreTake(g_SPI_Semaphore, portMAX_DELAY) == pdTRUE)
-        {
-            LT768_LCD.Parallel_Init();
-            Serial.println("LCM_Task");
-            xSemaphoreGive(g_SPI_Semaphore);
-        }
-        delay(2000);
-    }*/
 
     LT768_Lib.LT768_DrawSquare_Fill(0,0,LCD_XSIZE_TFT,LCD_YSIZE_TFT,color16M_white);
     while(1)

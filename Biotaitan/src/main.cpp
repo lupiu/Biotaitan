@@ -27,7 +27,7 @@ void setup() {
 
     SPI_Init();
     LCM_Initial();
-    //SD_Initial();
+    SD_Initial();
     BCR_Initial();
 
     SYS_Initial();
