@@ -13,6 +13,7 @@
 #include "lcm.h"
 #include "barcode.h"
 #include "sd_card.h"
+#include "rtc_module.h"
 
 //--------------------------------------------------
 _SysHdl g_SysHdl = {0};
@@ -204,6 +205,23 @@ void System_Task(void * pvParametersoid)
             SYS_BtnScan(g_TopMenu);
             TEMP_AllOff();
             OPT_Led_OffAll();
+
+            DateTime now;
+            RTC_ReadTime(&now);
+            String yearStr = String(now.year(), DEC);
+            String monthStr = (now.month() < 10 ? "0" : "") + String(now.month(), DEC);
+            String dayStr = (now.day() < 10 ? "0" : "") + String(now.day(), DEC);
+            String hourStr = (now.hour() < 10 ? "0" : "") + String(now.hour(), DEC); 
+            String minuteStr = (now.minute() < 10 ? "0" : "") + String(now.minute(), DEC);
+            String secondStr = (now.second() < 10 ? "0" : "") + String(now.second(), DEC);
+          
+            // Complete time string
+            String formattedTime = yearStr + "-" + monthStr + "-" + dayStr + " " + hourStr + ":" + minuteStr + ":" + secondStr;
+            Serial.println(formattedTime);
+            char charArray[40];
+            formattedTime.toCharArray(charArray, 40);
+            LCM_ShowInfoString(charArray, 1);
+
         }
         else if (g_SysHdl.Status == SYS_RUNNIG)
         {
@@ -214,6 +232,9 @@ void System_Task(void * pvParametersoid)
             }
             SYS_BtnScan(g_RunMenu);
             TEMP_Test(0);
+
+            RTC_AdjustTime(DateTime(2025, 05, 17, 18, 20, 47));
+
         }
         //OPT_Test(0);
         //TEMP_Test(0);

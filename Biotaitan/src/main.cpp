@@ -14,6 +14,7 @@
 #include "sd_card.h"
 #include "spi_api.h"
 #include "barcode.h"
+#include "rtc_module.h"
 
 //--------------------------------------------------
 
@@ -29,6 +30,7 @@ void setup() {
     LCM_Initial();
     SD_Initial();
     BCR_Initial();
+    RTC_Initial();
 
     SYS_Initial();
 }

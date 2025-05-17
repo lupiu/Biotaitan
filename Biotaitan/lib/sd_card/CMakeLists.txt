@@ -1,6 +1,4 @@
-idf_component_register(SRCS "lcm.c"
-                            "../spi_api/spi_api.c"
+idf_component_register(SRCS "sd_card.c"
                        INCLUDE_DIRS "."
-                                    "../spi_api"
                        REQUIRES "driver"
 )
