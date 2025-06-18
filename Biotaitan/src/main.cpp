@@ -15,6 +15,7 @@
 #include "spi_api.h"
 #include "barcode.h"
 #include "rtc_module.h"
+#include "msc.h"
 
 //--------------------------------------------------
 
@@ -27,10 +28,11 @@ void setup() {
     OPT_Initial();
 
     SPI_Init();
-    LCM_Initial();
+    //LCM_Initial();
     SD_Initial();
     BCR_Initial();
     RTC_Initial();
+    MSC_Initial();
 
     SYS_Initial();
 }
