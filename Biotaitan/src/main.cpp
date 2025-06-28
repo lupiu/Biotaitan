@@ -28,7 +28,7 @@ void setup() {
     OPT_Initial();
 
     SPI_Init();
-    //LCM_Initial();
+    LCM_Initial();
     SD_Initial();
     BCR_Initial();
     RTC_Initial();

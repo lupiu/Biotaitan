@@ -42,7 +42,6 @@ void SD_WriteLog(const char *str)
 void SD_Initial(void)
 {
     spiSD.begin(SPI_MASTER_CLK, SPI_MASTER_MISO, SPI_MASTER_MOSI, -1);
-    //spiSD.setFrequency(1000000);
 
     pinMode(SD_SPI_CSN, OUTPUT);
     digitalWrite(SD_SPI_CSN, HIGH);

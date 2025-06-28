@@ -14,14 +14,14 @@
 #include "USBMSC.h"
 #include "SPI.h"
 #include "SD.h"
-#include "sd_card.h"
+#include "spi_api.h"
 
 //--------------------------------------------------
 //paramters define
 
 //--------------------------------------------------
 void MSC_Initial(void);
-
+void MSC_UsbStart(void);
 //--------------------------------------------------
 
 #endif

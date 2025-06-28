@@ -14,6 +14,7 @@
 #include "barcode.h"
 #include "sd_card.h"
 #include "rtc_module.h"
+#include "msc.h"
 
 //--------------------------------------------------
 _SysHdl g_SysHdl = {0};
@@ -54,6 +55,22 @@ void SYS_ChangeStatus(_SysStatus status)
   g_SysHdl.ScnUpdated = 0;
 }
 
+//--------------------------------------------------
+void SYS_BtnF0(void)
+{
+    //LCM_ShowInfoString("Button F0", 1);
+    if (g_SysHdl.Status == SYS_MAIN)
+    {
+        SYS_ChangeStatus(SYS_RUNNIG);
+        LCM_ShowInfoString("System in USB Mode!!!", 1);
+        MSC_UsbStart();
+    }
+    else if (g_SysHdl.Status == SYS_RUNNIG)
+    {   
+        ESP.restart();
+    }
+}
+/*
 //--------------------------------------------------
 void SYS_BtnF0(void)
 {
@@ -112,7 +129,7 @@ void SYS_BtnF0(void)
         Serial.begin(115200);
     }
 }
-
+*/
 //--------------------------------------------------
 void SYS_BtnF1(void)
 {
@@ -221,10 +238,13 @@ void System_Task(void * pvParametersoid)
             char charArray[40];
             formattedTime.toCharArray(charArray, 40);
             LCM_ShowInfoString(charArray, 1);
+            SD_WriteLog(formattedTime.c_str());
 
         }
         else if (g_SysHdl.Status == SYS_RUNNIG)
         {
+            SYS_BtnScan(g_RunMenu);
+            /*
             if (g_SysHdl.ScnUpdated == 0)
             {
                 LCM_DisplayFuncKey(g_RunMenu);
@@ -234,7 +254,7 @@ void System_Task(void * pvParametersoid)
             TEMP_Test(0);
 
             RTC_AdjustTime(DateTime(2025, 05, 17, 18, 20, 47));
-
+            */
         }
         //OPT_Test(0);
         //TEMP_Test(0);
